@@ -18,8 +18,8 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY")
     SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    # Use the same secret for both Flask and JWT to ensure compatibility
-    JWT_SECRET_KEY = SECRET_KEY
+    # Use separate secret for JWT for security isolation
+    JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
     
     # OAuth Configuration
     GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")

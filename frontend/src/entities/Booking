@@ -1,0 +1,114 @@
+
+{
+  "name": "Booking",
+  "type": "object",
+  "properties": {
+    "first_name": {
+      "type": "string",
+      "description": "Participant's first name"
+    },
+    "last_name": {
+      "type": "string",
+      "description": "Participant's last name"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Contact email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Phone number"
+    },
+    "package_type": {
+      "type": "string",
+      "enum": [
+        "basic",
+        "pro",
+        "premium"
+      ],
+      "description": "Selected package"
+    },
+    "trek_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Selected trek start date"
+    },
+    "participants_count": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 12,
+      "description": "Number of participants"
+    },
+    "total_price": {
+      "type": "number",
+      "description": "Total booking price"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "cancelled"
+      ],
+      "default": "pending",
+      "description": "The current status of the booking"
+    },
+    "special_requests": {
+      "type": "string",
+      "description": "Any special dietary or accommodation requests"
+    },
+    "emergency_contact_name": {
+      "type": "string",
+      "description": "Emergency contact name"
+    },
+    "emergency_contact_phone": {
+      "type": "string",
+      "description": "Emergency contact phone"
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "he",
+        "en"
+      ],
+      "default": "he",
+      "description": "Preferred language"
+    }
+  },
+  "required": [
+    "first_name",
+    "last_name",
+    "email",
+    "phone",
+    "package_type",
+    "trek_date",
+    "participants_count"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "write": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

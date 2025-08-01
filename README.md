@@ -1,1 +1,0 @@
-# nahalprat-trek

@@ -1,0 +1,57 @@
+{
+  "name": "TrekDate",
+  "type": "object",
+  "properties": {
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Trek start date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Trek end date"
+    },
+    "available_spots_basic": {
+      "type": "number",
+      "default": 12,
+      "description": "Available spots for basic package"
+    },
+    "available_spots_pro": {
+      "type": "number",
+      "default": 8,
+      "description": "Available spots for pro package"
+    },
+    "available_spots_premium": {
+      "type": "number",
+      "default": 4,
+      "description": "Available spots for premium package"
+    },
+    "season": {
+      "type": "string",
+      "enum": [
+        "spring",
+        "summer",
+        "autumn",
+        "winter"
+      ],
+      "description": "Season category"
+    },
+    "weather_notes": {
+      "type": "string",
+      "description": "Weather-related information"
+    }
+  },
+  "required": [
+    "start_date",
+    "end_date"
+  ],
+  "rls": {
+    "read": {},
+    "write": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

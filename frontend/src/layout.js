@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "./utils"; // TODO: Check if this file exists
 import { Menu, X, Globe, Mountain, Calendar, ImageIcon, Package, BookOpen, ChevronRight, ArrowUp } from "lucide-react";
 import { Button } from "./components/ui/button"; // TODO: Check if this file exists
+import { LoginButton } from "./components/auth/LoginButton";
 
 const LanguageContext = createContext();
 
@@ -141,6 +142,14 @@ export default function Layout({ children, currentPageName }) {
                   <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </Button>
 
+                <LoginButton 
+                  className={`${
+                    scrolled 
+                      ? 'text-gray-700' 
+                      : 'text-white'
+                  }`} 
+                />
+                
                 <Link to={createPageUrl("Booking")}>
                   <Button className="relative overflow-hidden group btn-primary">
                     <span className="relative z-10">{t.bookNow}</span>
@@ -197,7 +206,8 @@ export default function Layout({ children, currentPageName }) {
                     <span>{item.title}</span>
                   </Link>
                 ))}
-                <div className="pt-2">
+                <div className="pt-2 space-y-2">
+                  <LoginButton className="w-full" />
                   <Link to={createPageUrl("Booking")} onClick={() => setMobileMenuOpen(false)}>
                     <Button className="w-full btn-primary">
                       {t.bookNow}

@@ -61,6 +61,8 @@ export default function MyBookingsPage() {
       }
     } catch (error) {
       console.error('Error loading data:', error);
+      // If user authentication fails, the ProtectedRoute component will handle the redirect
+      // so we don't need to handle it here specifically
     }
     setLoading(false); // Set loading false after data is loaded or error occurs
   };

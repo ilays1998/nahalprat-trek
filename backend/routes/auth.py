@@ -4,6 +4,7 @@ from models import db, User
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from config import Config
 import os
+import json
 
 auth_bp = Blueprint("auth", __name__)
 oauth = OAuth()
@@ -16,12 +17,13 @@ def on_load(state):
         name='google',
         client_id=Config.GOOGLE_CLIENT_ID,
         client_secret=Config.GOOGLE_CLIENT_SECRET,
-        access_token_url='https://accounts.google.com/o/oauth2/token',
-        access_token_params=None,
-        authorize_url='https://accounts.google.com/o/oauth2/auth',
-        authorize_params={'prompt': 'select_account'},
-        api_base_url='https://www.googleapis.com/oauth2/v1/',
-        client_kwargs={'scope': 'openid email profile'}
+        access_token_url='https://oauth2.googleapis.com/token',
+        authorize_url='https://accounts.google.com/o/oauth2/v2/auth',
+        api_base_url='https://www.googleapis.com/',
+        client_kwargs={
+            'scope': 'email profile',  # Removed 'openid' to avoid ID token validation
+            'token_endpoint_auth_method': 'client_secret_post'
+        }
     )
 
 @auth_bp.route("/login")
@@ -31,11 +33,16 @@ def login():
 
 @auth_bp.route("/authorize")
 def authorize():
-    token = oauth.google.authorize_access_token()
-    resp = oauth.google.get("userinfo")
-    user_info = resp.json()
-    email = user_info['email']
-    name = user_info.get('name', '')
+    try:
+        token = oauth.google.authorize_access_token()
+        # Use the access token to get user info
+        resp = oauth.google.get('oauth2/v2/userinfo', token=token)
+        user_info = resp.json()
+        email = user_info['email']
+        name = user_info.get('name', '')
+    except Exception as e:
+        print(f"OAuth error: {e}")
+        return redirect(f"{Config.FRONTEND_URL}/login-error")
 
     user = User.query.filter_by(email=email).first()
     if not user:
@@ -45,11 +52,37 @@ def authorize():
         db.session.add(user)
         db.session.commit()
 
-    access_token = create_access_token(identity={"id": user.id, "email": user.email, "role": user.role})
-    return jsonify(access_token=access_token, user={"email": user.email, "role": user.role, "name": user.name})
+    # Flask-JWT-Extended expects identity to be a simple value, not an object
+    access_token = create_access_token(identity=str(user.id))
+    
+    # Redirect to frontend with token and user data
+    frontend_callback_url = f"{Config.FRONTEND_URL}/auth/callback"
+    user_data = {"email": user.email, "role": user.role, "name": user.name}
+    
+    # Encode user data for URL
+    import urllib.parse
+    encoded_user_data = urllib.parse.quote(json.dumps(user_data))
+    
+    callback_url = f"{frontend_callback_url}?access_token={access_token}&user={encoded_user_data}"
+    return redirect(callback_url)
 
 @auth_bp.route("/me")
 @jwt_required()
 def me():
-    identity = get_jwt_identity()
-    return jsonify(identity)
+    try:
+        user_id = get_jwt_identity()
+        
+        # Look up the user by ID
+        user = User.query.get(int(user_id))
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+            
+        user_data = {
+            "id": user.id,
+            "email": user.email,
+            "name": user.name,
+            "role": user.role
+        }
+        return jsonify(user_data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

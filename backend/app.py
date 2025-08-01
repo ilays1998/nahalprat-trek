@@ -1,8 +1,10 @@
-
+from dotenv import load_dotenv
+load_dotenv()
 from flask import Flask
 from config import Config
 from models import db, migrate
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 
 def create_app():
     app = Flask(__name__)
@@ -10,6 +12,9 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     CORS(app, supports_credentials=True)
+    
+    # Initialize JWT
+    jwt = JWTManager(app)
 
     # Register routes
     from routes.auth import auth_bp
@@ -24,4 +29,4 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True)
+    app.run(debug=True, port=Config.BACKEND_PORT)

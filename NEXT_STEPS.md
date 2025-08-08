@@ -1,29 +1,31 @@
 # 🚧 Next Steps for Nahal Prat Project
 
-## 🔄 Database
+## 🗂️ Database ([#1](https://github.com/YOUR_USERNAME/YOUR_REPO/issues/1))
 
-- [ ] **Rename `user` table** to avoid conflict with PostgreSQL reserved word  
-  - Suggested name: `app_user` or `users`
-  - Update all related models, migrations, and queries
+- [x] **Rename `user` table** to avoid conflict with PostgreSQL reserved word  
+  - ✅ Renamed to `app_user`
+  - ✅ Updated SQLAlchemy model name to `AppUser`
+  - ✅ Created Alembic migration (d84acb1a8319)
+  - ✅ Updated all related imports and references
+  - ✅ Migration successfully applied
 
-## 🔐 Authentication
+## 🔐 Authentication ([#2](https://github.com/YOUR_USERNAME/YOUR_REPO/issues/2))
 
-- [ ] **Improve Google authentication flow**
-  - Add better error handling for failed logins
-  - Show clearer messages to user during sign-in/out
-  - Style the login page to match the site branding
-- [ ] Differentiate access between `admin` and `user` in the UI
-  - Admins should see booking management options
-  - Users should only see their own bookings
+- [x] **Enhance UI**
+  - ✅ Styled login/logout buttons with Google branding and desert theme
+  - ✅ Added beautiful authentication page with glassmorphism effects
+  - ✅ Added logout confirmation modal with Hebrew text
+  - ✅ Enhanced button component with multiple variants and animations
 
-## 🏠 Home Page
+## 🏠 Homepage Enhancements ([#3](https://github.com/YOUR_USERNAME/YOUR_REPO/issues/3))
 
-- [ ] **Enhance homepage with more functionality**
-  - Add section to showcase trek packages: Basic, Pro, Premium
-  - Show next available trek dates (fetch from `/api/trekdates`)
-  - Add CTA buttons for registration / login
-  - Add testimonials or images (optional)
+- [x] Add all the options that in topbar code (switch laungaugh, menu, etc...)
 
 ---
+
+📌 **Tracking via GitHub Issues**  
+- [#1 Rename `user` table](https://github.com/YOUR_USERNAME/YOUR_REPO/issues/1)  
+- [#2 Improve Auth](https://github.com/YOUR_USERNAME/YOUR_REPO/issues/2)  
+- [#3 Homepage improvements](https://github.com/YOUR_USERNAME/YOUR_REPO/issues/3)
 
 _Last updated: 2025-08-03_

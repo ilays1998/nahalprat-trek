@@ -311,7 +311,7 @@ export default function Home() {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="glass text-white border-white/30 hover:bg-white/20 text-lg px-8 py-6 rounded-2xl"
+                  className="bg-white text-desert-700 hover:bg-desert-50 text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
                 >
                   {currentContent.hero.viewPackages}
                 </Button>

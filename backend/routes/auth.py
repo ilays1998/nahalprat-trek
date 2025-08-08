@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, url_for, session, jsonify, request
 from authlib.integrations.flask_client import OAuth
-from models import db, User
+from models import db, AppUser
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from config import Config
 import os
@@ -44,11 +44,11 @@ def authorize():
         print(f"OAuth error: {e}")
         return redirect(f"{Config.FRONTEND_URL}/login-error")
 
-    user = User.query.filter_by(email=email).first()
+    user = AppUser.query.filter_by(email=email).first()
     if not user:
         # Make you admin if email matches
         role = "admin" if email == Config.ADMIN_EMAIL else "user"
-        user = User(email=email, name=name, role=role)
+        user = AppUser(email=email, name=name, role=role)
         db.session.add(user)
         db.session.commit()
 
@@ -73,7 +73,7 @@ def me():
         user_id = get_jwt_identity()
         
         # Look up the user by ID
-        user = User.query.get(int(user_id))
+        user = AppUser.query.get(int(user_id))
         if not user:
             return jsonify({"error": "User not found"}), 404
             

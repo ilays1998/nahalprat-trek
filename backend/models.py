@@ -5,7 +5,9 @@ from datetime import datetime
 db = SQLAlchemy()
 migrate = Migrate()
 
-class User(db.Model):
+class AppUser(db.Model):
+    __tablename__ = 'app_user'
+    
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     name = db.Column(db.String(128))
@@ -24,7 +26,7 @@ class TrekDate(db.Model):
 
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('app_user.id'), nullable=False)
     first_name = db.Column(db.String(64), nullable=False)
     last_name = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(255), nullable=False)
@@ -39,4 +41,4 @@ class Booking(db.Model):
     emergency_contact_phone = db.Column(db.String(32))
     language = db.Column(db.String(4), default='he')
     created_date = db.Column(db.DateTime, default=datetime.utcnow)
-    user = db.relationship("User", backref="bookings")
+    user = db.relationship("AppUser", backref="bookings")

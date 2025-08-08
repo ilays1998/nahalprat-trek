@@ -4,6 +4,7 @@ import { createPageUrl } from "./utils"; // TODO: Check if this file exists
 import { Menu, X, Globe, Mountain, Calendar, ImageIcon, Package, BookOpen, ChevronRight, ArrowUp } from "lucide-react";
 import { Button } from "./components/ui/button"; // TODO: Check if this file exists
 import { LoginButton } from "./components/auth/LoginButton";
+import { useAuth } from "./contexts/AuthContext";
 
 const LanguageContext = createContext();
 
@@ -44,16 +45,17 @@ export default function Layout({ children, currentPageName }) {
   const location = useLocation();
   const [language, setLanguage] = useState('he');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const { isAuthenticated, loading } = useAuth();
   
   const t = translations[language];
   const isRTL = language === 'he';
 
+  // Don't show navigation on auth callback page or when not authenticated
+  const shouldShowNavigation = isAuthenticated && location.pathname !== '/auth/callback';
+
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 20;
-      setScrolled(isScrolled);
       setShowScrollTop(window.scrollY > 300);
     };
 
@@ -80,144 +82,71 @@ export default function Layout({ children, currentPageName }) {
   return (
     <LanguageContext.Provider value={{ language, t, isRTL, toggleLanguage }}>
       <div className={`min-h-screen bg-gradient-to-b from-desert-50 via-white to-desert-50 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
-        {/* Navigation */}
-        <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-          scrolled 
-            ? 'glass shadow-lg py-2' 
-            : 'bg-transparent py-4'
-        }`}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center">
-              {/* Logo */}
-              <Link 
-                to={createPageUrl("Home")} 
-                className="flex items-center gap-3 group"
-                data-aos="fade-right"
-              >
-                <div className="relative">
-                  <div className="absolute inset-0 bg-desert-gradient rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
-                  <div className="relative w-12 h-12 bg-desert-gradient rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-warm">
-                    <Mountain className="w-7 h-7 text-white" />
-                  </div>
-                </div>
-                <div className={isRTL ? 'text-right' : 'text-left'}>
-                  <h1 className={`text-2xl font-display font-bold ${scrolled ? 'text-gray-900' : 'text-white'} transition-colors duration-300`}>
-                    {t.title}
-                  </h1>
-                  <p className={`text-xs ${scrolled ? 'text-gray-600' : 'text-desert-100'} transition-colors duration-300`}>
-                    {t.subtitle}
-                  </p>
-                </div>
-              </Link>
-
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center gap-6" data-aos="fade-left">
-                {navigationItems.map((item, index) => (
-                  <Link
-                    key={item.title}
-                    to={item.url}
-                    className={`group flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
-                      location.pathname === item.url
-                        ? `${scrolled ? 'bg-desert-100 text-desert-700' : 'bg-white/20 text-white'} shadow-md`
-                        : `${scrolled ? 'text-gray-700 hover:bg-desert-50' : 'text-white/90 hover:bg-white/10'} hover:shadow-md`
-                    }`}
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                    <span>{item.title}</span>
-                  </Link>
-                ))}
-                
-                {/* Language Toggle */}
-                <Button
-                  onClick={toggleLanguage}
-                  className={`relative overflow-hidden group px-3 py-2 rounded-xl ${
-                    scrolled 
-                      ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' 
-                      : 'bg-white/20 hover:bg-white/30 text-white'
-                  } transition-all duration-300`}
+        {/* Navigation - Only show when authenticated */}
+        {shouldShowNavigation && (
+          <nav className="relative top-0 w-full bg-white shadow-lg border-b-2 border-gray-300 py-4">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center">
+                {/* Logo */}
+                <Link 
+                  to={createPageUrl("Home")} 
+                  className="flex items-center gap-3 group mr-8"
                 >
-                  <Globe className="w-4 h-4 mr-1.5" />
-                  <span className="font-medium">{language === 'he' ? 'EN' : 'עב'}</span>
-                  <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </Button>
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-desert-gradient rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                    <div className="relative w-12 h-12 bg-desert-gradient rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-warm">
+                      <Mountain className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className={isRTL ? 'text-right' : 'text-left'}>
+                    <h1 className="text-2xl font-display font-bold text-gray-900 transition-colors duration-300">
+                      {t.title}
+                    </h1>
+                    <p className="text-xs text-gray-600 transition-colors duration-300">
+                      {t.subtitle}
+                    </p>
+                  </div>
+                </Link>
 
-                <LoginButton 
-                  className={`${
-                    scrolled 
-                      ? 'text-gray-700' 
-                      : 'text-white'
-                  }`} 
-                />
-                
-                <Link to={createPageUrl("Booking")}>
-                  <Button className="relative overflow-hidden group btn-primary">
-                    <span className="relative z-10">{t.bookNow}</span>
-                    <ChevronRight className="w-4 h-4 ml-1 relative z-10 group-hover:translate-x-1 transition-transform" />
+                {/* Centered Navigation */}
+                <div className="flex items-center justify-center gap-3 flex-1">
+                  {navigationItems.map((item, index) => (
+                    <Link
+                      key={item.title}
+                      to={item.url}
+                      className={`group flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 border-2 shadow-md ${
+                        location.pathname === item.url
+                          ? 'bg-desert-500 text-white border-desert-600 shadow-lg transform scale-105'
+                          : 'text-gray-800 border-gray-400 hover:bg-desert-100 hover:border-desert-400 hover:shadow-lg bg-gray-50 hover:transform hover:scale-102'
+                      }`}
+                    >
+                      <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                      <span className="whitespace-nowrap">{item.title}</span>
+                    </Link>
+                  ))}
+                  
+                  {/* Language Toggle */}
+                  <Button
+                    onClick={toggleLanguage}
+                    className="relative overflow-hidden group px-4 py-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-800 border-2 border-gray-400 hover:border-gray-500 transition-all duration-300 shadow-md font-semibold flex items-center justify-between w-[80px]"
+                  >
+                    <Globe className="w-4 h-4" />
+                    <span className="font-semibold text-sm">{language === 'he' ? 'EN' : 'עב'}</span>
                     <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </Button>
-                </Link>
-              </div>
 
-              {/* Mobile Menu Button */}
-              <div className="md:hidden flex items-center gap-2">
-                <Button
-                  onClick={toggleLanguage}
-                  className={`p-2 rounded-lg ${
-                    scrolled 
-                      ? 'bg-gray-100 text-gray-700' 
-                      : 'bg-white/20 text-white'
-                  }`}
-                >
-                  <Globe className="w-5 h-5" />
-                </Button>
-                <Button
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className={`p-2 rounded-lg ${
-                    scrolled 
-                      ? 'bg-gray-100 text-gray-700' 
-                      : 'bg-white/20 text-white'
-                  }`}
-                >
-                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                </Button>
-              </div>
-            </div>
-
-            {/* Mobile Menu */}
-            <div className={`md:hidden transition-all duration-500 ease-in-out ${
-              mobileMenuOpen 
-                ? 'max-h-screen opacity-100 mt-4' 
-                : 'max-h-0 opacity-0 overflow-hidden'
-            }`}>
-              <div className="glass rounded-2xl p-4 space-y-2">
-                {navigationItems.map((item) => (
-                  <Link
-                    key={item.title}
-                    to={item.url}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                      location.pathname === item.url
-                        ? 'bg-desert-100 text-desert-700 shadow-md'
-                        : 'text-gray-700 hover:bg-desert-50'
-                    }`}
-                  >
-                    <item.icon className="w-5 h-5" />
-                    <span>{item.title}</span>
-                  </Link>
-                ))}
-                <div className="pt-2 space-y-2">
-                  <LoginButton className="w-full" />
-                  <Link to={createPageUrl("Booking")} onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full btn-primary">
-                      {t.bookNow}
-                    </Button>
-                  </Link>
+                  <LoginButton 
+                    className="text-gray-800 border-2 border-gray-400 hover:border-gray-500 bg-gray-50 hover:bg-gray-100 font-semibold shadow-md" 
+                  />
                 </div>
+
+
               </div>
+
+
             </div>
-          </div>
-        </nav>
+          </nav>
+        )}
 
         {/* Main Content */}
         <main className="flex-1">
@@ -247,7 +176,7 @@ export default function Layout({ children, currentPageName }) {
           
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="grid md:grid-cols-3 gap-12">
-              <div data-aos="fade-up">
+              <div>
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 bg-desert-gradient rounded-xl flex items-center justify-center shadow-warm">
                     <Mountain className="w-6 h-6 text-white" />
@@ -259,7 +188,7 @@ export default function Layout({ children, currentPageName }) {
                 </p>
               </div>
               
-              <div data-aos="fade-up" data-aos-delay="100">
+              <div>
                 <h4 className="font-display font-semibold text-lg mb-4 text-desert-200">
                   {t.contact}
                 </h4>
@@ -275,7 +204,7 @@ export default function Layout({ children, currentPageName }) {
                 </div>
               </div>
               
-              <div data-aos="fade-up" data-aos-delay="200">
+              <div>
                 <h4 className="font-display font-semibold text-lg mb-4 text-desert-200">
                   {t.followUs}
                 </h4>

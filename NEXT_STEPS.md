@@ -1,6 +1,6 @@
 # 🚧 Next Steps for Nahal Prat Project
 
-## 🗂️ Database ([#1](https://github.com/YOUR_USERNAME/YOUR_REPO/issues/1))
+## 🗂️ Database ([#1](https://github.com/ilays1998/nahalprat-trek/issues/1))
 
 - [x] **Rename `user` table** to avoid conflict with PostgreSQL reserved word  
   - ✅ Renamed to `app_user`
@@ -9,7 +9,7 @@
   - ✅ Updated all related imports and references
   - ✅ Migration successfully applied
 
-## 🔐 Authentication ([#2](https://github.com/YOUR_USERNAME/YOUR_REPO/issues/2))
+## 🔐 Authentication ([#2](https://github.com/ilays1998/nahalprat-trek/issues/2))
 
 - [x] **Enhance UI**
   - ✅ Styled login/logout buttons with Google branding and desert theme
@@ -17,7 +17,7 @@
   - ✅ Added logout confirmation modal with Hebrew text
   - ✅ Enhanced button component with multiple variants and animations
 
-## 🏠 Homepage Enhancements ([#3](https://github.com/YOUR_USERNAME/YOUR_REPO/issues/3))
+## 🏠 Homepage Enhancements ([#3](https://github.com/ilays1998/nahalprat-trek/issues/3))
 
 - [x] Add all the options that in topbar code (switch laungaugh, menu, etc...)
 

@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('authToken'));
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState(null);
 
   const API_BASE_URL = config.API_BASE_URL;
 
@@ -44,8 +45,12 @@ export const AuthProvider = ({ children }) => {
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
+        setAuthError(null);
+      } else if (response.status === 401) {
+        // Token is expired or invalid
+        handleAuthError('Your session has expired. Please log in again.');
       } else {
-        // Token is invalid, remove it
+        // Other errors
         logout();
       }
     } catch (error) {
@@ -53,6 +58,16 @@ export const AuthProvider = ({ children }) => {
       logout();
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAuthError = (message) => {
+    logout();
+    setAuthError(message);
+    // Store the current path to redirect back after login
+    const currentPath = window.location.pathname;
+    if (currentPath !== '/auth/callback' && currentPath !== '/login-error') {
+      localStorage.setItem('redirectPath', currentPath);
     }
   };
 
@@ -64,7 +79,13 @@ export const AuthProvider = ({ children }) => {
   const handleAuthCallback = (accessToken, userData) => {
     setToken(accessToken);
     setUser(userData);
+    setAuthError(null);
     localStorage.setItem('authToken', accessToken);
+    
+    // Redirect to stored path or default to home
+    const redirectPath = localStorage.getItem('redirectPath') || '/';
+    localStorage.removeItem('redirectPath'); // Clear stored path
+    window.location.href = redirectPath;
   };
 
   const logout = () => {
@@ -82,6 +103,8 @@ export const AuthProvider = ({ children }) => {
     handleAuthCallback,
     isAuthenticated: !!user,
     isAdmin: user?.role === 'admin',
+    authError,
+    clearAuthError: () => setAuthError(null),
   };
 
   return (

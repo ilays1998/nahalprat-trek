@@ -5,11 +5,12 @@ import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { CalendarIcon, Users, Phone, Mail, Shield, ShieldCheck, ShieldClose, Ban, Clock, Check, Trash2 } from "lucide-react";
+import { CalendarIcon, Users, Phone, Mail, Shield, ShieldCheck, ShieldClose, Ban, Clock, Check, Trash2, LogIn } from "lucide-react";
 import { format, parseISO, isAfter } from "date-fns";
 import AddDateForm from "../admin/AddDateForm";
 import ManageDates from "../admin/ManageDatesForm";
 import { useLanguage } from "../layout";
+import { useAuth } from "../contexts/AuthContext";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +25,7 @@ import {
 
 export default function MyBookingsPage() {
   const { language } = useLanguage();
+  const { login } = useAuth();
   const [myBookings, setMyBookings] = useState([]);
   const [allBookings, setAllBookings] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -31,6 +33,7 @@ export default function MyBookingsPage() {
   const [showAddDate, setShowAddDate] = useState(false);
   const [trekDates, setTrekDates] = useState([]);
   const [error, setError] = useState(null);
+  const [isAuthError, setIsAuthError] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -39,6 +42,7 @@ export default function MyBookingsPage() {
   const loadData = async () => {
     setLoading(true);
     setError(null);
+    setIsAuthError(false);
     try {
       // Load current user
       const user = await User.me();
@@ -77,7 +81,12 @@ export default function MyBookingsPage() {
       }
     } catch (error) {
       console.error('Error loading user data:', error);
-      setError('Failed to load user data. Please try again.');
+      if (error.name === 'AuthError') {
+        setIsAuthError(true);
+        setError(language === 'he' ? 'פג תוקף החיבור שלך. אנא התחבר מחדש.' : 'Your session has expired. Please log in again.');
+      } else {
+        setError('Failed to load user data. Please try again.');
+      }
     }
     setLoading(false);
   };
@@ -385,13 +394,23 @@ export default function MyBookingsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="text-red-600 mb-4">⚠️</div>
-            <p className="text-gray-900 font-semibold">{error}</p>
-            <Button 
-              onClick={loadData} 
-              className="mt-4 bg-amber-600 hover:bg-amber-700"
-            >
-              {language === 'he' ? 'נסה שוב' : 'Try Again'}
-            </Button>
+            <p className="text-gray-900 font-semibold mb-4">{error}</p>
+            {isAuthError ? (
+              <Button 
+                onClick={login}
+                className="bg-amber-600 hover:bg-amber-700 inline-flex items-center gap-2"
+              >
+                <LogIn className="w-4 h-4" />
+                {language === 'he' ? 'התחבר מחדש' : 'Log In Again'}
+              </Button>
+            ) : (
+              <Button 
+                onClick={loadData} 
+                className="mt-4 bg-amber-600 hover:bg-amber-700"
+              >
+                {language === 'he' ? 'נסה שוב' : 'Try Again'}
+              </Button>
+            )}
           </div>
         </div>
       </div>

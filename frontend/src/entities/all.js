@@ -15,13 +15,21 @@ const getAuthHeaders = () => {
 };
 
 // Helper function for API calls
-const apiCall = async (endpoint, options = {}) => {;
+const apiCall = async (endpoint, options = {}) => {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     headers: getAuthHeaders(),
     ...options,
   });
 
   if (!response.ok) {
+    // Handle authentication errors
+    if (response.status === 401) {
+      // Clear the expired token
+      localStorage.removeItem('authToken');
+      // Force page reload to trigger auth state update
+      window.location.reload();
+      throw new Error('Authentication failed - please log in again');
+    }
     throw new Error(`API call failed: ${response.statusText}`);
   }
 

@@ -5,6 +5,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from config import Config
 import os
 import json
+from datetime import timedelta
 
 auth_bp = Blueprint("auth", __name__)
 oauth = OAuth()
@@ -53,7 +54,8 @@ def authorize():
         db.session.commit()
 
     # Flask-JWT-Extended expects identity to be a simple value, not an object
-    access_token = create_access_token(identity=str(user.id))
+    expires_delta = timedelta(minutes=int(os.environ.get("JWT_ACCESS_TOKEN_EXPIRES_MINUTES", "15")))
+    access_token = create_access_token(identity=str(user.id), expires_delta=expires_delta)
     
     # Redirect to frontend with token and user data
     frontend_callback_url = f"{Config.FRONTEND_URL}/auth/callback"

@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from "react";
-import { Booking, User, TrekDate } from "../entities/all"; // TODO: Check if this file exists
-import { Button } from "../components/ui/button"; // TODO: Check if this file exists
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "../components/ui/card"; // TODO: Check if this file exists
-import { Badge } from "../components/ui/badge"; // TODO: Check if this file exists
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"; // TODO: Check if this file exists
+import { Booking, User, TrekDate } from "../entities/all";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { CalendarIcon, Users, Phone, Mail, Shield, ShieldCheck, ShieldClose, Ban, Clock, Check, Trash2 } from "lucide-react";
 import { format, parseISO, isAfter } from "date-fns";
 import AddDateForm from "../admin/AddDateForm";
@@ -19,7 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../components/ui/alert-dialog"; // TODO: Check if this file exists
+} from "../components/ui/alert-dialog";
 
 export default function MyBookingsPage() {
   const [myBookings, setMyBookings] = useState([]);
@@ -27,7 +27,8 @@ export default function MyBookingsPage() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showAddDate, setShowAddDate] = useState(false);
-  const [trekDates, setTrekDates] = useState([]); // New state for trek dates
+  const [trekDates, setTrekDates] = useState([]);
+  const [error, setError] = useState(null);
   const language = 'he';
 
   useEffect(() => {
@@ -35,44 +36,58 @@ export default function MyBookingsPage() {
   }, []);
 
   const loadData = async () => {
-    setLoading(true); // Set loading true at the beginning of data load
+    setLoading(true);
+    setError(null);
     try {
+      // Load current user
       const user = await User.me();
       setCurrentUser(user);
       
-      // Load user's own bookings and all trek dates concurrently
-      const [userBookings, allTrekDates] = await Promise.all([
-        Booking.filter({ created_by: user.email }, '-trek_date'), // Sort by trek_date descending
-        TrekDate.list('-start_date') // Fetch all available trek dates, sorted by start_date
-      ]);
-      
-      setMyBookings(userBookings);
-      setTrekDates(allTrekDates); // Set trek dates state
-      
-      // If user is admin, load all bookings
-      if (user.role === 'admin') {
-        try {
-          const allBookingsData = await Booking.list('-trek_date'); // Sort by trek_date descending
-          setAllBookings(allBookingsData);
-        } catch (error) {
-          console.log('Admin access to all bookings restricted by RLS or other error:', error);
-          setAllBookings([]);
+      try {
+        // Load user's own bookings and trek dates concurrently
+        const [userBookings, allTrekDates] = await Promise.all([
+          Booking.filter({ sort: '-trek_date', user_id: user.id }),
+          TrekDate.list('-start_date')
+        ]);
+        
+        setMyBookings(userBookings);
+        setTrekDates(allTrekDates);
+        
+        // If user is admin, load all bookings
+        if (user.role === 'admin') {
+          try {
+            const allBookingsData = await Booking.filter({ 
+              sort: '-trek_date',
+              admin: true // Use admin=true parameter for admin requests
+            });
+            console.log('Admin bookings loaded:', allBookingsData);
+            setAllBookings(allBookingsData);
+          } catch (error) {
+            console.error('Error loading all bookings:', error);
+            setError('Failed to load all bookings. Please try again.');
+            setAllBookings([]);
+          }
         }
+      } catch (error) {
+        console.error('Error loading data:', error);
+        setError('Failed to load bookings. Please try again.');
+        setMyBookings([]);
+        setTrekDates([]);
       }
     } catch (error) {
-      console.error('Error loading data:', error);
-      // If user authentication fails, the ProtectedRoute component will handle the redirect
-      // so we don't need to handle it here specifically
+      console.error('Error loading user data:', error);
+      setError('Failed to load user data. Please try again.');
     }
-    setLoading(false); // Set loading false after data is loaded or error occurs
+    setLoading(false);
   };
 
   const handleApproveBooking = async (bookingToApprove) => {
     try {
       await Booking.update(bookingToApprove.id, { status: 'confirmed' });
-      loadData();
+      await loadData(); // Reload all data after update
     } catch (error) {
       console.error("Failed to approve booking:", error);
+      setError('Failed to approve booking. Please try again.');
     }
   };
 
@@ -81,11 +96,13 @@ export default function MyBookingsPage() {
       // 1. Update booking status to 'cancelled'
       await Booking.update(bookingToCancel.id, { status: 'cancelled' });
 
-      // 2. Find the corresponding trek date using the exact date string
-      const trekDateToUpdate = trekDates.find(td => td.start_date === bookingToCancel.trek_date);
+      // 2. Find the corresponding trek date
+      const trekDateToUpdate = trekDates.find(td => 
+        td.start_date === bookingToCancel.trek_date
+      );
 
       if (trekDateToUpdate) {
-        // 3. Add the spots back to the available count based on package type
+        // 3. Add the spots back to the available count
         const spotsField = `available_spots_${bookingToCancel.package_type}`;
         const currentSpots = trekDateToUpdate[spotsField] || 0;
         const spotsToAdd = bookingToCancel.participants_count;
@@ -95,21 +112,21 @@ export default function MyBookingsPage() {
         });
       }
 
-      // 4. Refresh the data on the page to reflect changes
-      loadData();
-
+      // 4. Refresh data
+      await loadData();
     } catch (error) {
       console.error("Failed to cancel booking:", error);
-      // Optionally, show an error message to the user
+      setError('Failed to cancel booking. Please try again.');
     }
   };
 
   const handleDeleteDate = async (dateId) => {
     try {
       await TrekDate.delete(dateId);
-      loadData();
+      await loadData();
     } catch (error) {
       console.error("Failed to delete date:", error);
+      setError('Failed to delete date. Please try again.');
     }
   };
 
@@ -355,6 +372,25 @@ export default function MyBookingsPage() {
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
             <p className="mt-4 text-gray-600">{language === 'he' ? 'טוען...' : 'Loading...'}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="text-red-600 mb-4">⚠️</div>
+            <p className="text-gray-900 font-semibold">{error}</p>
+            <Button 
+              onClick={loadData} 
+              className="mt-4 bg-amber-600 hover:bg-amber-700"
+            >
+              {language === 'he' ? 'נסה שוב' : 'Try Again'}
+            </Button>
           </div>
         </div>
       </div>

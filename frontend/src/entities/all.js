@@ -15,7 +15,7 @@ const getAuthHeaders = () => {
 };
 
 // Helper function for API calls
-const apiCall = async (endpoint, options = {}) => {
+const apiCall = async (endpoint, options = {}) => {;
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     headers: getAuthHeaders(),
     ...options,

@@ -1,22 +1,39 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import db, TrekDate
+from models import db, TrekDate, AppUser
 from datetime import date
 
 trekdates_bp = Blueprint("trekdates", __name__)
 
-@trekdates_bp.route("/", methods=["GET"])
+@trekdates_bp.route("/", methods=["GET"], strict_slashes=False)
 def list_trekdates():
     # Return all trekdates, only future+present ones
     today = date.today()
-    trekdates = TrekDate.query.filter(TrekDate.end_date >= today).all()
+    
+    # Get sort parameter
+    sort_param = request.args.get('sort', 'start_date')
+    
+    # Build query
+    query = TrekDate.query.filter(TrekDate.end_date >= today)
+    
+    # Handle sorting
+    if sort_param == '-start_date':
+        query = query.order_by(TrekDate.start_date.desc())
+    elif sort_param == 'start_date':
+        query = query.order_by(TrekDate.start_date.asc())
+    else:
+        # Default to ascending start_date
+        query = query.order_by(TrekDate.start_date.asc())
+    
+    trekdates = query.all()
     return jsonify([serialize_trekdate(d) for d in trekdates])
 
-@trekdates_bp.route("/", methods=["POST"])
+@trekdates_bp.route("/", methods=["POST"], strict_slashes=False)
 @jwt_required()
 def add_trekdate():
-    user = get_jwt_identity()
-    if user['role'] != 'admin':
+    user_id = get_jwt_identity()
+    user = AppUser.query.get(int(user_id))
+    if not user or user.role != 'admin':
         return jsonify({"error": "Only admin"}), 403
     data = request.json
     td = TrekDate(

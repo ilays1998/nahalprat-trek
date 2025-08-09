@@ -13,10 +13,10 @@ import { Badge } from "../components/ui/badge"; // TODO: Check if this file exis
 import { Alert, AlertDescription } from "../components/ui/alert"; // TODO: Check if this file exists
 import { CalendarIcon, Users, Phone, AlertCircle, CheckCircle } from "lucide-react";
 import { format, parseISO, isAfter, startOfDay, addDays } from "date-fns";
+import { useLanguage } from "../layout";
 
 export default function BookingPage() {
-  const language = 'he';
-  const isRTL = language === 'he';
+  const { language, isRTL } = useLanguage();
   const [availableDates, setAvailableDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedPackage, setSelectedPackage] = useState('');

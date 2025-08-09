@@ -9,6 +9,7 @@ import { CalendarIcon, Users, Phone, Mail, Shield, ShieldCheck, ShieldClose, Ban
 import { format, parseISO, isAfter } from "date-fns";
 import AddDateForm from "../admin/AddDateForm";
 import ManageDates from "../admin/ManageDatesForm";
+import { useLanguage } from "../layout";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,6 +23,7 @@ import {
 } from "../components/ui/alert-dialog";
 
 export default function MyBookingsPage() {
+  const { language } = useLanguage();
   const [myBookings, setMyBookings] = useState([]);
   const [allBookings, setAllBookings] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -29,7 +31,6 @@ export default function MyBookingsPage() {
   const [showAddDate, setShowAddDate] = useState(false);
   const [trekDates, setTrekDates] = useState([]);
   const [error, setError] = useState(null);
-  const language = 'he';
 
   useEffect(() => {
     loadData();

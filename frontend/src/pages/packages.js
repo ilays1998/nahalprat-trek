@@ -6,10 +6,10 @@ import { Button } from "../components/ui/button"; // TODO: Check if this file ex
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"; // TODO: Check if this file exists
 import { Badge } from "../components/ui/badge"; // TODO: Check if this file exists
 import { Check, Star, Users, Clock, Utensils, Bed, Car, ShieldCheck } from "lucide-react";
+import { useLanguage } from "../layout";
 
 export default function Packages() {
-  const language = 'he';
-  const isRTL = language === 'he';
+  const { language, isRTL } = useLanguage();
 
   const content = {
     he: {

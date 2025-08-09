@@ -4,10 +4,10 @@ import { Badge } from "../components/ui/badge"; // TODO: Check if this file exis
 import { Button } from "../components/ui/button"; // TODO: Check if this file exists
 import { X, ZoomIn } from "lucide-react";
 import { Dialog, DialogContent } from "../components/ui/dialog"; // TODO: Check if this file exists
+import { useLanguage } from "../layout";
 
 export default function Gallery() {
-  const language = 'he';
-  const isRTL = language === 'he';
+  const { language, isRTL } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedImage, setSelectedImage] = useState(null);
 

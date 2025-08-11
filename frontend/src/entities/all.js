@@ -1,8 +1,6 @@
 // all.js
 import config from '../config';
 
-export default { foo: 1, bar: 2 };
-
 const API_BASE_URL = config.API_BASE_URL;
 
 // Helper function to get auth headers
@@ -24,11 +22,11 @@ const apiCall = async (endpoint, options = {}) => {
   if (!response.ok) {
     // Handle authentication errors
     if (response.status === 401) {
-      // Clear the expired token
+      // Clear the expired token and surface an AuthError to callers
       localStorage.removeItem('authToken');
-      // Force page reload to trigger auth state update
-      window.location.reload();
-      throw new Error('Authentication failed - please log in again');
+      const err = new Error('Authentication failed - please log in again');
+      err.name = 'AuthError';
+      throw err;
     }
     throw new Error(`API call failed: ${response.statusText}`);
   }

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models import db, TrekDate, AppUser
-from datetime import date
+from datetime import date, datetime
 
 trekdates_bp = Blueprint("trekdates", __name__)
 
@@ -35,10 +35,17 @@ def add_trekdate():
     user = AppUser.query.get(int(user_id))
     if not user or user.role != 'admin':
         return jsonify({"error": "Only admin"}), 403
-    data = request.json
+    data = request.json or {}
+    # Parse incoming ISO strings (YYYY-MM-DD)
+    try:
+        start_date = datetime.strptime(data['start_date'], '%Y-%m-%d').date()
+        end_date = datetime.strptime(data['end_date'], '%Y-%m-%d').date()
+    except Exception:
+        return jsonify({"error": "Invalid date format, expected YYYY-MM-DD"}), 400
+
     td = TrekDate(
-        start_date=data['start_date'],
-        end_date=data['end_date'],
+        start_date=start_date,
+        end_date=end_date,
         available_spots_basic=data.get('available_spots_basic', 12),
         available_spots_pro=data.get('available_spots_pro', 8),
         available_spots_premium=data.get('available_spots_premium', 4),
@@ -48,6 +55,49 @@ def add_trekdate():
     db.session.add(td)
     db.session.commit()
     return jsonify(serialize_trekdate(td))
+
+@trekdates_bp.route('/<int:trekdate_id>', methods=['PUT'], strict_slashes=False)
+@jwt_required()
+def update_trekdate(trekdate_id: int):
+    user_id = get_jwt_identity()
+    user = AppUser.query.get(int(user_id))
+    if not user or user.role != 'admin':
+        return jsonify({"error": "Only admin"}), 403
+
+    td = TrekDate.query.get_or_404(trekdate_id)
+    data = request.json or {}
+
+    # Update fields if provided
+    if 'start_date' in data:
+        try:
+            td.start_date = datetime.strptime(data['start_date'], '%Y-%m-%d').date()
+        except Exception:
+            return jsonify({"error": "Invalid start_date format, expected YYYY-MM-DD"}), 400
+    if 'end_date' in data:
+        try:
+            td.end_date = datetime.strptime(data['end_date'], '%Y-%m-%d').date()
+        except Exception:
+            return jsonify({"error": "Invalid end_date format, expected YYYY-MM-DD"}), 400
+    for field in ['available_spots_basic', 'available_spots_pro', 'available_spots_premium', 'season', 'weather_notes']:
+        if field in data:
+            setattr(td, field, data[field])
+
+    db.session.add(td)
+    db.session.commit()
+    return jsonify(serialize_trekdate(td))
+
+@trekdates_bp.route('/<int:trekdate_id>', methods=['DELETE'], strict_slashes=False)
+@jwt_required()
+def delete_trekdate(trekdate_id: int):
+    user_id = get_jwt_identity()
+    user = AppUser.query.get(int(user_id))
+    if not user or user.role != 'admin':
+        return jsonify({"error": "Only admin"}), 403
+
+    td = TrekDate.query.get_or_404(trekdate_id)
+    db.session.delete(td)
+    db.session.commit()
+    return jsonify({"success": True})
 
 def serialize_trekdate(d):
     return {

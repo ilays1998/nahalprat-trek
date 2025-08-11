@@ -56,7 +56,7 @@ def list_bookings():
                 query = query.order_by(asc(getattr(Booking, sort_param)))
         
         bookings = query.all()
-        result = [booking.to_dict() for booking in bookings]
+        result = [serialize_booking(booking) for booking in bookings]
         logging.debug(f"Returning {len(result)} bookings")
         return jsonify(result)
     except Exception as e:

@@ -13,7 +13,7 @@ export function Calendar({ mode = 'single', selected, onSelect, disabled, initia
         disabled={disabled}
         initialFocus={initialFocus}
         // Improve default visuals
-        showOutsideDays
+        showOutsideDays={false}
         weekStartsOn={0}
         styles={{
           caption: { fontWeight: 600 },

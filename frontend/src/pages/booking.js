@@ -14,9 +14,22 @@ import { Alert, AlertDescription } from "../components/ui/alert"; // TODO: Check
 import { CalendarIcon, Users, Phone, AlertCircle, CheckCircle } from "lucide-react";
 import { format, parseISO, isAfter, startOfDay, addDays } from "date-fns";
 import { useLanguage } from "../layout";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function BookingPage() {
   const { language, isRTL } = useLanguage();
+  const { user } = useAuth();
+  
+  const getDefaultNamesFromUser = (currentUser) => {
+    const fullName = (currentUser?.name || "").trim();
+    if (!fullName) return { firstName: "", lastName: "" };
+    const parts = fullName.split(/\s+/);
+    if (parts.length === 1) return { firstName: parts[0], lastName: "" };
+    const lastName = parts.pop();
+    const firstName = parts.join(" ");
+    return { firstName, lastName };
+  };
+  const defaultNames = getDefaultNamesFromUser(user);
   const [availableDates, setAvailableDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedPackage, setSelectedPackage] = useState('');
@@ -25,9 +38,9 @@ export default function BookingPage() {
   const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
+    first_name: defaultNames.firstName,
+    last_name: defaultNames.lastName,
+    email: user?.email || '',
     phone: '',
     package_type: '',
     participants_count: 1,
@@ -57,6 +70,19 @@ export default function BookingPage() {
     });
     setAvailableDates(futureDates);
   };
+
+  // If user info arrives after mount, prefill empty name/email fields
+  useEffect(() => {
+    if (user) {
+      const names = getDefaultNamesFromUser(user);
+      setFormData((prev) => ({
+        ...prev,
+        first_name: prev.first_name || names.firstName,
+        last_name: prev.last_name || names.lastName,
+        email: prev.email || user.email || '',
+      }));
+    }
+  }, [user]);
 
   const getAvailableSpots = (date, packageType) => {
     if (!date || !packageType) return 0;
@@ -216,9 +242,9 @@ export default function BookingPage() {
       
       // Reset form
       setFormData({
-        first_name: '',
-        last_name: '',
-        email: '',
+        first_name: getDefaultNamesFromUser(user).firstName,
+        last_name: getDefaultNamesFromUser(user).lastName,
+        email: user?.email || '',
         phone: '',
         package_type: '',
         participants_count: 1,
@@ -407,21 +433,24 @@ export default function BookingPage() {
 
         {/* Step 3: Personal Information Form */}
         {selectedPackage && selectedDate && (
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-10">
             <Card className="border-none shadow-lg">
               <CardHeader>
                 <CardTitle className="text-xl font-bold">{currentContent.step3}</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-8">
                 <div className="grid lg:grid-cols-2 gap-8">
                   {/* Personal Information */}
-                  <div className="space-y-4">
+                  <div className="space-y-5 rounded-xl border border-gray-100 bg-white/60 p-5">
                     <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                       <Users className="w-5 h-5 text-amber-600" />
                       {currentContent.personalInfo}
                     </h3>
+                    <p className="text-sm text-gray-500">
+                      {language === 'he' ? 'נשתמש בפרטים האלו כדי ליצור קשר בנוגע להזמנה שלך.' : 'We will use these details to contact you about your booking.'}
+                    </p>
                     
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-5">
                       <div>
                         <Label htmlFor="firstName">{currentContent.fields.firstName}</Label>
                         <Input
@@ -430,6 +459,8 @@ export default function BookingPage() {
                           value={formData.first_name}
                           onChange={(e) => handleInputChange('first_name', e.target.value)}
                           className="mt-2"
+                          placeholder={language === 'he' ? 'יוסי' : 'John'}
+                          autoComplete="given-name"
                         />
                       </div>
                       <div>
@@ -440,6 +471,8 @@ export default function BookingPage() {
                           value={formData.last_name}
                           onChange={(e) => handleInputChange('last_name', e.target.value)}
                           className="mt-2"
+                          placeholder={language === 'he' ? 'כהן' : 'Doe'}
+                          autoComplete="family-name"
                         />
                       </div>
                     </div>
@@ -453,6 +486,8 @@ export default function BookingPage() {
                         value={formData.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
                         className="mt-2"
+                        placeholder="name@example.com"
+                        autoComplete="email"
                       />
                     </div>
                     
@@ -460,20 +495,26 @@ export default function BookingPage() {
                       <Label htmlFor="phone">{currentContent.fields.phone}</Label>
                       <Input
                         id="phone"
+                        type="tel"
                         required
                         value={formData.phone}
                         onChange={(e) => handleInputChange('phone', e.target.value)}
                         className="mt-2"
+                        placeholder={language === 'he' ? '050-123-4567' : '+1 (555) 123-4567'}
+                        autoComplete="tel"
                       />
                     </div>
                   </div>
 
                   {/* Trek Details */}
-                  <div className="space-y-4">
+                  <div className="space-y-5 rounded-xl border border-gray-100 bg-white/60 p-5">
                     <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                       <CalendarIcon className="w-5 h-5 text-amber-600" />
                       {currentContent.trekDetails}
                     </h3>
+                    <p className="text-sm text-gray-500">
+                      {language === 'he' ? 'בחר את מספר המשתתפים והוסף בקשות מיוחדות במידת הצורך.' : 'Choose the number of participants and add any special requests.'}
+                    </p>
 
                     <div>
                       <Label htmlFor="participants">{currentContent.fields.participants}</Label>
@@ -512,7 +553,10 @@ export default function BookingPage() {
                     <Phone className="w-5 h-5 text-amber-600" />
                     {currentContent.emergencyContact}
                   </h3>
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <p className="text-sm text-gray-500 mb-4">
+                    {language === 'he' ? 'ניצור קשר רק במקרה חירום.' : 'We will contact this person only in case of emergency.'}
+                  </p>
+                  <div className="grid md:grid-cols-2 gap-5">
                     <div>
                       <Label htmlFor="emergencyName">{currentContent.fields.emergencyName}</Label>
                       <Input
@@ -522,17 +566,20 @@ export default function BookingPage() {
                         onChange={(e) => handleInputChange('emergency_contact_name', e.target.value)}
                         placeholder={currentContent.placeholders.emergencyName}
                         className="mt-2"
+                        autoComplete="name"
                       />
                     </div>
                     <div>
                       <Label htmlFor="emergencyPhone">{currentContent.fields.emergencyPhone}</Label>
                       <Input
                         id="emergencyPhone"
+                        type="tel"
                         required
                         value={formData.emergency_contact_phone}
                         onChange={(e) => handleInputChange('emergency_contact_phone', e.target.value)}
                         placeholder={currentContent.placeholders.emergencyPhone}
                         className="mt-2"
+                        autoComplete="tel"
                       />
                     </div>
                   </div>

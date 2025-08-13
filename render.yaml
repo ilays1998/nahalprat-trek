@@ -5,8 +5,7 @@ services:
     rootDir: backend
     plan: free
     buildCommand: pip install -r requirements.txt
-    preDeployCommand: FLASK_APP=app:create_app flask db upgrade
-    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT
+    startCommand: FLASK_APP=app:create_app flask db upgrade || true && gunicorn wsgi:app --bind 0.0.0.0:$PORT
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -18,16 +17,13 @@ services:
           property: connectionString
       - key: FLASK_APP
         value: app:create_app
-      - key: FRONTEND_URL
+      - key: FRONTEND_HOST
         fromService:
           name: nahalprat-frontend
           type: web
-          property: url
+          property: host
       - key: CORS_ORIGINS
-        fromService:
-          name: nahalprat-frontend
-          type: web
-          property: url
+        value: "*"
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET
@@ -43,11 +39,11 @@ services:
     buildCommand: npm ci && npm run build
     startCommand: npm run preview -- --host --port $PORT
     envVars:
-      - key: VITE_BACKEND_URL
+      - key: VITE_BACKEND_HOST
         fromService:
           name: nahalprat-backend
           type: web
-          property: url
+          property: host
 
 databases:
   - name: nahalprat-db

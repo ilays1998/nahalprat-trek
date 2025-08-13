@@ -11,7 +11,14 @@ class Config:
 
     # Prefer explicit URLs from env (e.g., on Render), then fallback to localhost ports
     BACKEND_URL = os.environ.get("BACKEND_URL") or os.environ.get("RENDER_EXTERNAL_URL") or f"http://localhost:{BACKEND_PORT}"
-    FRONTEND_URL = os.environ.get("FRONTEND_URL") or f"http://localhost:{FRONTEND_PORT}"
+    # Prefer explicit FRONTEND_URL, otherwise allow constructing from FRONTEND_HOST (e.g., from Render blueprint),
+    # else fall back to localhost port
+    _frontend_host = os.environ.get("FRONTEND_HOST")
+    FRONTEND_URL = (
+        os.environ.get("FRONTEND_URL")
+        or (f"https://{_frontend_host}" if _frontend_host else None)
+        or f"http://localhost:{FRONTEND_PORT}"
+    )
     API_BASE_URL = f"{BACKEND_URL}/api"
     
     # Flask Configuration

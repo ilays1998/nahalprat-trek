@@ -13,9 +13,9 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const heroImages = [
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-    "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-    "https://images.unsplash.com/photo-1464207687429-7505649dae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+    "/images/hero-desert-1.jpg",
+    "/images/hero-nahal-prat-1.jpg",
+    "/images/hero-landscape-1.jpg"
   ];
 
   useEffect(() => {

@@ -41,37 +41,37 @@ export default function Gallery() {
   const galleryImages = [
     {
       id: 1,
-      url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      url: "/images/desert-landscape-1.jpg",
       title: language === 'he' ? "נופי המדבר" : "Desert Landscapes",
       category: "landscape"
     },
     {
       id: 2,
-      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      url: "/images/nahal-prat-1.jpg",
       title: language === 'he' ? "נחל פרת" : "Nahal Prat Stream",
       category: "landscape"
     },
     {
       id: 3,
-      url: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      url: "/images/desert-camping-1.jpg",
       title: language === 'he' ? "קמפינג במדבר" : "Desert Camping",
       category: "accommodation"
     },
     {
       id: 4,
-      url: "https://images.unsplash.com/photo-1555992336-fb0d29498b13?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      url: "/images/outdoor-dining-1.jpg",
       title: language === 'he' ? "ארוחה באוויר הפתוח" : "Outdoor Dining",
       category: "meals"
     },
     {
       id: 5,
-      url: "https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      url: "/images/trail-hiking-1.jpg",
       title: language === 'he' ? "הליכה בשביל" : "Trail Hiking",
       category: "activities"
     },
     {
       id: 6,
-      url: "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      url: "/images/desert-sunrise-1.jpg",
       title: language === 'he' ? "זריחה במדבר" : "Desert Sunrise",
       category: "landscape"
     }

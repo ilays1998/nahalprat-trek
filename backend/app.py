@@ -13,7 +13,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     CORS(app, 
-         origins=[Config.FRONTEND_URL],
+         origins=Config.CORS_ORIGINS,
          methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
          allow_headers=['Content-Type', 'Authorization'],
          supports_credentials=True)

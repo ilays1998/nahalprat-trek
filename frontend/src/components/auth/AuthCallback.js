@@ -33,8 +33,8 @@ export const AuthCallback = () => {
             userData = JSON.parse(decodeURIComponent(userDataParam));
           }
 
-          handleAuthCallback(accessToken, userData);
-          navigate('/', { replace: true });
+          const path = handleAuthCallback(accessToken, userData);
+          navigate(path, { replace: true });
         } catch (error) {
           console.error('Error handling auth callback:', error);
           navigate('/login-error', { replace: true });

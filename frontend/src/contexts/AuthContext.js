@@ -81,11 +81,11 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
     setAuthError(null);
     localStorage.setItem('authToken', accessToken);
-    
-    // Redirect to stored path or default to home
+
+    // Return the path we should navigate to; caller performs navigation
     const redirectPath = localStorage.getItem('redirectPath') || '/';
-    localStorage.removeItem('redirectPath'); // Clear stored path
-    window.location.href = redirectPath;
+    localStorage.removeItem('redirectPath');
+    return redirectPath;
   };
 
   const logout = () => {

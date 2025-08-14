@@ -1,0 +1,51 @@
+services:
+  - type: web
+    name: nahalprat-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: FLASK_APP=app:create_app flask db upgrade || true && gunicorn wsgi:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: SQLALCHEMY_DATABASE_URI
+        fromDatabase:
+          name: nahalprat-db
+          property: connectionString
+      - key: FLASK_APP
+        value: app:create_app
+      - key: FRONTEND_HOST
+        fromService:
+          name: nahalprat-frontend
+          type: web
+          property: host
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+
+  - type: web
+    name: nahalprat-frontend
+    runtime: node
+    rootDir: frontend
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm run preview -- --host --port $PORT
+    envVars:
+      - key: VITE_BACKEND_HOST
+        fromService:
+          name: nahalprat-backend
+          type: web
+          property: host
+
+databases:
+  - name: nahalprat-db
+    plan: free
+

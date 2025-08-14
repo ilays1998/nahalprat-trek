@@ -17,4 +17,4 @@
    source venv/bin/activate
    pip install -r requirements.txt
 
-3. flask run
+3. python3 app.py

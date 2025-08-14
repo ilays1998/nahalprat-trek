@@ -20,6 +20,10 @@ export default defineConfig({
     port: 3000,
     open: true
   },
+  preview: {
+    // Allow Render (and optional custom domains) to access the preview server
+    allowedHosts: true,
+  },
   build: {
     outDir: 'dist',
     sourcemap: true

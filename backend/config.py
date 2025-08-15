@@ -10,7 +10,9 @@ class Config:
     FRONTEND_PORT = int(os.environ.get("FRONTEND_PORT", "3000"))
 
     # Prefer explicit URLs from env (e.g., on Render), then fallback to localhost ports
-    BACKEND_URL = os.environ.get("BACKEND_URL") or os.environ.get("RENDER_EXTERNAL_URL") or f"http://localhost:{BACKEND_PORT}"
+    # Get the host IP from environment or default to 0.0.0.0 to listen on all interfaces
+    BACKEND_HOST = os.environ.get("BACKEND_HOST", "0.0.0.0")
+    BACKEND_URL = os.environ.get("BACKEND_URL") or os.environ.get("RENDER_EXTERNAL_URL") or f"http://{BACKEND_HOST}:{BACKEND_PORT}"
     # Prefer explicit FRONTEND_URL, otherwise allow constructing from FRONTEND_HOST (e.g., from Render blueprint),
     # else fall back to localhost port
     _frontend_host = os.environ.get("FRONTEND_HOST")

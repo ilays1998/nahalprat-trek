@@ -86,11 +86,11 @@ export default function Layout({ children, currentPageName }) {
         {shouldShowNavigation && (
           <nav className="relative top-0 w-full bg-white shadow-lg border-b-2 border-gray-300 py-4">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center">
+              <div className="flex items-center justify-between">
                 {/* Logo */}
                 <Link 
                   to={createPageUrl("Home")} 
-                  className="flex items-center gap-3 group mr-8"
+                  className="flex items-center gap-3 group"
                 >
                   <div className="relative">
                     <div className="absolute inset-0 bg-desert-gradient rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
@@ -98,8 +98,8 @@ export default function Layout({ children, currentPageName }) {
                       <Mountain className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className={isRTL ? 'text-right' : 'text-left'}>
-                    <h1 className="text-2xl font-display font-bold text-gray-900 transition-colors duration-300">
+                  <div className={`hidden sm:block ${isRTL ? 'text-right' : 'text-left'}`}>
+                    <h1 className="text-xl lg:text-2xl font-display font-bold text-gray-900 transition-colors duration-300">
                       {t.title}
                     </h1>
                     <p className="text-xs text-gray-600 transition-colors duration-300">
@@ -108,8 +108,8 @@ export default function Layout({ children, currentPageName }) {
                   </div>
                 </Link>
 
-                {/* Centered Navigation */}
-                <div className="flex items-center justify-center gap-3 flex-1">
+                {/* Desktop Navigation */}
+                <div className="hidden lg:flex items-center gap-3">
                   {navigationItems.map((item, index) => (
                     <Link
                       key={item.title}
@@ -140,10 +140,60 @@ export default function Layout({ children, currentPageName }) {
                   />
                 </div>
 
+                {/* Mobile menu button and controls */}
+                <div className="lg:hidden flex items-center gap-2">
+                  {/* Mobile Language Toggle */}
+                  <Button
+                    onClick={toggleLanguage}
+                    className="relative overflow-hidden group p-2 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-800 border-2 border-gray-400 hover:border-gray-500 transition-all duration-300 shadow-md"
+                  >
+                    <Globe className="w-5 h-5" />
+                  </Button>
 
+                  {/* Mobile menu toggle */}
+                  <Button
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    className="p-2 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-800 border-2 border-gray-400 hover:border-gray-500 transition-all duration-300 shadow-md"
+                  >
+                    {mobileMenuOpen ? (
+                      <X className="w-6 h-6" />
+                    ) : (
+                      <Menu className="w-6 h-6" />
+                    )}
+                  </Button>
+                </div>
               </div>
 
-
+              {/* Mobile Navigation Menu */}
+              <div className={`lg:hidden mt-4 transition-all duration-300 overflow-hidden ${
+                mobileMenuOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
+              }`}>
+                <div className="py-2 space-y-2 border-t border-gray-200">
+                  {navigationItems.map((item, index) => (
+                    <Link
+                      key={item.title}
+                      to={item.url}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`group flex items-center gap-3 px-3 py-2 rounded-xl text-base font-semibold transition-all duration-300 border-2 shadow-md ${
+                        location.pathname === item.url
+                          ? 'bg-desert-500 text-white border-desert-600 shadow-lg'
+                          : 'text-gray-800 border-gray-400 hover:bg-desert-100 hover:border-desert-400 hover:shadow-lg bg-gray-50'
+                      }`}
+                    >
+                      <item.icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                      <span>{item.title}</span>
+                      <ChevronRight className="w-4 h-4 ml-auto" />
+                    </Link>
+                  ))}
+                  
+                  {/* Mobile Login Button */}
+                  <div className="mt-2 border-t border-gray-200 pt-2">
+                    <LoginButton 
+                      className="w-full text-gray-800 border-2 border-gray-400 hover:border-gray-500 bg-gray-50 hover:bg-gray-100 font-semibold shadow-md py-2 text-base flex items-center justify-center" 
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </nav>
         )}

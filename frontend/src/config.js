@@ -10,7 +10,9 @@ const config = {
   get BACKEND_URL() {
     if (this.BACKEND_URL_ENV) return this.BACKEND_URL_ENV;
     if (this.BACKEND_HOST_ENV) return `https://${this.BACKEND_HOST_ENV}`;
-    return `http://localhost:${this.BACKEND_PORT}`;
+    // Use the same host as the frontend when in development
+    const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+    return `http://${host}:${this.BACKEND_PORT}`;
   },
   
   get API_BASE_URL() {
@@ -18,7 +20,10 @@ const config = {
   },
   
   get FRONTEND_URL() {
-    return `http://localhost:${this.FRONTEND_PORT}`;
+    // Use the current window location instead of hardcoding localhost
+    return typeof window !== 'undefined' 
+      ? `${window.location.protocol}//${window.location.host}`
+      : `http://localhost:${this.FRONTEND_PORT}`;
   }
 };
 

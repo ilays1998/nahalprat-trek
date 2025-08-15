@@ -60,7 +60,7 @@ export default function ManageDates({ trekDates, onDeleteDate, language = 'he' }
   
   const t = content[language];
   
-  const DateCard = ({ date }) => (
+  const DateCard = ({ date, isPast }) => (
     <Card className="border-none shadow-md bg-white">
       <CardHeader>
         <CardTitle className="text-lg font-bold flex items-center gap-2">
@@ -80,26 +80,28 @@ export default function ManageDates({ trekDates, onDeleteDate, language = 'he' }
             Premium: {date.available_spots_premium} {t.spots}
           </Badge>
         </div>
-        <div className="pt-3 border-t">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm" className="w-full">
-                <Trash2 className="w-4 h-4 mr-2" />
-                {t.deleteDate}
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>{t.deleteConfirmTitle}</AlertDialogTitle>
-                <AlertDialogDescription>{t.deleteConfirmDesc}</AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>{t.back}</AlertDialogCancel>
-                <AlertDialogAction onClick={() => onDeleteDate(date.id)}>{t.confirm}</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
+        {!isPast && (
+          <div className="pt-3 border-t">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm" className="w-full">
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  {t.deleteDate}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>{t.deleteConfirmTitle}</AlertDialogTitle>
+                  <AlertDialogDescription>{t.deleteConfirmDesc}</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>{t.back}</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => onDeleteDate(date.id)}>{t.confirm}</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
@@ -109,7 +111,7 @@ export default function ManageDates({ trekDates, onDeleteDate, language = 'he' }
       <h3 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-amber-200">{title}</h3>
       {dates.length > 0 ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {dates.map(date => <DateCard key={date.id} date={date} />)}
+          {dates.map(date => <DateCard key={date.id} date={date} isPast={title === t.past} />)}
         </div>
       ) : (
         <p className="text-gray-500">{t[`no${title.split(' ')[0]}`]}</p>

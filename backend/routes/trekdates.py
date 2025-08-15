@@ -13,8 +13,8 @@ def list_trekdates():
     # Get sort parameter
     sort_param = request.args.get('sort', 'start_date')
     
-    # Build query
-    query = TrekDate.query.filter(TrekDate.end_date >= today)
+    # Build query - get all trek dates
+    query = TrekDate.query
     
     # Handle sorting
     if sort_param == '-start_date':
@@ -95,6 +95,12 @@ def delete_trekdate(trekdate_id: int):
         return jsonify({"error": "Only admin"}), 403
 
     td = TrekDate.query.get_or_404(trekdate_id)
+    
+    # Check if trek date is in the past
+    today = date.today()
+    if td.end_date < today:
+        return jsonify({"error": "Cannot delete past trek dates"}), 400
+        
     db.session.delete(td)
     db.session.commit()
     return jsonify({"success": True})

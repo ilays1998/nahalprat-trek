@@ -519,20 +519,20 @@ export default function BookingPage() {
                     <div>
                       <Label htmlFor="participants">{currentContent.fields.participants}</Label>
                       <Select
-                        value={formData.participants_count.toString()}
-                        onValueChange={(value) => handleInputChange('participants_count', parseInt(value))}
+                        value={formData.participants_count}
+                        onChange={e => handleInputChange('participants_count', Number(e.target.value))}
                       >
                         <SelectTrigger className="mt-2">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           {Array.from({length: Math.min(10, getAvailableSpots(packageDates.find(d => d.start_date === format(selectedDate, 'yyyy-MM-dd')), selectedPackage))}, (_, i) => i + 1).map(num => (
-                            <SelectItem key={num} value={num.toString()}>
-                              {num} {currentContent.perPerson}
+                            <SelectItem key={num} value={num}>
+                              {num}
                             </SelectItem>
                           ))}
                         </SelectContent>
-                      </Select>
+                    </Select>
                     </div>
 
                     <div>

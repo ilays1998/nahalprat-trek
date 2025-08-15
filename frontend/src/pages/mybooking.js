@@ -318,7 +318,7 @@ export default function MyBookingsPage() {
           </div>
         )}
       </CardContent>
-      {showUserInfo && !isCancelled && (
+      {showUserInfo && !isCancelled && isFutureBooking && (
         <CardFooter className="grid grid-cols-2 gap-2">
           {booking.status === 'pending' && (
              <Button variant="default" size="sm" onClick={() => handleApproveBooking(booking)} className="bg-green-600 hover:bg-green-700 text-white">

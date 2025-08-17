@@ -1,16 +1,16 @@
 
 import React, { useState, useEffect } from "react";
-import { TrekDate, Booking } from "../entities/all"; // TODO: Check if this file exists
-import { createPageUrl } from "../utils"; // TODO: Check if this file exists
-import { Button } from "../components/ui/button"; // TODO: Check if this file exists
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"; // TODO: Check if this file exists
-import { Input } from "../components/ui/input"; // TODO: Check if this file exists
-import { Label } from "../components/ui/label"; // TODO: Check if this file exists
-import { Textarea } from "../components/ui/textarea"; // TODO: Check if this file exists
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"; // TODO: Check if this file exists
-import { Calendar } from "../components/ui/calendar"; // TODO: Check if this file exists
-import { Badge } from "../components/ui/badge"; // TODO: Check if this file exists
-import { Alert, AlertDescription } from "../components/ui/alert"; // TODO: Check if this file exists
+import { TrekDate, Booking } from "../entities/all";
+import { createPageUrl } from "../utils";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Textarea } from "../components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Calendar } from "../components/ui/calendar";
+import { Badge } from "../components/ui/badge";
+import { Alert, AlertDescription } from "../components/ui/alert";
 import { CalendarIcon, Users, Phone, AlertCircle, CheckCircle } from "lucide-react";
 import { format, parseISO, isAfter, startOfDay, addDays } from "date-fns";
 import { useLanguage } from "../layout";

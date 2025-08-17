@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'; // TODO: Check if this file exists
-import { Badge } from '../components/ui/badge'; // TODO: Check if this file exists
-import { Button } from '../components/ui/button'; // TODO: Check if this file exists
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,7 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../components/ui/alert-dialog"; // TODO: Check if this file exists
+} from "../components/ui/alert-dialog";
 import { format, parseISO, isAfter, isBefore, isEqual, startOfDay } from 'date-fns';
 import { Calendar, Check, Package, Trash2 } from 'lucide-react';
 

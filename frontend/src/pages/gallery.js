@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Card, CardContent } from "../components/ui/card"; // TODO: Check if this file exists
-import { Badge } from "../components/ui/badge"; // TODO: Check if this file exists
-import { Button } from "../components/ui/button"; // TODO: Check if this file exists
+import { Card, CardContent } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
 import { X, ZoomIn } from "lucide-react";
-import { Dialog, DialogContent } from "../components/ui/dialog"; // TODO: Check if this file exists
+import { Dialog, DialogContent } from "../components/ui/dialog";
 import { useLanguage } from "../layout";
 
 export default function Gallery() {

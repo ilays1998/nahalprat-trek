@@ -1,8 +1,8 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { createPageUrl } from "./utils"; // TODO: Check if this file exists
+import { createPageUrl } from "./utils";
 import { Menu, X, Globe, Mountain, Calendar, ImageIcon, Package, BookOpen, ChevronRight, ArrowUp } from "lucide-react";
-import { Button } from "./components/ui/button"; // TODO: Check if this file exists
+import { Button } from "./components/ui/button";
 import { LoginButton } from "./components/auth/LoginButton";
 import { useAuth } from "./contexts/AuthContext";
 

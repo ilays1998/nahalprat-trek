@@ -1,10 +1,10 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils"; // TODO: Check if this file exists
-import { Button } from "../components/ui/button"; // TODO: Check if this file exists
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"; // TODO: Check if this file exists
-import { Badge } from "../components/ui/badge"; // TODO: Check if this file exists
+import { createPageUrl } from "../utils";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
 import { Check, Star, Users, Clock, Utensils, Bed, Car, ShieldCheck } from "lucide-react";
 import { useLanguage } from "../layout";
 

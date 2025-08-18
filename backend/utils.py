@@ -26,10 +26,6 @@ def get_ip_info(ip_address: str) -> Optional[Dict]:
                 'country': data.get('country_code2'),  # 2-letter country code
                 'city': data.get('city')
             }
-        elif response.status_code == 401:
-            print("Invalid IPGEOLOCATION_API_KEY")
-        elif response.status_code == 429:
-            print("IPGEOLOCATION rate limit exceeded")
         else:
             print(f"IPGEOLOCATION error: {response.status_code} - {response.text}")
             

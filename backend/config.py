@@ -37,3 +37,6 @@ class Config:
 
     # CORS configuration
     CORS_ORIGINS = [origin.strip() for origin in os.environ.get("CORS_ORIGINS", "").split(",") if origin.strip()] or [FRONTEND_URL]
+    
+    # IP Geolocation Configuration
+    IPGEOLOCATION_API_KEY = os.environ.get("IPGEOLOCATION_API_KEY")

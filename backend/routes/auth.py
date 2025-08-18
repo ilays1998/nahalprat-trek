@@ -1,11 +1,12 @@
 from flask import Blueprint, redirect, url_for, session, jsonify, request
 from authlib.integrations.flask_client import OAuth
-from models import db, AppUser
+from models import db, AppUser, UserLogin
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from config import Config
+from utils import get_ip_info
 import os
 import json
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 auth_bp = Blueprint("auth", __name__)
 oauth = OAuth()
@@ -52,6 +53,29 @@ def authorize():
         user = AppUser(email=email, name=name, role=role)
         db.session.add(user)
         db.session.commit()
+
+    # Update last_seen and create login record
+    user.last_seen = datetime.utcnow()
+    
+    # Get client IP address
+    ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
+    if ip_address:
+        # If X-Forwarded-For contains multiple IPs, take the first one
+        ip_address = ip_address.split(',')[0].strip()
+    
+    # Get geolocation info
+    ip_info = get_ip_info(ip_address)
+    
+    # Create login record
+    login = UserLogin(
+        user_id=user.id,
+        ip_address=ip_address,
+        region=ip_info.get('region') if ip_info else None,
+        country=ip_info.get('country') if ip_info else None,
+        city=ip_info.get('city') if ip_info else None
+    )
+    db.session.add(login)
+    db.session.commit()
 
     # Flask-JWT-Extended expects identity to be a simple value, not an object
     expires_delta = timedelta(minutes=int(os.environ.get("JWT_ACCESS_TOKEN_EXPIRES_MINUTES", "15")))

@@ -17,11 +17,8 @@ services:
           property: connectionString
       - key: FLASK_APP
         value: app:create_app
-      - key: FRONTEND_HOST
-        fromService:
-          name: nahalprat-frontend
-          type: web
-          property: host
+      - key: FRONTEND_URL
+        value: https://nahalprat-frontend.onrender.com
       - key: CORS_ORIGINS
         value: "*"
       - key: GOOGLE_CLIENT_ID

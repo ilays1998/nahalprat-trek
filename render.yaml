@@ -20,7 +20,13 @@ services:
       - key: FRONTEND_URL
         value: https://nahalprat-frontend.onrender.com
       - key: CORS_ORIGINS
-        value: "*"
+        value: "https://nahalprat-frontend.onrender.com"
+      - key: SESSION_COOKIE_SECURE
+        value: "true"
+      - key: SESSION_COOKIE_HTTPONLY
+        value: "true"
+      - key: SESSION_COOKIE_SAMESITE
+        value: "None"
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET

@@ -16,6 +16,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const [formData, setFormData] = useState({
     available_spots_basic: 12,
@@ -192,23 +193,31 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <Label>{currentContent.startDate}</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full justify-start mt-2">
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? format(startDate, 'PPP') : currentContent.selectDate}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={setStartDate}
-                    disabled={(date) => date < today}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <div className="mt-2">
+                <Button 
+                  type="button"
+                  variant="outline" 
+                  className="w-full justify-start"
+                  onClick={() => setShowCalendar(!showCalendar)}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {startDate ? format(startDate, 'PPP') : currentContent.selectDate}
+                </Button>
+                {showCalendar && (
+                  <div className="mt-2 p-3 bg-white border border-gray-200 rounded-lg shadow-lg">
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={(date) => {
+                        setStartDate(date);
+                        setShowCalendar(false);
+                      }}
+                      disabled={(date) => date < today}
+                      initialFocus
+                    />
+                  </div>
+                )}
+              </div>
             </div>
 
             <div>

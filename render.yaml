@@ -31,13 +31,11 @@ services:
       - key: ADMIN_EMAIL
         sync: false
 
-  - type: web
+  - type: static
     name: nahalprat-frontend
-    runtime: node
     rootDir: frontend
-    plan: free
     buildCommand: npm ci && npm run build
-    startCommand: npm run preview -- --host --port $PORT
+    publishDir: dist
     envVars:
       - key: VITE_BACKEND_HOST
         fromService:

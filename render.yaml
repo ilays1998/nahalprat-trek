@@ -31,11 +31,12 @@ services:
       - key: ADMIN_EMAIL
         sync: false
 
-  - type: static_site
+  - type: web
     name: nahalprat-frontend
+    runtime: static
     rootDir: frontend
     buildCommand: npm ci && npm run build
-    publishDir: dist
+    staticPublishPath: ./dist
     envVars:
       - key: VITE_BACKEND_HOST
         fromService:

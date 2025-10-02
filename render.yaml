@@ -39,7 +39,7 @@ services:
     staticPublishPath: ./dist
     envVars:
       - key: VITE_BACKEND_HOST
-        value: https://nahalprat-backend.onrender.com
+        value: nahalprat-backend.onrender.com
       - key: VITE_GOOGLE_CLIENT_ID
         sync: false
 

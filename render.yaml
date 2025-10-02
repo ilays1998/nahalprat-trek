@@ -38,10 +38,10 @@ services:
     buildCommand: npm ci && npm run build
     staticPublishPath: ./dist
     envVars:
-      - key: VITE_BACKEND_HOST
-        value: nahalprat-backend.onrender.com
+      - key: VITE_BACKEND_URL
+        value: https://nahalprat-backend.onrender.com
       - key: VITE_GOOGLE_CLIENT_ID
-        sync: false
+        value: 361028788793-igfr700b6nd8bq7mr2ed7it7jgcoascb.apps.googleusercontent.com
 
 databases:
   - name: nahalprat-db

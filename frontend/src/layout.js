@@ -25,7 +25,7 @@ const translations = {
     contact: "צור קשר",
     followUs: "עקוב אחרינו",
     allRights: "כל הזכויות שמורות.",
-    footerDesc: "חווה את מדבר יהודה במסלול מודרך ומאורגן בהשראת הליכה אירופאית בין בקתות הרים."
+    footerDesc: "חווה את מדבר יהודה במסלול מאורגן בהשראת הליכה אירופאית בין בקתות הרים."
   },
   en: {
     home: "Home",
@@ -39,7 +39,7 @@ const translations = {
     contact: "Contact",
     followUs: "Follow Us",
     allRights: "All rights reserved.",
-    footerDesc: "Experience the Judean Desert through a guided, organized trek inspired by European hut-to-hut hiking."
+    footerDesc: "Experience the Judean Desert through an organized trek inspired by European hut-to-hut hiking."
   }
 };
 
@@ -89,30 +89,21 @@ export default function Layout({ children, currentPageName }) {
         {shouldShowNavigation && (
           <nav className="relative top-0 w-full bg-gradient-to-r from-desert-50 via-white to-desert-50 backdrop-blur-sm shadow-warm-lg border-b border-desert-200/30 py-4">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between">
+              <div className={`flex items-center ${isRTL ? 'gap-3' : 'gap-6'}`}>
                 {/* Logo */}
                 <Link 
                   to={createPageUrl("Home")} 
-                  className="flex items-center gap-3 group"
+                  className="flex items-center group"
                 >
                   <div className="relative">
-                    <div className="absolute inset-0 bg-desert-gradient rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
-                    <div className="relative w-12 h-12 bg-desert-gradient rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-warm">
-                      <Mountain className="w-7 h-7 text-white" />
+                    <div className="relative w-16 h-20 flex items-center justify-center transform group-hover:scale-110 transition-all duration-300">
+                      <img src="/images/logo.png" alt="TNP Logo" className="w-full h-full object-contain drop-shadow-lg" />
                     </div>
-                  </div>
-                  <div className={`hidden sm:block ${isRTL ? 'text-right' : 'text-left'}`}>
-                    <h1 className="text-xl lg:text-2xl font-display font-bold text-gray-900 transition-colors duration-300">
-                      {t.title}
-                    </h1>
-                    <p className="text-xs text-gray-600 transition-colors duration-300">
-                      {t.subtitle}
-                    </p>
                   </div>
                 </Link>
 
                 {/* Desktop Navigation */}
-                <div className="hidden lg:flex items-center gap-3">
+                <div className={`hidden lg:flex items-center gap-3 flex-1 ${isRTL ? 'justify-center' : 'justify-end'}`}>
                   {navigationItems.map((item, index) => (
                     <Link
                       key={item.title}

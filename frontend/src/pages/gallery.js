@@ -62,118 +62,55 @@ export default function Gallery() {
     }
   };
 
-  const galleryImages = [
-    // Mixed order for better visual variety
-    {
-      id: 1,
-      url: "/images/landscapes/DSC_0319.JPG",
-      title: language === 'he' ? "נופי המדבר" : "Desert Landscapes",
-      category: "landscape"
-    },
-    {
-      id: 2,
-      url: "/images/activities/DSC_0321.JPG",
-      title: language === 'he' ? "טיפוס סלעים" : "Rock Climbing",
-      category: "activities"
-    },
-    {
-      id: 3,
-      url: "/images/landscapes/DSC_0323.JPG",
-      title: language === 'he' ? "נחל פרת" : "Nahal Prat Stream",
-      category: "landscape"
-    },
-    {
-      id: 4,
-      url: "/images/landscapes/DSC_0335.JPG",
-      title: language === 'he' ? "נופי סלע" : "Rock Formations",
-      category: "landscape"
-    },
-    {
-      id: 5,
-      url: "/images/activities/DSC_0372.JPG",
-      title: language === 'he' ? "הליכה בטבע" : "Nature Hiking",
-      category: "activities"
-    },
-    {
-      id: 6,
-      url: "/images/landscapes/DSC_0338.JPG",
-      title: language === 'he' ? "מסלול הליכה" : "Trail Path",
-      category: "landscape"
-    },
-    {
-      id: 7,
-      url: "/images/landscapes/DSC_0346.JPG",
-      title: language === 'he' ? "צוקים" : "Cliffs",
-      category: "landscape"
-    },
-    {
-      id: 8,
-      url: "/images/activities/DSC_0391.JPG",
-      title: language === 'he' ? "חקר השטח" : "Terrain Exploration",
-      category: "activities"
-    },
-    {
-      id: 9,
-      url: "/images/landscapes/DSC_0369.JPG",
-      title: language === 'he' ? "נוף מדברי" : "Desert View",
-      category: "landscape"
-    },
-    {
-      id: 10,
-      url: "/images/activities/DSC_0394.JPG",
-      title: language === 'he' ? "פעילות קבוצתית" : "Group Activities",
-      category: "activities"
-    },
-    {
-      id: 11,
-      url: "/images/landscapes/DSC_0379.JPG",
-      title: language === 'he' ? "ערוצי המים" : "Water Channels",
-      category: "landscape"
-    },
-    {
-      id: 12,
-      url: "/images/landscapes/DSC_0396.JPG",
-      title: language === 'he' ? "צמחיית המדבר" : "Desert Vegetation",
-      category: "landscape"
-    },
-    {
-      id: 13,
-      url: "/images/activities/DSC_0410.JPG",
-      title: language === 'he' ? "אתגרי שטח" : "Field Challenges",
-      category: "activities"
-    },
-    {
-      id: 14,
-      url: "/images/landscapes/DSC_0404.JPG",
-      title: language === 'he' ? "מעיינות" : "Springs",
-      category: "landscape"
-    },
-    {
-      id: 15,
-      url: "/images/landscapes/DSC_0409.JPG",
-      title: language === 'he' ? "שבילי הרים" : "Mountain Trails",
-      category: "landscape"
-    },
-    {
-      id: 16,
-      url: "/images/activities/DSC_0426.JPG",
-      title: language === 'he' ? "הליכה בערוץ" : "Stream Walking",
-      category: "activities"
-    },
-    {
-      id: 17,
-      url: "/images/landscapes/DSC_0425.JPG",
-      title: language === 'he' ? "כיפות סלע" : "Rock Domes",
-      category: "landscape"
-    },
-    {
-      id: 18,
-      url: "/images/landscapes/DSC_0431.JPG",
-      title: language === 'he' ? "נופי שקיעה" : "Sunset Views",
-      category: "landscape"
-    }
-    // Note: Meals and accommodation folders are empty, ready for future additions
+  // Auto-load images using Vite's import.meta.glob (eager loading for smooth performance)
+  const landscapeImages = import.meta.glob('/public/images/landscapes/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
+  const activitiesImages = import.meta.glob('/public/images/activities/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
+  const mealsImages = import.meta.glob('/public/images/meals/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
+  const accommodationImages = import.meta.glob('/public/images/accommodation/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
+
+  // Generate title from filename only
+  const generateTitle = (filename) => {
+    return filename.replace(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/, '');
+  };
+
+  // Convert imported images to gallery format
+  const createImageObjects = (imageMap, category) => {
+    return Object.entries(imageMap).map(([path, url], index) => {
+      const filename = path.split('/').pop();
+      return {
+        id: `${category}-${index + 1}`,
+        url: url.replace('/public', ''), // Remove /public prefix for correct URL
+        title: generateTitle(filename),
+        category: category
+      };
+    });
+  };
+
+  // Combine all images and mix them for better visual variety
+  const allImages = [
+    ...createImageObjects(landscapeImages, 'landscape'),
+    ...createImageObjects(activitiesImages, 'activities'),
+    ...createImageObjects(mealsImages, 'meals'),
+    ...createImageObjects(accommodationImages, 'accommodation')
   ];
+
+  // Mix the images for better visual variety (interleave different categories)
+  const galleryImages = allImages.sort((a, b) => {
+    // Sort by a combination of category and filename to create consistent mixed order
+    const categoryOrder = { landscape: 0, activities: 1, accommodation: 2, meals: 3 };
+    const aCategoryIndex = categoryOrder[a.category] || 999;
+    const bCategoryIndex = categoryOrder[b.category] || 999;
+    
+    // If same category, sort by ID, otherwise alternate categories
+    if (aCategoryIndex === bCategoryIndex) {
+      return a.id.localeCompare(b.id);
+    }
+    
+    // Create a mixed pattern by using modulo
+    const aIndex = parseInt(a.id.split('-')[1]) || 0;
+    const bIndex = parseInt(b.id.split('-')[1]) || 0;
+    return (aCategoryIndex + aIndex * 0.1) - (bCategoryIndex + bIndex * 0.1);
+  });
 
   const categories = Object.entries(currentContent.categories);
   const filteredImages = selectedCategory === 'all' 

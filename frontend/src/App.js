@@ -9,6 +9,7 @@ import Packages from './pages/packages';
 import Gallery from './pages/gallery';
 import BookingPage from './pages/booking';
 import MyBookingsPage from './pages/mybooking';
+import Contact from './pages/contact';
 
 export default function App() {
   return (
@@ -62,6 +63,16 @@ export default function App() {
               <Layout>
                 <ProtectedRoute>
                   <MyBookingsPage />
+                </ProtectedRoute>
+              </Layout>
+            } 
+          />
+          <Route 
+            path="/contact" 
+            element={
+              <Layout>
+                <ProtectedRoute>
+                  <Contact />
                 </ProtectedRoute>
               </Layout>
             } 

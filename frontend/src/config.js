@@ -24,6 +24,15 @@ const config = {
     return typeof window !== 'undefined' 
       ? `${window.location.protocol}//${window.location.host}`
       : `http://localhost:${this.FRONTEND_PORT}`;
+  },
+
+  // Contact Information
+  CONTACT: {
+    EMAIL: 'treknahalprat@gmail.com',
+    PHONE: {
+      he: '054-5901376',           // Hebrew - local format
+      en: '+972-54-590-1376'      // English - international format
+    }
   }
 };
 

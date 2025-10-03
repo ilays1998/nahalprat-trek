@@ -1,10 +1,12 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "./utils";
-import { Menu, X, Globe, Mountain, Calendar, ImageIcon, Package, BookOpen, ChevronRight, ArrowUp } from "lucide-react";
+import { Menu, X, Globe, Mountain, Calendar, ImageIcon, Package, BookOpen, ChevronRight, ArrowUp, Mail } from "lucide-react";
+import { FaFacebook, FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import { Button } from "./components/ui/button";
 import { LoginButton } from "./components/auth/LoginButton";
 import { useAuth } from "./contexts/AuthContext";
+import config from "./config";
 
 const LanguageContext = createContext();
 
@@ -23,7 +25,7 @@ const translations = {
     contact: "צור קשר",
     followUs: "עקוב אחרינו",
     allRights: "כל הזכויות שמורות.",
-    footerDesc: "חווה את המדבר היהודי במסלול מודרך ומאורגן בהשראת הליכה אירופאית בין בקתות הרים."
+    footerDesc: "חווה את מדבר יהודה במסלול מודרך ומאורגן בהשראת הליכה אירופאית בין בקתות הרים."
   },
   en: {
     home: "Home",
@@ -73,6 +75,7 @@ export default function Layout({ children, currentPageName }) {
     { title: t.gallery, url: createPageUrl("Gallery"), icon: ImageIcon },
     { title: t.booking, url: createPageUrl("Booking"), icon: Calendar },
     { title: t.myBookings, url: createPageUrl("MyBookings"), icon: BookOpen },
+    { title: t.contact, url: createPageUrl("Contact"), icon: Mail },
   ];
 
   const toggleLanguage = () => {
@@ -84,7 +87,7 @@ export default function Layout({ children, currentPageName }) {
       <div className={`min-h-screen bg-gradient-to-b from-desert-50 via-white to-desert-50 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
         {/* Navigation - Only show when authenticated */}
         {shouldShowNavigation && (
-          <nav className="relative top-0 w-full bg-white shadow-lg border-b-2 border-gray-300 py-4">
+          <nav className="relative top-0 w-full bg-gradient-to-r from-desert-50 via-white to-desert-50 backdrop-blur-sm shadow-warm-lg border-b border-desert-200/30 py-4">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between">
                 {/* Logo */}
@@ -114,29 +117,30 @@ export default function Layout({ children, currentPageName }) {
                     <Link
                       key={item.title}
                       to={item.url}
-                      className={`group flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 border-2 shadow-md ${
+                      className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ${
                         location.pathname === item.url
-                          ? 'bg-desert-500 text-white border-desert-600 shadow-lg transform scale-105'
-                          : 'text-gray-800 border-gray-400 hover:bg-desert-100 hover:border-desert-400 hover:shadow-lg bg-gray-50 hover:transform hover:scale-102'
+                          ? 'bg-desert-gradient text-white shadow-warm-lg transform scale-105 hover:scale-110'
+                          : 'text-gray-800 bg-white/80 backdrop-blur-sm hover:bg-white border border-desert-200/50 hover:border-desert-300 hover:shadow-warm hover:transform hover:scale-105'
                       }`}
                     >
-                      <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                      <span className="whitespace-nowrap">{item.title}</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-desert-100/30 to-desert-200/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <item.icon className="relative w-4 h-4 group-hover:scale-110 transition-transform z-10" />
+                      <span className="relative whitespace-nowrap z-10">{item.title}</span>
                     </Link>
                   ))}
                   
                   {/* Language Toggle */}
                   <Button
                     onClick={toggleLanguage}
-                    className="relative overflow-hidden group px-4 py-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-800 border-2 border-gray-400 hover:border-gray-500 transition-all duration-300 shadow-md font-semibold flex items-center justify-between w-[80px]"
+                    className="relative overflow-hidden group px-4 py-3 rounded-xl bg-white/80 backdrop-blur-sm hover:bg-white text-gray-800 border border-desert-200/50 hover:border-desert-300 transition-all duration-300 shadow-lg hover:shadow-warm font-semibold flex items-center justify-between w-[80px] hover:scale-105"
                   >
-                    <Globe className="w-4 h-4" />
-                    <span className="font-semibold text-sm">{language === 'he' ? 'EN' : 'עב'}</span>
-                    <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-desert-100/30 to-desert-200/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <Globe className="relative w-4 h-4 z-10" />
+                    <span className="relative font-semibold text-sm z-10">{language === 'he' ? 'EN' : 'עב'}</span>
                   </Button>
 
                   <LoginButton 
-                    className="text-gray-800 border-2 border-gray-400 hover:border-gray-500 bg-gray-50 hover:bg-gray-100 font-semibold shadow-md" 
+                    className="text-gray-800 bg-white/80 backdrop-blur-sm hover:bg-white border border-desert-200/50 hover:border-desert-300 font-semibold shadow-lg hover:shadow-warm hover:scale-105" 
                   />
                 </div>
 
@@ -145,20 +149,22 @@ export default function Layout({ children, currentPageName }) {
                   {/* Mobile Language Toggle */}
                   <Button
                     onClick={toggleLanguage}
-                    className="relative overflow-hidden group p-2 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-800 border-2 border-gray-400 hover:border-gray-500 transition-all duration-300 shadow-md"
+                    className="relative overflow-hidden group p-2 rounded-xl bg-white/80 backdrop-blur-sm hover:bg-white text-gray-800 border border-desert-200/50 hover:border-desert-300 transition-all duration-300 shadow-lg hover:shadow-warm hover:scale-105"
                   >
-                    <Globe className="w-5 h-5" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-desert-100/30 to-desert-200/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <Globe className="relative w-5 h-5 z-10" />
                   </Button>
 
                   {/* Mobile menu toggle */}
                   <Button
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="p-2 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-800 border-2 border-gray-400 hover:border-gray-500 transition-all duration-300 shadow-md"
+                    className="relative overflow-hidden group p-2 rounded-xl bg-white/80 backdrop-blur-sm hover:bg-white text-gray-800 border border-desert-200/50 hover:border-desert-300 transition-all duration-300 shadow-lg hover:shadow-warm hover:scale-105"
                   >
+                    <div className="absolute inset-0 bg-gradient-to-r from-desert-100/30 to-desert-200/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     {mobileMenuOpen ? (
-                      <X className="w-6 h-6" />
+                      <X className="relative w-6 h-6 z-10" />
                     ) : (
-                      <Menu className="w-6 h-6" />
+                      <Menu className="relative w-6 h-6 z-10" />
                     )}
                   </Button>
                 </div>
@@ -168,28 +174,29 @@ export default function Layout({ children, currentPageName }) {
               <div className={`lg:hidden mt-4 transition-all duration-300 overflow-hidden ${
                 mobileMenuOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
               }`}>
-                <div className="py-2 space-y-2 border-t border-gray-200">
+                <div className="py-2 space-y-2 border-t border-desert-200/30">
                   {navigationItems.map((item, index) => (
                     <Link
                       key={item.title}
                       to={item.url}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`group flex items-center gap-3 px-3 py-2 rounded-xl text-base font-semibold transition-all duration-300 border-2 shadow-md ${
+                      className={`group relative overflow-hidden flex items-center gap-3 px-3 py-2 rounded-xl text-base font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ${
                         location.pathname === item.url
-                          ? 'bg-desert-500 text-white border-desert-600 shadow-lg'
-                          : 'text-gray-800 border-gray-400 hover:bg-desert-100 hover:border-desert-400 hover:shadow-lg bg-gray-50'
+                          ? 'bg-desert-gradient text-white shadow-warm-lg'
+                          : 'text-gray-800 bg-white/80 backdrop-blur-sm hover:bg-white border border-desert-200/50 hover:border-desert-300 hover:shadow-warm'
                       }`}
                     >
-                      <item.icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                      <span>{item.title}</span>
-                      <ChevronRight className="w-4 h-4 ml-auto" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-desert-100/30 to-desert-200/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <item.icon className="relative w-5 h-5 group-hover:scale-110 transition-transform z-10" />
+                      <span className="relative z-10">{item.title}</span>
+                      <ChevronRight className="relative w-4 h-4 ml-auto z-10" />
                     </Link>
                   ))}
                   
                   {/* Mobile Login Button */}
-                  <div className="mt-2 border-t border-gray-200 pt-2">
+                  <div className="mt-2 border-t border-desert-200/30 pt-2">
                     <LoginButton 
-                      className="w-full text-gray-800 border-2 border-gray-400 hover:border-gray-500 bg-gray-50 hover:bg-gray-100 font-semibold shadow-md py-2 text-base flex items-center justify-center" 
+                      className="w-full text-gray-800 bg-white/80 backdrop-blur-sm hover:bg-white border border-desert-200/50 hover:border-desert-300 font-semibold shadow-lg hover:shadow-warm py-2 text-base flex items-center justify-center" 
                     />
                   </div>
                 </div>
@@ -245,11 +252,11 @@ export default function Layout({ children, currentPageName }) {
                 <div className="space-y-3 text-gray-400">
                   <p className="flex items-center gap-2 hover:text-white transition-colors">
                     <span className="w-1.5 h-1.5 bg-desert-400 rounded-full"></span>
-                    info@nahalprat.co.il
+                    treknahalprat@gmail.com
                   </p>
                   <p className="flex items-center gap-2 hover:text-white transition-colors">
                     <span className="w-1.5 h-1.5 bg-desert-400 rounded-full"></span>
-                    +972-50-123-4567
+                    {config.CONTACT.PHONE[language]}
                   </p>
                 </div>
               </div>
@@ -259,14 +266,22 @@ export default function Layout({ children, currentPageName }) {
                   {t.followUs}
                 </h4>
                 <div className="flex gap-4">
-                  <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-desert-500 transition-all duration-300 group">
-                    <span className="text-sm font-medium group-hover:scale-110 transition-transform">FB</span>
+                  <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-all duration-300 group">
+                    <FaFacebook className="w-5 h-5 group-hover:scale-110 transition-transform" />
                   </a>
-                  <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-desert-500 transition-all duration-300 group">
-                    <span className="text-sm font-medium group-hover:scale-110 transition-transform">IG</span>
+                  <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-pink-500 transition-all duration-300 group">
+                    <FaInstagram className="w-5 h-5 group-hover:scale-110 transition-transform" />
                   </a>
-                  <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-desert-500 transition-all duration-300 group">
-                    <span className="text-sm font-medium group-hover:scale-110 transition-transform">YT</span>
+                  <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-red-600 transition-all duration-300 group">
+                    <FaYoutube className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  </a>
+                  <a 
+                    href={`https://wa.me/${config.CONTACT.PHONE.en.replace(/[^0-9]/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-green-600 transition-all duration-300 group"
+                  >
+                    <FaWhatsapp className="w-5 h-5 group-hover:scale-110 transition-transform" />
                   </a>
                 </div>
               </div>

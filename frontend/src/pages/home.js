@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
-import { Mountain, Users, Clock, Shield, Star, MapPin, CalendarIcon, ShieldCheck, Sparkles, Navigation, Heart, Camera, Backpack, Tent } from "lucide-react";
+import { Mountain, Users, Clock, Shield, Star, MapPin, CalendarIcon, ShieldCheck, Sparkles, Navigation, Heart, Camera, Backpack, Tent, Bus, Bed, Utensils, Map } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../layout";
 
@@ -30,33 +30,33 @@ export default function Home() {
       hero: {
         title: "מסלול נחל פרת",
         subtitle: "חוויית טיול מודרכת בת 3 ימים במדבר יהודה",
-        description: "גלה את יופיו של המדבר היהודי במסלול מאורגן ומודרך בהשראת הליכה אירופאית בין בקתות הרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה ייחודית במדבר.",
+        description: "גלה את יופיו של מדבר יהודה במסלול מאורגן ומודרך בהשראת הליכה אירופאית בין בקתות הרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה בבקתה במדבר.",
         cta: "התחל את ההרפתקה",
         viewPackages: "צפה בחבילות"
       },
       features: {
-        title: "למה לבחור במסלול שלנו?",
+        title: "אתם הולכים אנחנו דואגים לכל השאר",
         subtitle: "חוויה מקצועית ומאורגנת עד הפרט האחרון",
         items: [
           {
-            icon: Mountain,
-            title: "נופים מדהימים",
-            description: "הליכה דרך נופי מדבר עוצרי נשימה ואתרים היסטוריים עתיקים"
+            icon: Bus,
+            title: "העברות",
+            description: "מירושלים עד לתחילת המסלול ובחזרה"
           },
           {
-            icon: Users,
-            title: "מדריכים מנוסים",
-            description: "מדריכים מקצועיים עם ידע עמוק על האזור והטבע המקומי"
+            icon: Bed,
+            title: "לינה",
+            description: "בקתה מעץ הכוללת שירותים, מקלחת, מיטה מפנקת ואווירה קסומה"
           },
           {
-            icon: ShieldCheck,
-            title: "ביטול גמיש",
-            description: "תהנה משקט נפשי עם אפשרות ביטול חינם עד 7 ימים לפני הטיול"
+            icon: Utensils,
+            title: "אוכל",
+            description: "נדאג לספק לכם ארוחות בוקר וערב ונשנושים למסלול"
           },
           {
-            icon: Clock,
-            title: "הכל מאורגן",
-            description: "ארוחות, לינה ותחבורה - הכל כלול ומאורגן מראש"
+            icon: Map,
+            title: "מסלול",
+            description: "מסלול מותאם שעובר בכל המקומות היפים באיזור"
           }
         ]
       },
@@ -95,28 +95,28 @@ export default function Home() {
         viewPackages: "View Packages"
       },
       features: {
-        title: "Why Choose Our Trek?",
+        title: "You Walk, We Handle Everything Else",
         subtitle: "Professional and organized experience down to every detail",
         items: [
           {
-            icon: Mountain,
-            title: "Stunning Landscapes",
-            description: "Hike through breathtaking desert scenery and ancient historical sites"
+            icon: Bus,
+            title: "Transportation",
+            description: "From Jerusalem to the trail start and back"
           },
           {
-            icon: Users,
-            title: "Expert Guides",
-            description: "Professional guides with deep knowledge of the region and local nature"
+            icon: Bed,
+            title: "Accommodation",
+            description: "Wooden cabin with restrooms, shower, comfortable bed and magical atmosphere"
           },
           {
-            icon: ShieldCheck,
-            title: "Flexible Cancellation",
-            description: "Enjoy peace of mind with free cancellation up to 7 days before your trek"
+            icon: Utensils,
+            title: "Food",
+            description: "We'll provide you with breakfast and dinner meals plus snacks for the trail"
           },
           {
-            icon: Clock,
-            title: "All Inclusive",
-            description: "Meals, accommodation, and transportation - everything included and organized"
+            icon: Map,
+            title: "Route",
+            description: "Customized route that passes through all the beautiful spots in the area"
           }
         ]
       },

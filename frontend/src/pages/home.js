@@ -13,9 +13,9 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const heroImages = [
-    "/images/hero-desert-1.jpg",
-    "/images/hero-nahal-prat-1.jpg",
-    "/images/hero-landscape-1.jpg"
+    "/images/landscapes/DSC_0346.JPG",
+    "/images/landscapes/DSC_0379.JPG",
+    "/images/landscapes/DSC_0431.JPG"
   ];
 
   useEffect(() => {

@@ -74,29 +74,11 @@ export default function Home() {
         perPerson: "לאדם",
         details: "פרטים נוספים"
       },
-      testimonials: {
-        title: "מה אומרים המטיילים",
-        subtitle: "חוויות אמיתיות ממטיילים שלנו",
-        items: [
-          {
-            name: "שרה כהן",
-            text: "חוויה בלתי נשכחת! הארגון היה מושלם והנופים פשוט מדהימים.",
-            role: "מטיילת מירושלים",
-            rating: 5
-          },
-          {
-            name: "דוד לוי",
-            text: "המדריכים היו נהדרים והלינה הייתה מעל הציפיות. ממליץ בחום!",
-            role: "מטייל מתל אביב",
-            rating: 5
-          },
-          {
-            name: "מיכל ברק",
-            text: "טיול מאורגן להפליא עם תשומת לב לכל פרט. נחזור בהחלט!",
-            role: "מטיילת מחיפה",
-            rating: 5
-          }
-        ]
+      about: {
+        title: "עלינו",
+        subtitle: "הכירו את משפחת סופר - המארחים שלכם להרפתקה במדבר",
+        text: "אנחנו משפחת סופר, גרים בנופי פרת כבר 27 שנים. מאז ומתמיד הייתה לנו אהבה גדולה לטבע ולהליכה בו. הכנו בשבילכם מסלול בהשראת הטרקים באיטליה ואוסטריה עם אוכל טוב ולינה נוחה. המטרה שלנו היא לאפשר לכם לצאת למסע שבו תוכלו להתנתק מהרעש וההמולה ששוררת במדינה שלנו בדרך קבע, ולתת לעצמכם את השקט שרק המרחבים הבראשיתיים של מדבר יהודה יכולים לתת.",
+        image: "/images/aboutus/DSC_0325.JPG"
       },
       cta: {
         title: "מוכנים להרפתקה?",
@@ -152,29 +134,11 @@ export default function Home() {
         perPerson: "per person",
         details: "View Details"
       },
-      testimonials: {
-        title: "What Trekkers Say",
-        subtitle: "Real experiences from our trekkers",
-        items: [
-          {
-            name: "Sarah Cohen",
-            text: "Unforgettable experience! The organization was perfect and the views were simply amazing.",
-            role: "Trekker from Jerusalem",
-            rating: 5
-          },
-          {
-            name: "David Levy",
-            text: "The guides were wonderful and the accommodation exceeded expectations. Highly recommend!",
-            role: "Trekker from Tel Aviv",
-            rating: 5
-          },
-          {
-            name: "Michal Barak",
-            text: "Amazingly organized trip with attention to every detail. We'll definitely be back!",
-            role: "Trekker from Haifa",
-            rating: 5
-          }
-        ]
+      about: {
+        title: "About Us",
+        subtitle: "Meet the Sofer Family - Your Desert Adventure Hosts",
+        text: "We are the Sofer family, living in the landscapes of Prat for 27 years. We have always had a great love for nature and hiking in it. We have prepared a route for you inspired by the treks in Italy and Austria with good food and comfortable accommodation. Our goal is to allow you to go on a journey where you can disconnect from the noise and hustle and bustle that constantly prevails in our country, and give yourself the quiet that only the pristine expanses of the Judean Desert can provide.",
+        image: "/images/aboutus/DSC_0325.JPG"
       },
       cta: {
         title: "Ready for Adventure?",
@@ -488,7 +452,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* About Us Section */}
       <section className="py-24 bg-gradient-to-b from-white to-desert-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
@@ -498,40 +462,58 @@ export default function Home() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
-              {currentContent.testimonials.title}
+              {currentContent.about.title}
             </h2>
-            <p className="text-xl text-gray-600">{currentContent.testimonials.subtitle}</p>
+            <p className="text-xl text-gray-600">{currentContent.about.subtitle}</p>
           </motion.div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {currentContent.testimonials.items.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="h-full border-none shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-desert-50">
-                <CardContent className="p-8">
-                  <div className="flex items-center gap-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="w-5 h-5 fill-desert-400 text-desert-400" />
-                    ))}
-                  </div>
-                    <p className="text-gray-700 mb-6 leading-relaxed text-lg italic">
-                    "{testimonial.text}"
-                  </p>
-                    <div>
-                      <div className="font-display font-semibold text-gray-900">
-                        {testimonial.name}
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="grid md:grid-cols-2 gap-12 items-center"
+            >
+              {/* Image */}
+              <div className="order-2 md:order-1">
+                <motion.div
+                  className="relative rounded-2xl overflow-hidden shadow-2xl"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img
+                    src={currentContent.about.image}
+                    alt={currentContent.about.title}
+                    className="w-full h-auto object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                </motion.div>
+              </div>
+              
+              {/* Text Content */}
+              <div className="order-1 md:order-2">
+                <Card className="border-none shadow-xl bg-gradient-to-br from-white to-desert-50/50">
+                  <CardContent className="p-8 lg:p-12">
+                    <p className="text-lg text-gray-700 leading-relaxed font-medium">
+                      {currentContent.about.text}
+                    </p>
+                    
+                    <div className="mt-8 pt-6 border-t border-desert-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-desert-gradient rounded-full flex items-center justify-center">
+                          <Heart className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-display font-bold text-gray-900 text-lg">
+                            {language === 'he' ? 'משפחת סופר' : 'Sofer Family'}
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-500">{testimonial.role}</div>
                     </div>
-                </CardContent>
-              </Card>
-              </motion.div>
-            ))}
+                  </CardContent>
+                </Card>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>

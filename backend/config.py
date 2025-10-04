@@ -32,11 +32,15 @@ class Config:
     
     # JWT Cookie Configuration
     JWT_TOKEN_LOCATION = ['cookies']
-    JWT_COOKIE_SECURE = os.environ.get("JWT_COOKIE_SECURE", "False") == "True"  # Set to True in production with HTTPS
+    # Auto-detect production: if using HTTPS URLs, enable secure cookies
+    _is_production = BACKEND_URL.startswith('https://') or FRONTEND_URL.startswith('https://')
+    JWT_COOKIE_SECURE = _is_production  # True in production with HTTPS
     JWT_COOKIE_CSRF_PROTECT = False  # Disable CSRF for simplicity; enable in production if needed
-    JWT_COOKIE_SAMESITE = 'Lax'  # 'Lax' or 'None' (None requires Secure=True)
+    JWT_COOKIE_SAMESITE = 'None' if _is_production else 'Lax'  # 'None' for cross-origin in production
     JWT_ACCESS_COOKIE_NAME = 'access_token_cookie'
     JWT_ACCESS_COOKIE_PATH = '/'
+    # Cookie domain - None means it will be set to the domain of the response
+    JWT_COOKIE_DOMAIN = None
     
     # OAuth Configuration
     GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")

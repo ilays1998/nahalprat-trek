@@ -242,5 +242,86 @@ This email was sent automatically from the Nahal Prat Trek booking system.
         
         return self._send_email(self.contact_email, subject, body)
 
+    def send_email_verification(self, user_email: str, user_name: str, verification_token: str) -> bool:
+        """Send email verification link to new user"""
+        from config import Config
+        
+        verification_url = f"{Config.FRONTEND_URL}/verify-email?token={verification_token}"
+        
+        subject = "Verify Your Email - Nahal Prat Trek"
+        
+        body = f"""
+Welcome to Nahal Prat Trek, {user_name}!
+
+Thank you for creating an account with us. To complete your registration and access all features, please verify your email address by clicking the link below:
+
+{verification_url}
+
+This verification link will expire in 24 hours. If you didn't create an account with us, please ignore this email.
+
+Once your email is verified, you'll be able to:
+• Book trekking experiences
+• Manage your bookings
+• Receive important updates about your adventures
+
+If you have any questions or need assistance, feel free to contact us.
+
+Best regards,
+The Nahal Prat Trek Team
+
+Contact: {self.contact_email}
+
+---
+If the link above doesn't work, copy and paste this URL into your browser:
+{verification_url}
+        """
+        
+        html_body = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: #B45309;">Welcome to Nahal Prat Trek!</h1>
+            </div>
+            
+            <p>Hi {user_name},</p>
+            
+            <p>Thank you for creating an account with us. To complete your registration and access all features, please verify your email address by clicking the button below:</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{verification_url}" 
+                   style="background-color: #B45309; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+                    Verify Email Address
+                </a>
+            </div>
+            
+            <p><strong>This verification link will expire in 24 hours.</strong></p>
+            
+            <p>Once your email is verified, you'll be able to:</p>
+            <ul>
+                <li>Book trekking experiences</li>
+                <li>Manage your bookings</li>
+                <li>Receive important updates about your adventures</li>
+            </ul>
+            
+            <p>If you didn't create an account with us, please ignore this email.</p>
+            
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+            
+            <p style="font-size: 12px; color: #666;">
+                If the button above doesn't work, copy and paste this link into your browser:<br>
+                <a href="{verification_url}">{verification_url}</a>
+            </p>
+            
+            <p style="font-size: 12px; color: #666;">
+                Best regards,<br>
+                The Nahal Prat Trek Team<br>
+                Contact: {self.contact_email}
+            </p>
+        </body>
+        </html>
+        """
+        
+        return self._send_email(user_email, subject, body, html_body)
+
 # Create a singleton instance
 email_service = EmailService()

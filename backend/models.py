@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
+import uuid
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -11,6 +12,10 @@ class AppUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     name = db.Column(db.String(128))
+    password_hash = db.Column(db.String(255), nullable=True)  # For email/password users
+    is_verified = db.Column(db.Boolean, default=False)  # Email verification status
+    verification_token = db.Column(db.String(255), nullable=True)  # Email verification token
+    auth_method = db.Column(db.String(16), default='google')  # 'google' or 'email'
     role = db.Column(db.String(16), default='user')  # 'user' or 'admin'
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     last_seen = db.Column(db.DateTime)

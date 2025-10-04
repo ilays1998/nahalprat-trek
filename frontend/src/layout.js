@@ -25,7 +25,12 @@ const translations = {
     contact: "צור קשר",
     followUs: "עקוב אחרינו",
     allRights: "כל הזכויות שמורות.",
-    footerDesc: "חווה את מדבר יהודה במסלול מאורגן בהשראת הליכה אירופאית בין בקתות הרים."
+    footerDesc: "חווה את מדבר יהודה במסלול מאורגן בהשראת הליכה אירופאית בין בקתות הרים.",
+    logout: "התנתק",
+    logoutConfirm: "האם אתה בטוח?",
+    logoutMessage: "האם אתה בטוח שברצונך להתנתק מהמערכת?",
+    cancel: "ביטול",
+    loading: "טוען..."
   },
   en: {
     home: "Home",
@@ -39,7 +44,12 @@ const translations = {
     contact: "Contact",
     followUs: "Follow Us",
     allRights: "All rights reserved.",
-    footerDesc: "Experience the Judean Desert through an organized trek inspired by European hut-to-hut hiking."
+    footerDesc: "Experience the Judean Desert through an organized trek inspired by European hut-to-hut hiking.",
+    logout: "Log Out",
+    logoutConfirm: "Are you sure?",
+    logoutMessage: "Are you sure you want to log out of the system?",
+    cancel: "Cancel",
+    loading: "Loading..."
   }
 };
 

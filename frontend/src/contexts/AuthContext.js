@@ -71,9 +71,105 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = () => {
+  const loginGoogle = () => {
     // Redirect to backend login endpoint
     window.location.href = `${API_BASE_URL}/auth/login`;
+  };
+
+  const loginEmail = async (email, password) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setToken(data.access_token);
+        setUser(data.user);
+        setAuthError(null);
+        localStorage.setItem('authToken', data.access_token);
+        return { success: true, message: data.message };
+      } else {
+        return { 
+          success: false, 
+          error: data.error,
+          needsVerification: data.needs_verification 
+        };
+      }
+    } catch (error) {
+      return { success: false, error: 'Network error. Please try again.' };
+    }
+  };
+
+  const register = async (email, password, name) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, name }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return { success: true, message: data.message, emailSent: data.email_sent };
+      } else {
+        return { success: false, error: data.error };
+      }
+    } catch (error) {
+      return { success: false, error: 'Network error. Please try again.' };
+    }
+  };
+
+  const verifyEmail = async (token) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/verify-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return { success: true, message: data.message };
+      } else {
+        return { success: false, error: data.error };
+      }
+    } catch (error) {
+      return { success: false, error: 'Network error. Please try again.' };
+    }
+  };
+
+  const resendVerification = async (email) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/resend-verification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return { success: true, message: data.message };
+      } else {
+        return { success: false, error: data.error };
+      }
+    } catch (error) {
+      return { success: false, error: 'Network error. Please try again.' };
+    }
   };
 
   const handleAuthCallback = (accessToken, userData) => {
@@ -98,7 +194,11 @@ export const AuthProvider = ({ children }) => {
     user,
     token,
     loading,
-    login,
+    loginGoogle,
+    loginEmail,
+    register,
+    verifyEmail,
+    resendVerification,
     logout,
     handleAuthCallback,
     isAuthenticated: !!user,

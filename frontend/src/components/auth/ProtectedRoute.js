@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../ui/button';
 import { LogIn } from 'lucide-react';
 import { useLanguage } from '../../layout';
+import LoginModal from './LoginModal';
 
 export const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, loading, login, authError } = useAuth();
+  const { isAuthenticated, loading, authError } = useAuth();
   const { language } = useLanguage();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   if (loading) {
     return (
@@ -25,23 +27,30 @@ export const ProtectedRoute = ({ children }) => {
 
   if (!isAuthenticated || authError) {
     return (
-      <div className="min-h-screen py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="text-red-600 mb-4">⚠️</div>
-            <p className="text-gray-900 font-semibold mb-4">
-              {authError || (language === 'he' ? 'אנא התחבר כדי להמשיך' : 'Please log in to continue')}
-            </p>
-            <Button 
-              onClick={login}
-              className="bg-amber-600 hover:bg-amber-700 inline-flex items-center gap-2"
-            >
-              <LogIn className="w-4 h-4" />
-              {language === 'he' ? 'התחבר' : 'Log In'}
-            </Button>
+      <>
+        <div className="min-h-screen py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <div className="text-red-600 mb-4">⚠️</div>
+              <p className="text-gray-900 font-semibold mb-4">
+                {authError || (language === 'he' ? 'אנא התחבר כדי להמשיך' : 'Please log in to continue')}
+              </p>
+              <Button 
+                onClick={() => setShowLoginModal(true)}
+                className="bg-amber-600 hover:bg-amber-700 inline-flex items-center gap-2"
+              >
+                <LogIn className="w-4 h-4" />
+                {language === 'he' ? 'התחבר' : 'Log In'}
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+        
+        <LoginModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+        />
+      </>
     );
   }
 

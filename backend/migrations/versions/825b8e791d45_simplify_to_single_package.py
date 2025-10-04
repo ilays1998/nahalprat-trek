@@ -17,6 +17,8 @@ depends_on = None
 
 
 def upgrade():
+    # This migration was originally empty but should have handled the package simplification
+    # The actual changes are now in migration a1b2c3d4e5f6_fix_available_spots_column.py
     pass
 
 

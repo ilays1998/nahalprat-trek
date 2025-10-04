@@ -5,34 +5,16 @@ services:
     rootDir: backend
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: FLASK_APP=app:create_app flask db upgrade || true && gunicorn wsgi:app --bind 0.0.0.0:$PORT
+    startCommand: FLASK_APP=app:create_app flask db upgrade && gunicorn wsgi:app --bind 0.0.0.0:$PORT
     envVars:
-      - key: SECRET_KEY
-        generateValue: true
-      - key: JWT_SECRET_KEY
-        generateValue: true
       - key: SQLALCHEMY_DATABASE_URI
         fromDatabase:
           name: nahalprat-db
           property: connectionString
       - key: FLASK_APP
         value: app:create_app
-      - key: FRONTEND_URL
-        value: https://nahalprat-frontend.onrender.com
-      - key: CORS_ORIGINS
-        value: "https://nahalprat-frontend.onrender.com"
-      - key: SESSION_COOKIE_SECURE
-        value: "true"
-      - key: SESSION_COOKIE_HTTPONLY
-        value: "true"
-      - key: SESSION_COOKIE_SAMESITE
-        value: "None"
-      - key: GOOGLE_CLIENT_ID
-        sync: false
-      - key: GOOGLE_CLIENT_SECRET
-        sync: false
-      - key: ADMIN_EMAIL
-        sync: false
+    # All other environment variables should be set in Render Dashboard
+    # See .env_production_backend for required variables
 
   - type: web
     name: nahalprat-frontend

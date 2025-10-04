@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
 import logging
+from email_utils import email_service
 
 contact_bp = Blueprint('contact', __name__)
 logger = logging.getLogger(__name__)
@@ -71,7 +72,7 @@ Reply to: {email}
         
         msg.attach(MIMEText(body, 'plain'))
         
-        # Send email
+        # Send email to admin
         try:
             server = smtplib.SMTP(smtp_server, smtp_port)
             server.starttls()
@@ -81,7 +82,14 @@ Reply to: {email}
             server.quit()
             
             logger.info(f"Contact form email sent successfully from {email}")
-            return jsonify({'message': 'Email sent successfully'}), 200
+            
+            # Send confirmation email to sender using email service
+            confirmation_sent = email_service.send_contact_confirmation(email, name)
+            
+            if confirmation_sent:
+                return jsonify({'message': 'Email sent successfully and confirmation sent to sender'}), 200
+            else:
+                return jsonify({'message': 'Email sent successfully but confirmation email failed'}), 200
             
         except smtplib.SMTPException as e:
             logger.error(f"SMTP error: {str(e)}")

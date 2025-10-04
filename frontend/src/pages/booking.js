@@ -140,7 +140,7 @@ export default function BookingPage() {
       availableSpots: "מקומות פנויים",
       selectPackageFirst: "בחר חבילה תחילה כדי לראות תאריכים זמינים",
       noAvailableDates: "אין תאריכים פנויים לחבילה זו",
-      successMessage: "בקשת ההזמנה נשלחה בהצלחה! נאשר אותה ונחזור אליך בקרוב.",
+      successMessage: "בקשת ההזמנה נשלחה בהצלחה! קיבלת אימייל אישור ונחזור אליך בקרוב.",
       errorMessage: "אירעה שגיאה. אנא נסה שוב.",
       step1: "שלב 1: בחירת חבילה",
       step2: "שלב 2: בחירת תאריך",
@@ -186,7 +186,7 @@ export default function BookingPage() {
       availableSpots: "Available Spots",
       selectPackageFirst: "Select a package first to see available dates",
       noAvailableDates: "No available dates for this package",
-      successMessage: "Booking request submitted successfully! We'll review and get back to you soon.",
+      successMessage: "Booking request submitted successfully! You've received a confirmation email and we'll get back to you soon.",
       errorMessage: "An error occurred. Please try again.",
       step1: "Step 1: Choose Package",
       step2: "Step 2: Select Date", 
@@ -229,14 +229,8 @@ export default function BookingPage() {
 
       await Booking.create(bookingData);
       
-      // Update available spots
-      const selectedDateData = availableDates.find(d => d.start_date === format(selectedDate, 'yyyy-MM-dd'));
-      if (selectedDateData) {
-        const field = `available_spots_${formData.package_type}`;
-        // This is a client-side prediction, actual spots will be managed on backend
-        // For now, we don't decrement client-side to prevent misleading UI if backend fails.
-        // We just reload the dates if needed, or rely on the success message.
-      }
+      // Reload available dates to reflect updated spots
+      await loadAvailableDates();
 
       setSuccess(true);
       

@@ -17,14 +17,12 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* All pages now require authentication */}
+          {/* Public pages - no authentication required */}
           <Route 
             path="/" 
             element={
               <Layout>
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
+                <Home />
               </Layout>
             } 
           />
@@ -32,9 +30,7 @@ export default function App() {
             path="/packages" 
             element={
               <Layout>
-                <ProtectedRoute>
-                  <Packages />
-                </ProtectedRoute>
+                <Packages />
               </Layout>
             } 
           />
@@ -42,12 +38,20 @@ export default function App() {
             path="/gallery" 
             element={
               <Layout>
-                <ProtectedRoute>
-                  <Gallery />
-                </ProtectedRoute>
+                <Gallery />
               </Layout>
             } 
           />
+          <Route 
+            path="/contact" 
+            element={
+              <Layout>
+                <Contact />
+              </Layout>
+            } 
+          />
+          
+          {/* Protected pages - authentication required */}
           <Route 
             path="/booking" 
             element={
@@ -68,16 +72,8 @@ export default function App() {
               </Layout>
             } 
           />
-          <Route 
-            path="/contact" 
-            element={
-              <Layout>
-                <ProtectedRoute>
-                  <Contact />
-                </ProtectedRoute>
-              </Layout>
-            } 
-          />
+          
+          {/* Auth and utility routes */}
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route 

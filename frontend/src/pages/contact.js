@@ -64,7 +64,6 @@ const translations = {
 
 export default function Contact() {
   const { language, isRTL } = useLanguage();
-  const { token } = useAuth();
   const t = translations[language] || translations.en;
   
   const [formData, setFormData] = useState({
@@ -133,9 +132,9 @@ export default function Contact() {
     try {
       const response = await fetch(`${config.API_BASE_URL}/contact`, {
         method: 'POST',
+        credentials: 'include',  // Include cookies
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(formData)
       });

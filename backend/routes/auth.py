@@ -1,11 +1,11 @@
 from flask import Blueprint, redirect, url_for, session, jsonify, request
 from authlib.integrations.flask_client import OAuth
-from models import db, AppUser, UserLogin
+from models import db, AppUser
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from config import Config
-from utils import get_ip_info
 from email_utils import email_service
 from werkzeug.security import generate_password_hash, check_password_hash
+from visitor_service import track_visitor
 import os
 import json
 import uuid
@@ -74,43 +74,29 @@ def authorize():
             db.session.commit()
         # If user.auth_method == 'google', they can already use Google, so just continue
 
-    # Update last_seen and create login record
+    # Update last_seen and track visitor
     user.last_seen = datetime.utcnow()
-    
-    # Get client IP address
-    ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
-    if ip_address:
-        # If X-Forwarded-For contains multiple IPs, take the first one
-        ip_address = ip_address.split(',')[0].strip()
-    
-    # Get geolocation info
-    ip_info = get_ip_info(ip_address)
-    
-    # Create login record
-    login = UserLogin(
-        user_id=user.id,
-        ip_address=ip_address,
-        region=ip_info.get('region') if ip_info else None,
-        country=ip_info.get('country') if ip_info else None,
-        city=ip_info.get('city') if ip_info else None
-    )
-    db.session.add(login)
     db.session.commit()
+    
+    # Track visitor with user_id (links anonymous visitor to authenticated user)
+    track_visitor(user_id=user.id)
 
     # Flask-JWT-Extended expects identity to be a simple value, not an object
-    expires_delta = timedelta(minutes=int(os.environ.get("JWT_ACCESS_TOKEN_EXPIRES_MINUTES", "15")))
+    expires_delta = timedelta(days=7)  # Longer expiry for cookie-based auth
     access_token = create_access_token(identity=str(user.id), expires_delta=expires_delta)
     
-    # Redirect to frontend with token and user data
+    # Redirect to frontend callback
     frontend_callback_url = f"{Config.FRONTEND_URL}/auth/callback"
-    user_data = {"email": user.email, "role": user.role, "name": user.name}
     
-    # Encode user data for URL
-    import urllib.parse
-    encoded_user_data = urllib.parse.quote(json.dumps(user_data))
+    # Create response with redirect
+    from flask import make_response
+    response = make_response(redirect(frontend_callback_url))
     
-    callback_url = f"{frontend_callback_url}?access_token={access_token}&user={encoded_user_data}"
-    return redirect(callback_url)
+    # Set JWT token as HttpOnly cookie
+    from flask_jwt_extended import set_access_cookies
+    set_access_cookies(response, access_token)
+    
+    return response
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
@@ -231,30 +217,15 @@ def login_email():
                 "needs_verification": True
             }), 401
             
-        # Update last_seen and create login record
+        # Update last_seen and track visitor
         user.last_seen = datetime.utcnow()
-        
-        # Get client IP address
-        ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
-        if ip_address:
-            ip_address = ip_address.split(',')[0].strip()
-        
-        # Get geolocation info
-        ip_info = get_ip_info(ip_address)
-        
-        # Create login record
-        login = UserLogin(
-            user_id=user.id,
-            ip_address=ip_address,
-            region=ip_info.get('region') if ip_info else None,
-            country=ip_info.get('country') if ip_info else None,
-            city=ip_info.get('city') if ip_info else None
-        )
-        db.session.add(login)
         db.session.commit()
         
+        # Track visitor with user_id (links anonymous visitor to authenticated user)
+        track_visitor(user_id=user.id)
+        
         # Create JWT token
-        expires_delta = timedelta(minutes=int(os.environ.get("JWT_ACCESS_TOKEN_EXPIRES_MINUTES", "15")))
+        expires_delta = timedelta(days=7)  # Longer expiry for cookie-based auth
         access_token = create_access_token(identity=str(user.id), expires_delta=expires_delta)
         
         user_data = {
@@ -264,11 +235,16 @@ def login_email():
             "role": user.role
         }
         
-        return jsonify({
-            "access_token": access_token,
+        # Create response and set cookie
+        from flask import make_response
+        from flask_jwt_extended import set_access_cookies
+        response = make_response(jsonify({
             "user": user_data,
             "message": "Login successful"
-        }), 200
+        }), 200)
+        set_access_cookies(response, access_token)
+        
+        return response
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -327,3 +303,13 @@ def me():
         return jsonify(user_data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@auth_bp.route("/logout", methods=["POST"])
+def logout():
+    """Logout by clearing the cookie"""
+    from flask import make_response
+    from flask_jwt_extended import unset_jwt_cookies
+    
+    response = make_response(jsonify({"message": "Logout successful"}), 200)
+    unset_jwt_cookies(response)
+    return response

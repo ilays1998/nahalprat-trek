@@ -16,30 +16,35 @@ def create_app():
          origins=Config.CORS_ORIGINS,
          methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
          allow_headers=['Content-Type', 'Authorization'],
-         supports_credentials=True)
+         supports_credentials=True,
+         expose_headers=['Set-Cookie'])
     
     # Initialize JWT
     jwt = JWTManager(app)
 
     @jwt.unauthorized_loader
     def missing_token(reason):
-        app.logger.error(f"JWT missing/unauthorized: {reason}")
-        return {"msg": reason}, 401
+        app.logger.info(f"JWT missing/unauthorized: {reason}")
+        return {"msg": "Missing or invalid token"}, 401
 
     @jwt.invalid_token_loader
     def invalid_token(reason):
-        app.logger.error(f"JWT invalid: {reason}")
-        return {"msg": reason}, 422
+        app.logger.info(f"JWT invalid: {reason}")
+        return {"msg": "Invalid token"}, 401
 
     @jwt.expired_token_loader
     def expired_token(jwt_header, jwt_data):
-        app.logger.error("JWT expired")
+        app.logger.info("JWT expired")
         return {"msg": "Token has expired"}, 401
 
     @jwt.needs_fresh_token_loader
     def needs_fresh(jwt_header, jwt_data):
-        app.logger.error("JWT not fresh")
+        app.logger.info("JWT not fresh")
         return {"msg": "Fresh token required"}, 401
+
+    # Initialize visitor tracking middleware
+    from visitor_middleware import init_visitor_tracking
+    init_visitor_tracking(app)
 
     # Register routes
     from routes.auth import auth_bp

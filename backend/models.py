@@ -47,15 +47,20 @@ class Booking(db.Model):
     created_date = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship("AppUser", backref="bookings")
 
-class UserLogin(db.Model):
-    __tablename__ = 'user_login'
+class Visitor(db.Model):
+    __tablename__ = 'visitor'
     
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('app_user.id'), nullable=False)
-    login_time = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    ip_address = db.Column(db.String(45), nullable=False)  # IPv6 can be up to 45 chars
+    visitor_id = db.Column(db.String(36), unique=True, nullable=False, index=True)  # UUID from cookie
+    user_id = db.Column(db.Integer, db.ForeignKey('app_user.id'), nullable=True)  # NULL for anonymous visitors
+    first_visit = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    last_visit = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    visit_count = db.Column(db.Integer, default=1, nullable=False)
+    ip_address = db.Column(db.String(45))  # IPv6 can be up to 45 chars
     region = db.Column(db.String(255))
     country = db.Column(db.String(2))  # ISO country code
     city = db.Column(db.String(255))
+    user_agent = db.Column(db.String(512))  # Browser/device info
+    referrer = db.Column(db.String(512))  # Where they came from
     
-    user = db.relationship("AppUser", backref="logins")
+    user = db.relationship("AppUser", backref="visitor_sessions")

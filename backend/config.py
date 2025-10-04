@@ -30,6 +30,14 @@ class Config:
     # Use separate secret for JWT for security isolation
     JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
     
+    # JWT Cookie Configuration
+    JWT_TOKEN_LOCATION = ['cookies']
+    JWT_COOKIE_SECURE = os.environ.get("JWT_COOKIE_SECURE", "False") == "True"  # Set to True in production with HTTPS
+    JWT_COOKIE_CSRF_PROTECT = False  # Disable CSRF for simplicity; enable in production if needed
+    JWT_COOKIE_SAMESITE = 'Lax'  # 'Lax' or 'None' (None requires Secure=True)
+    JWT_ACCESS_COOKIE_NAME = 'access_token_cookie'
+    JWT_ACCESS_COOKIE_PATH = '/'
+    
     # OAuth Configuration
     GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
     GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")

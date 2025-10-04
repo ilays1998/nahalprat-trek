@@ -3,27 +3,19 @@ import config from '../config';
 
 const API_BASE_URL = config.API_BASE_URL;
 
-// Helper function to get auth headers
-const getAuthHeaders = () => {
-  const token = localStorage.getItem('authToken');
-  return {
-    'Content-Type': 'application/json',
-    ...(token && { 'Authorization': `Bearer ${token}` }),
-  };
-};
-
-// Helper function for API calls
+// Helper function for API calls with cookie-based auth
 const apiCall = async (endpoint, options = {}) => {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    headers: getAuthHeaders(),
+    credentials: 'include',  // Include cookies in all requests
+    headers: {
+      'Content-Type': 'application/json',
+    },
     ...options,
   });
 
   if (!response.ok) {
     // Handle authentication errors
     if (response.status === 401) {
-      // Clear the expired token and surface an AuthError to callers
-      localStorage.removeItem('authToken');
       const err = new Error('Authentication failed - please log in again');
       err.name = 'AuthError';
       throw err;

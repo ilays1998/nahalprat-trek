@@ -63,8 +63,8 @@ export default function Layout({ children, currentPageName }) {
   const t = translations[language];
   const isRTL = language === 'he';
 
-  // Don't show navigation on auth callback page or when not authenticated
-  const shouldShowNavigation = isAuthenticated && location.pathname !== '/auth/callback';
+  // Don't show navigation on auth callback page only
+  const shouldShowNavigation = location.pathname !== '/auth/callback';
 
   useEffect(() => {
     const handleScroll = () => {

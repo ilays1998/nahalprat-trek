@@ -13,31 +13,21 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('authToken'));
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
 
   const API_BASE_URL = config.API_BASE_URL;
 
   useEffect(() => {
-    if (token) {
-      // Verify token and get user info on app load
-      fetchUserInfo();
-    } else {
-      setLoading(false);
-    }
-  }, [token]);
+    // Try to fetch user info on app load (cookie-based auth)
+    fetchUserInfo();
+  }, []);
 
   const fetchUserInfo = async () => {
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
     try {
       const response = await fetch(`${API_BASE_URL}/auth/me`, {
+        credentials: 'include',  // Include cookies in request
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
@@ -47,15 +37,16 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
         setAuthError(null);
       } else if (response.status === 401) {
-        // Token is expired or invalid
-        handleAuthError('Your session has expired. Please log in again.');
+        // Not authenticated or session expired
+        setUser(null);
+        setAuthError(null);
       } else {
         // Other errors
-        logout();
+        setUser(null);
       }
     } catch (error) {
       console.error('Error fetching user info:', error);
-      logout();
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -80,6 +71,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login-email`, {
         method: 'POST',
+        credentials: 'include',  // Include cookies in request
         headers: {
           'Content-Type': 'application/json',
         },
@@ -89,10 +81,9 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setToken(data.access_token);
+        // Cookie is set by backend
         setUser(data.user);
         setAuthError(null);
-        localStorage.setItem('authToken', data.access_token);
         return { success: true, message: data.message };
       } else {
         return { 
@@ -110,6 +101,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -132,6 +124,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/verify-email`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -154,6 +147,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/resend-verification`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -172,27 +166,34 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const handleAuthCallback = (accessToken, userData) => {
-    setToken(accessToken);
-    setUser(userData);
-    setAuthError(null);
-    localStorage.setItem('authToken', accessToken);
-
+  const handleAuthCallback = async () => {
+    // Cookie is already set by backend during OAuth redirect
+    // Just fetch user info and redirect
+    await fetchUserInfo();
+    
     // Return the path we should navigate to; caller performs navigation
     const redirectPath = localStorage.getItem('redirectPath') || '/';
     localStorage.removeItem('redirectPath');
     return redirectPath;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      // Call backend to clear cookie
+      await fetch(`${API_BASE_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+    
     setUser(null);
-    setToken(null);
-    localStorage.removeItem('authToken');
+    setAuthError(null);
   };
 
   const value = {
     user,
-    token,
     loading,
     loginGoogle,
     loginEmail,

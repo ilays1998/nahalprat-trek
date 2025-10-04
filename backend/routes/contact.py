@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -11,7 +11,6 @@ contact_bp = Blueprint('contact', __name__)
 logger = logging.getLogger(__name__)
 
 @contact_bp.route('/contact', methods=['POST'])
-@jwt_required()
 def send_contact_email():
     """Send contact form submission via email"""
     try:

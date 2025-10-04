@@ -24,9 +24,7 @@ class TrekDate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
-    available_spots_basic = db.Column(db.Integer, default=12)
-    available_spots_pro = db.Column(db.Integer, default=8)
-    available_spots_premium = db.Column(db.Integer, default=4)
+    available_spots = db.Column(db.Integer, default=20)  # Single package system
     season = db.Column(db.String(16))
     weather_notes = db.Column(db.Text)
 
@@ -37,7 +35,7 @@ class Booking(db.Model):
     last_name = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     phone = db.Column(db.String(32), nullable=False)
-    package_type = db.Column(db.String(16), nullable=False)  # basic, pro, premium
+    package_type = db.Column(db.String(16), nullable=False, default='standard')  # single standard package
     trek_date = db.Column(db.Date, nullable=False)
     participants_count = db.Column(db.Integer, default=1)
     total_price = db.Column(db.Integer)

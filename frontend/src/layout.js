@@ -15,17 +15,17 @@ export const useLanguage = () => useContext(LanguageContext);
 const translations = {
   he: {
     home: "בית",
-    packages: "חבילות",
+    packages: "מחיר",
     gallery: "גלריה",
     booking: "הזמנה",
     myBookings: "ההזמנות שלי",
-    title: "מסלול נחל פרת",
+    title: "טרק נחל פרת",
     subtitle: "חוויית טיול 3 ימים במדבר יהודה",
     bookNow: "הזמן עכשיו",
     contact: "צור קשר",
     followUs: "עקוב אחרינו",
     allRights: "כל הזכויות שמורות.",
-    footerDesc: "חווה את מדבר יהודה במסלול מאורגן בהשראת הליכה אירופאית בין בקתות הרים.",
+    footerDesc: "חווה את מדבר יהודה בטרק מאורגן בהשראת הליכה אירופאית בין בקתות הרים.",
     logout: "התנתק",
     logoutConfirm: "האם אתה בטוח?",
     logoutMessage: "האם אתה בטוח שברצונך להתנתק מהמערכת?",
@@ -34,7 +34,7 @@ const translations = {
   },
   en: {
     home: "Home",
-    packages: "Packages",
+    packages: "Pricing",
     gallery: "Gallery", 
     booking: "Booking",
     myBookings: "My Bookings",
@@ -236,8 +236,8 @@ export default function Layout({ children, currentPageName }) {
             <div className="grid md:grid-cols-3 gap-12">
               <div>
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-desert-gradient rounded-xl flex items-center justify-center shadow-warm">
-                    <Mountain className="w-6 h-6 text-white" />
+                  <div className="w-10 h-12 flex items-center justify-center">
+                    <img src="/images/logo.png" alt="TNP Logo" className="w-full h-full object-contain drop-shadow-lg" />
                   </div>
                   <h3 className="text-xl font-display font-bold">{t.title}</h3>
                 </div>

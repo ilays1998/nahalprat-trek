@@ -32,7 +32,6 @@ export default function BookingPage() {
   const defaultNames = getDefaultNamesFromUser(user);
   const [availableDates, setAvailableDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedPackage, setSelectedPackage] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -42,7 +41,7 @@ export default function BookingPage() {
     last_name: defaultNames.lastName,
     email: user?.email || '',
     phone: '',
-    package_type: '',
+    package_type: 'standard',  // Single package system
     participants_count: 1,
     special_requests: '',
     emergency_contact_name: '',
@@ -54,11 +53,7 @@ export default function BookingPage() {
     loadAvailableDates();
   }, []);
 
-  useEffect(() => {
-    if (selectedPackage) {
-      setFormData(prev => ({ ...prev, package_type: selectedPackage }));
-    }
-  }, [selectedPackage]);
+  // No package selection needed - single package system
 
   const loadAvailableDates = async () => {
     const dates = await TrekDate.list();
@@ -84,45 +79,34 @@ export default function BookingPage() {
     }
   }, [user]);
 
-  const getAvailableSpots = (date, packageType) => {
-    if (!date || !packageType) return 0;
-    const field = `available_spots_${packageType}`;
-    return date[field] || 0;
+  const getAvailableSpots = (date) => {
+    if (!date) return 0;
+    return date.available_spots || 0;
   };
 
-  const isDateAvailable = (date, packageType) => {
-    if (!packageType || !date) return false;
-    return getAvailableSpots(date, packageType) > 0;
+  const isDateAvailable = (date) => {
+    if (!date) return false;
+    return getAvailableSpots(date) > 0;
   };
 
-  const getAvailableDatesForPackage = (packageType) => {
-    if (!packageType) return [];
-    return availableDates.filter(date => isDateAvailable(date, packageType));
+  const getAvailableDates = () => {
+    return availableDates.filter(date => isDateAvailable(date));
   };
 
   const content = {
     he: {
       title: "הזמנת טיול",
-      subtitle: "מלא את הפרטים והזמן את מקומך במסלול נחל פרת",
+      subtitle: "מלא את הפרטים והזמן את מקומך בטרק נחל פרת",
       personalInfo: "פרטים אישיים",
       trekDetails: "פרטי הטיול",
       emergencyContact: "איש קשר לחירום",
-      packagePrices: {
-        basic: "₪1,000",
-        pro: "₪2,000", 
-        premium: "₪3,000"
-      },
-      packageNames: {
-        basic: "בסיסי",
-        pro: "מקצועי",
-        premium: "פרימיום"
-      },
+      packagePrice: "₪1,000",
+      packageName: "טרק נחל פרת",
       fields: {
         firstName: "שם פרטי",
         lastName: "שם משפחה",
         email: "כתובת אימייל",
         phone: "טלפון",
-        package: "בחר חבילה",
         date: "בחר תאריך",
         participants: "מספר משתתפים",
         specialRequests: "בקשות מיוחדות",
@@ -138,14 +122,13 @@ export default function BookingPage() {
       totalPrice: "מחיר כולל",
       perPerson: "לאדם",
       availableSpots: "מקומות פנויים",
-      selectPackageFirst: "בחר חבילה תחילה כדי לראות תאריכים זמינים",
-      noAvailableDates: "אין תאריכים פנויים לחבילה זו",
+      noAvailableDates: "אין תאריכים זמינים כרגע",
       successMessage: "בקשת ההזמנה נשלחה בהצלחה! קיבלת אימייל אישור ונחזור אליך בקרוב.",
       errorMessage: "אירעה שגיאה. אנא נסה שוב.",
-      step1: "שלב 1: בחירת חבילה",
-      step2: "שלב 2: בחירת תאריך",
-      step3: "שלב 3: פרטים אישיים",
-      trekDuration: "טיול של 3 ימים"
+      step1: "שלב 1: בחירת תאריך",
+      step2: "שלב 2: פרטים אישיים",
+      trekDuration: "טיול של 3 ימים, 2 לילות",
+      selectDateFirst: "אנא בחר תאריך כדי להמשיך"
     },
     en: {
       title: "Book Your Trek",
@@ -153,22 +136,13 @@ export default function BookingPage() {
       personalInfo: "Personal Information",
       trekDetails: "Trek Details",
       emergencyContact: "Emergency Contact",
-      packagePrices: {
-        basic: "₪1,000",
-        pro: "₪2,000",
-        premium: "₪3,000"
-      },
-      packageNames: {
-        basic: "Basic",
-        pro: "Pro",
-        premium: "Premium"
-      },
+      packagePrice: "₪1,000",
+      packageName: "Nahal Prat Trek",
       fields: {
         firstName: "First Name",
         lastName: "Last Name",
         email: "Email Address",
         phone: "Phone Number",
-        package: "Select Package",
         date: "Select Date",
         participants: "Number of Participants",
         specialRequests: "Special Requests",
@@ -184,14 +158,13 @@ export default function BookingPage() {
       totalPrice: "Total Price",
       perPerson: "per person",
       availableSpots: "Available Spots",
-      selectPackageFirst: "Select a package first to see available dates",
-      noAvailableDates: "No available dates for this package",
+      noAvailableDates: "No available dates at the moment",
       successMessage: "Booking request submitted successfully! You've received a confirmation email and we'll get back to you soon.",
       errorMessage: "An error occurred. Please try again.",
-      step1: "Step 1: Choose Package",
-      step2: "Step 2: Select Date", 
-      step3: "Step 3: Personal Details",
-      trekDuration: "3-day trek"
+      step1: "Step 1: Select Date",
+      step2: "Step 2: Personal Details",
+      trekDuration: "3-day trek, 2 nights",
+      selectDateFirst: "Please select a date to continue"
     }
   };
 
@@ -205,8 +178,7 @@ export default function BookingPage() {
   };
 
   const calculateTotalPrice = () => {
-    const prices = { basic: 1000, pro: 2000, premium: 3000 };
-    return (prices[formData.package_type] || 0) * formData.participants_count;
+    return 1000 * formData.participants_count;  // Fixed price: 1000 NIS per person
   };
 
   const handleSubmit = async (e) => {
@@ -248,7 +220,6 @@ export default function BookingPage() {
         language: language
       });
       setSelectedDate(null);
-      setSelectedPackage('');
       // Optionally reload available dates to reflect changes if the booking logic was server-side and updated spots immediately.
       // await loadAvailableDates(); 
 
@@ -296,7 +267,7 @@ export default function BookingPage() {
     );
   }
 
-  const packageDates = getAvailableDatesForPackage(selectedPackage);
+  const availableBookingDates = getAvailableDates();
   const today = startOfDay(new Date());
 
   return (
@@ -319,44 +290,30 @@ export default function BookingPage() {
           </Alert>
         )}
 
-        {/* Step 1: Package Selection */}
-        <Card className="border-none shadow-lg mb-8">
-          <CardHeader>
-            <CardTitle className="text-xl font-bold">{currentContent.step1}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-3 gap-6">
-              {Object.entries(currentContent.packageNames).map(([key, name]) => (
-                <Card 
-                  key={key}
-                  className={`cursor-pointer transition-all duration-300 ${
-                    selectedPackage === key 
-                      ? 'ring-2 ring-amber-300 bg-amber-50' 
-                      : 'hover:shadow-lg'
-                  }`}
-                  onClick={() => setSelectedPackage(key)}
-                >
-                  <CardContent className="p-6 text-center">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">{name}</h3>
-                    <div className="text-2xl font-bold text-amber-600 mb-2">
-                      {currentContent.packagePrices[key]}
-                    </div>
-                    <p className="text-gray-500 text-sm">{currentContent.perPerson}</p>
-                  </CardContent>
-                </Card>
-              ))}
+        {/* Package Information */}
+        <Card className="border-none shadow-lg mb-8 bg-gradient-to-r from-desert-50 to-orange-50">
+          <CardContent className="p-8">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">{currentContent.packageName}</h2>
+              <div className="text-4xl font-bold text-desert-600 mb-2">
+                {currentContent.packagePrice}
+              </div>
+              <p className="text-gray-600">{currentContent.perPerson}</p>
+              <div className="mt-4 text-sm text-gray-500">
+                {currentContent.trekDuration}
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Step 2: Date Selection */}
-        {selectedPackage && (
+        {/* Step 1: Date Selection */}
+        {(
           <Card className="border-none shadow-lg mb-8">
             <CardHeader>
               <CardTitle className="text-xl font-bold">{currentContent.step2}</CardTitle>
             </CardHeader>
             <CardContent>
-              {packageDates.length > 0 ? (
+              {getAvailableDates().length > 0 ? (
                 <div className="grid lg:grid-cols-2 gap-8">
                   <div>
                     <Calendar
@@ -366,7 +323,7 @@ export default function BookingPage() {
                       disabled={(date) => {
                         const dateStr = format(date, 'yyyy-MM-dd');
                         const isPast = date < today;
-                        const isNotAvailable = !packageDates.some(d => d.start_date === dateStr);
+                        const isNotAvailable = !getAvailableDates().some(d => d.start_date === dateStr);
                         return isPast || isNotAvailable;
                       }}
                       className="rounded-md border"
@@ -377,8 +334,8 @@ export default function BookingPage() {
                       {language === 'he' ? 'תאריכים זמינים:' : 'Available Dates:'}
                     </h4>
                     <div className="space-y-2 max-h-64 overflow-y-auto">
-                      {packageDates.map((date) => {
-                        const spots = getAvailableSpots(date, selectedPackage);
+                      {getAvailableDates().map((date) => {
+                        const spots = getAvailableSpots(date);
                         const startDate = parseISO(date.start_date);
                         const endDate = parseISO(date.end_date);
                         return (
@@ -425,8 +382,8 @@ export default function BookingPage() {
           </Card>
         )}
 
-        {/* Step 3: Personal Information Form */}
-        {selectedPackage && selectedDate && (
+        {/* Step 2: Personal Information Form */}
+        {selectedDate && (
           <form onSubmit={handleSubmit} className="space-y-10">
             <Card className="border-none shadow-lg">
               <CardHeader>
@@ -520,7 +477,7 @@ export default function BookingPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {Array.from({length: Math.min(10, getAvailableSpots(packageDates.find(d => d.start_date === format(selectedDate, 'yyyy-MM-dd')), selectedPackage))}, (_, i) => i + 1).map(num => (
+                          {Array.from({length: Math.min(10, getAvailableSpots(getAvailableDates().find(d => d.start_date === format(selectedDate, 'yyyy-MM-dd'))))}, (_, i) => i + 1).map(num => (
                             <SelectItem key={num} value={num}>
                               {num}
                             </SelectItem>
@@ -588,7 +545,7 @@ export default function BookingPage() {
                   <div className="text-center md:text-left">
                     <div className="space-y-2">
                       <p className="text-lg text-gray-600">
-                        {currentContent.packageNames[selectedPackage]} × {formData.participants_count}
+                        {currentContent.packageName} × {formData.participants_count}
                       </p>
                       <p className="text-sm text-gray-500">
                         {format(selectedDate, 'MMM d')} - {format(addDays(selectedDate, 2), 'MMM d, yyyy')}
@@ -620,9 +577,9 @@ export default function BookingPage() {
           </form>
         )}
 
-        {!selectedPackage && (
+        {!selectedDate && (
           <div className="text-center py-8 text-gray-500">
-            {currentContent.selectPackageFirst}
+            {currentContent.selectDateFirst}
           </div>
         )}
       </div>

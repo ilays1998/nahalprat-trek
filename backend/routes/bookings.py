@@ -83,12 +83,12 @@ def create_booking():
     if not trekdate:
         return jsonify({"error": "No such trek date"}), 400
 
-    package_field = f"available_spots_{data['package_type']}"
-    if getattr(trekdate, package_field) < data['participants_count']:
+    # Check available spots (single package system)
+    if trekdate.available_spots < data['participants_count']:
         return jsonify({"error": "Not enough spots"}), 400
 
     # Decrement spots
-    setattr(trekdate, package_field, getattr(trekdate, package_field) - data['participants_count'])
+    trekdate.available_spots -= data['participants_count']
 
     booking = Booking(
         user_id=user.id,
@@ -96,10 +96,10 @@ def create_booking():
         last_name=data['last_name'],
         email=data['email'],
         phone=data['phone'],
-        package_type=data['package_type'],
+        package_type='standard',  # Single package system
         trek_date=trek_date_value,
         participants_count=data['participants_count'],
-        total_price=data['total_price'],
+        total_price=1000 * data['participants_count'],  # Fixed price: 1000 NIS per person
         special_requests=data.get('special_requests'),
         emergency_contact_name=data.get('emergency_contact_name'),
         emergency_contact_phone=data.get('emergency_contact_phone'),

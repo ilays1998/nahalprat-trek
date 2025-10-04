@@ -28,11 +28,11 @@ export default function Home() {
   const content = {
     he: {
       hero: {
-        title: "מסלול נחל פרת",
-        subtitle: "חוויית טיול מודרכת בת 3 ימים במדבר יהודה",
-        description: "גלה את יופיו של מדבר יהודה במסלול מאורגן בהשראת הליכה אירופאית בין בקתות הרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה בבקתה במדבר.",
+        title: "טרק נחל פרת",
+        subtitle: "חוויית טיול בת 3 ימים במדבר יהודה",
+        description: "גלה את יופיו של מדבר יהודה בטרק מאורגן בהשראת הליכה אירופאית בין בקתות הרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה בבקתה במדבר.",
         cta: "התחל את ההרפתקה",
-        viewPackages: "צפה בחבילות"
+        viewPricing: "צפה במחיר"
       },
       features: {
         title: "אתם הולכים אנחנו דואגים לכל השאר",
@@ -41,7 +41,7 @@ export default function Home() {
           {
             icon: Bus,
             title: "העברות",
-            description: "מירושלים עד לתחילת המסלול ובחזרה"
+            description: "מירושלים עד לתחילת הטרק ובחזרה"
           },
           {
             icon: Bed,
@@ -51,32 +51,32 @@ export default function Home() {
           {
             icon: Utensils,
             title: "אוכל",
-            description: "נדאג לספק לכם ארוחות בוקר וערב ונשנושים למסלול"
+            description: "נדאג לספק לכם ארוחות בוקר וערב ונשנושים לטרק"
           },
           {
             icon: Map,
-            title: "מסלול",
-            description: "מסלול מותאם שעובר בכל המקומות היפים באיזור"
+            title: "טרק",
+            description: "טרק מותאם שעובר בכל המקומות היפים באיזור"
           }
         ]
       },
       stats: {
-        trekkers: "1,200+ מטיילים",
-        rating: "4.9 דירוג",
-        trails: "12 מסלולים",
-        years: "8 שנות ניסיון"
+        distance: "35 ק״מ",
+        springs: "3 מעיינות",
+        pools: "עלייה 800 מ'",
+        stream: "נחל אחד"
       },
       journey: {
         title: "סיפור דרך",
         subtitle: "מסע של שלושה ימים במדבר יהודה",
-        viewAll: "צפה בפרטים המלאים",
+        viewAll: "צפה במחיר המלא",
         day: "יום",
-        mapTitle: "מפת המסלול"
+        mapTitle: "מפת הטרק"
       },
       about: {
         title: "עלינו",
         subtitle: "הכירו את משפחת סופר - המארחים שלכם להרפתקה במדבר",
-        text: "אנחנו משפחת סופר, גרים בנופי פרת כבר 27 שנים. מאז ומתמיד הייתה לנו אהבה גדולה לטבע ולהליכה בו. הכנו בשבילכם מסלול בהשראת הטרקים באיטליה ואוסטריה עם אוכל טוב ולינה נוחה. המטרה שלנו היא לאפשר לכם לצאת למסע שבו תוכלו להתנתק מהרעש וההמולה ששוררת במדינה שלנו בדרך קבע, ולתת לעצמכם את השקט שרק המרחבים הבראשיתיים של מדבר יהודה יכולים לתת.",
+        text: "אנחנו משפחת סופר, גרים בנופי פרת כבר 27 שנים. מאז ומתמיד הייתה לנו אהבה גדולה לטבע ולהליכה בו. הכנו בשבילכם טרק בהשראת הטרקים באיטליה ואוסטריה עם אוכל טוב ולינה נוחה. המטרה שלנו היא לאפשר לכם לצאת למסע שבו תוכלו להתנתק מהרעש וההמולה ששוררת במדינה שלנו בדרך קבע, ולתת לעצמכם את השקט שרק המרחבים הבראשיתיים של מדבר יהודה יכולים לתת.",
         image: "/images/aboutus/DSC_0325.JPG"
       },
       cta: {
@@ -88,10 +88,10 @@ export default function Home() {
     en: {
       hero: {
         title: "Nahal Prat Trek",
-        subtitle: "3-Day Guided Desert Adventure",
+        subtitle: "3-Day Desert Adventure",
         description: "Discover the beauty of the Judean Desert through an organized trek inspired by European hut-to-hut hiking. Three days of hiking, breathtaking landscapes, and unique desert accommodation.",
         cta: "Start Your Adventure",
-        viewPackages: "View Packages"
+        viewPricing: "View Pricing"
       },
       features: {
         title: "You Walk, We Handle Everything Else",
@@ -120,15 +120,15 @@ export default function Home() {
         ]
       },
       stats: {
-        trekkers: "1,200+ Trekkers",
-        rating: "4.9 Rating",
-        trails: "12 Trails",
-        years: "8 Years Experience"
+        distance: "35 KM",
+        springs: "3 Springs",
+        pools: "800m Elevation",
+        stream: "One Stream"
       },
       journey: {
         title: "Journey Story",
         subtitle: "A three-day adventure through the Judean Desert",
-        viewAll: "View Full Details",
+        viewAll: "View Full Pricing",
         day: "Day",
         mapTitle: "Trail Map"
       },
@@ -175,7 +175,7 @@ export default function Home() {
       dayNumber: 1,
       title: language === 'he' ? 'מענתות לנופי פרת' : 'Anatot to Nofei Prat', 
       description: language === 'he' 
-        ? 'תיאור של היום הראשון - מסע מהיר ומרגש דרך הנופים המרהיבים של מדבר יהודה. נתחיל בענתות ונגיע לנופי פרת'
+        ? 'תיאור של היום הראשון'
         : 'Description of the first day - a fast and exciting journey through the spectacular landscapes of the Judean Desert. We start in Anatot and arrive at Nofei Prat',
       garminEmbed: "https://connect.garmin.com/modern/activity/embed/19753628830",
       logo: "/images/logo.png"
@@ -185,7 +185,7 @@ export default function Home() {
       dayNumber: 2,
       title: language === 'he' ? 'היום השני במדבר' : 'Second Day in the Desert', 
       description: language === 'he'
-        ? 'תיאור של היום השני - המשך המסע עם נופים חדשים וחוויות בלתי נשכחות במדבר יהודה'
+        ? 'תיאור של היום השני'
         : 'Description of the second day - continuing the journey with new landscapes and unforgettable experiences in the Judean Desert',
       garminEmbed: "https://connect.garmin.com/modern/activity/embed/19753628830",
       logo: "/images/logo.png"
@@ -195,7 +195,7 @@ export default function Home() {
       dayNumber: 3,
       title: language === 'he' ? 'היום השלישי וההגעה' : 'Third Day and Arrival', 
       description: language === 'he'
-        ? 'תיאור של היום השלישי והאחרון - סיום המסע עם רגשות עמוקים וזכרונות שיישארו לנצח'
+        ? 'תיאור של היום השלישי'
         : 'Description of the third and final day - completing the journey with deep emotions and memories that will last forever',
       garminEmbed: "https://connect.garmin.com/modern/activity/embed/19753628830",
       logo: "/images/logo.png"
@@ -276,7 +276,7 @@ export default function Home() {
                   variant="outline" 
                   className="bg-white text-desert-700 hover:bg-desert-50 text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
                 >
-                  {currentContent.hero.viewPackages}
+                  {currentContent.hero.viewPricing}
                 </Button>
               </Link>
             </motion.div>

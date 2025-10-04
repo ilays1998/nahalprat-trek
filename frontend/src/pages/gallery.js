@@ -1,10 +1,135 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
 import { X, ZoomIn, Mountain, Camera, Utensils, Bed } from "lucide-react";
 import { Dialog, DialogContent } from "../components/ui/dialog";
 import { useLanguage } from "../layout";
+
+// Image cache to prevent reloading
+const imageCache = new Map();
+const preloadQueue = new Set();
+
+// Professional gallery image component with instant loading
+const GalleryImage = React.memo(({ image, index, allImages }) => {
+  const [imageState, setImageState] = useState('loading');
+  const [isInView, setIsInView] = useState(false);
+  const imgRef = useRef();
+  const containerRef = useRef();
+
+  // Intersection Observer for viewport detection
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          
+          // Preload next 3 images when current comes into view
+          const currentIndex = allImages.findIndex(img => img.id === image.id);
+          for (let i = 1; i <= 3; i++) {
+            const nextImage = allImages[currentIndex + i];
+            if (nextImage && !preloadQueue.has(nextImage.url)) {
+              preloadQueue.add(nextImage.url);
+              preloadImage(nextImage.url);
+            }
+          }
+        }
+      },
+      { 
+        threshold: 0.1, 
+        rootMargin: '100px' // Start loading when 100px away
+      }
+    );
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [image.id, allImages]);
+
+  // Preload function
+  const preloadImage = useCallback((url) => {
+    if (imageCache.has(url)) return Promise.resolve();
+    
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        imageCache.set(url, img);
+        resolve();
+      };
+      img.onerror = resolve; // Don't block on errors
+      img.src = url;
+    });
+  }, []);
+
+  // Handle image loading
+  useEffect(() => {
+    if (!isInView) return;
+
+    // Check cache first
+    if (imageCache.has(image.url)) {
+      setImageState('loaded');
+      return;
+    }
+
+    // Start loading
+    setImageState('loading');
+    
+    const img = new Image();
+    img.onload = () => {
+      imageCache.set(image.url, img);
+      // Small delay for smooth transition
+      setTimeout(() => setImageState('loaded'), 50);
+    };
+    img.onerror = () => setImageState('error');
+    img.src = image.url;
+
+  }, [isInView, image.url]);
+
+  return (
+    <div 
+      ref={containerRef}
+      className="relative overflow-hidden bg-gray-100 group cursor-pointer"
+      style={{
+        aspectRatio: '1 / 1'
+      }}
+      onClick={() => onImageClick(image)}
+    >
+      {/* Placeholder */}
+      {imageState === 'loading' && (
+        <div 
+          className="absolute inset-0 animate-pulse"
+          style={{
+            backgroundColor: 'rgb(243, 244, 246)'
+          }}
+        />
+      )}
+      
+      {/* Main Image */}
+      {isInView && (
+        <img
+          ref={imgRef}
+          src={image.url}
+          alt={image.title}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+          style={{
+            opacity: imageState === 'loaded' ? 1 : 0,
+            filter: imageState === 'loaded' ? 'blur(0px)' : 'blur(4px)',
+            transition: 'opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease',
+            willChange: imageState === 'loading' ? 'opacity, filter' : 'transform'
+          }}
+          loading={index < 8 ? "eager" : "lazy"}
+          decoding="async"
+        />
+      )}
+      
+      {/* Hover Overlay */}
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center pointer-events-none">
+        <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+    </div>
+  );
+});
 
 export default function Gallery() {
   const { language, isRTL } = useLanguage();
@@ -87,35 +212,38 @@ export default function Gallery() {
   };
 
   // Combine all images and mix them for better visual variety
-  const allImages = [
+  const allImages = useMemo(() => [
     ...createImageObjects(landscapeImages, 'landscape'),
     ...createImageObjects(activitiesImages, 'activities'),
     ...createImageObjects(mealsImages, 'meals'),
     ...createImageObjects(accommodationImages, 'accommodation')
-  ];
+  ], []);
 
-  // Mix the images for better visual variety (interleave different categories)
-  const galleryImages = allImages.sort((a, b) => {
-    // Sort by a combination of category and filename to create consistent mixed order
-    const categoryOrder = { landscape: 0, activities: 1, accommodation: 2, meals: 3 };
-    const aCategoryIndex = categoryOrder[a.category] || 999;
-    const bCategoryIndex = categoryOrder[b.category] || 999;
-    
-    // If same category, sort by ID, otherwise alternate categories
-    if (aCategoryIndex === bCategoryIndex) {
-      return a.id.localeCompare(b.id);
+  // Shuffle function for random order
+  const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    
-    // Create a mixed pattern by using modulo
-    const aIndex = parseInt(a.id.split('-')[1]) || 0;
-    const bIndex = parseInt(b.id.split('-')[1]) || 0;
-    return (aCategoryIndex + aIndex * 0.1) - (bCategoryIndex + bIndex * 0.1);
-  });
+    return shuffled;
+  };
+
+  // Use useMemo to shuffle only once and memoize the result
+  const galleryImages = useMemo(() => {
+    return allImages.length > 0 ? shuffleArray(allImages) : [];
+  }, [allImages]);
 
   const categories = Object.entries(currentContent.categories);
+  
+  // For "all" category, use shuffled images; for specific categories, sort by filename for consistency
   const filteredImages = selectedCategory === 'all' 
     ? galleryImages 
-    : galleryImages.filter(img => img.category === selectedCategory);
+    : allImages
+        .filter(img => img.category === selectedCategory)
+        .sort((a, b) => a.title.localeCompare(b.title));
+
+
 
   return (
     <div className="min-h-screen py-12">
@@ -136,7 +264,7 @@ export default function Gallery() {
             const categoryStyle = categoryConfig[key];
             const isSelected = selectedCategory === key;
             
-            // Define colors for each category
+            // Define colors for each category (restored original logic)
             const getButtonStyle = (key, isSelected) => {
               const baseStyle = {
                 padding: '12px 24px',
@@ -232,22 +360,15 @@ export default function Gallery() {
         </div>
 
         {/* Image Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredImages.map((image) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 gallery-grid">
+          {filteredImages.map((image, index) => (
             <Card 
               key={image.id} 
-              className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer group"
+              className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer group gallery-card"
               onClick={() => setSelectedImage(image)}
             >
               <div className="relative">
-                <img
-                  src={image.url}
-                  alt={image.title}
-                  className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-                  <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
+                <GalleryImage image={image} index={index} allImages={filteredImages} />
                 {/* Modern Category Badge - Only show when viewing "All" */}
                 {selectedCategory === 'all' && (
                   <div className="absolute top-3 right-3">
@@ -277,7 +398,7 @@ export default function Gallery() {
 
         {/* Image Modal */}
         <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-          <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+          <DialogContent className="max-w-4xl max-h-[90vh] p-0 gallery-modal">
             {selectedImage && (
               <div className="relative">
                 <Button
@@ -292,6 +413,9 @@ export default function Gallery() {
                   src={selectedImage.url}
                   alt={selectedImage.title}
                   className="w-full h-auto max-h-[80vh] object-contain"
+                  loading="eager"
+                  decoding="async"
+                  style={{ willChange: 'transform' }}
                 />
                 <div className="p-6 bg-white">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">

@@ -211,10 +211,9 @@ export default function Home() {
           {heroImages.map((image, index) => (
             <motion.div
               key={index}
-              className="absolute inset-0 bg-cover bg-center"
-          style={{
-                backgroundImage: `url(${image})`,
-                opacity: currentImageIndex === index ? 1 : 0
+              className={`hero-slide ${currentImageIndex === index ? 'active' : ''}`}
+              style={{
+                backgroundImage: `url(${image})`
               }}
               animate={{ opacity: currentImageIndex === index ? 1 : 0 }}
               transition={{ duration: 1 }}

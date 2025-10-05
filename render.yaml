@@ -28,7 +28,7 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_BACKEND_URL
-        value: https://nahalprat-backend.onrender.com
+        value: https://api.treknahalprat.co.il
       - key: VITE_GOOGLE_CLIENT_ID
         value: 361028788793-igfr700b6nd8bq7mr2ed7it7jgcoascb.apps.googleusercontent.com
 

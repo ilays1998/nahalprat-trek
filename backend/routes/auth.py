@@ -34,7 +34,8 @@ def on_load(state):
 
 @auth_bp.route("/login")
 def login():
-    redirect_uri = url_for("auth.authorize", _external=True)
+    # Use configurable redirect URI from environment, with fallback to dynamic URL
+    redirect_uri = Config.OAUTH_REDIRECT_URI or url_for("auth.authorize", _external=True)
     return oauth.google.authorize_redirect(redirect_uri)
 
 @auth_bp.route("/authorize")

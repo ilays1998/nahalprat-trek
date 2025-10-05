@@ -45,6 +45,8 @@ class Config:
     # OAuth Configuration
     GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
     GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
+    # OAuth Redirect URI - configurable for different environments
+    OAUTH_REDIRECT_URI = os.environ.get("OAUTH_REDIRECT_URI") or f"{API_BASE_URL}/auth/authorize"
     ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL")
 
     # CORS configuration

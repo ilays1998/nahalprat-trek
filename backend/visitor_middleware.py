@@ -28,13 +28,20 @@ def init_visitor_tracking(app):
         if request.path.startswith('/static/') or request.path == '/favicon.ico':
             return response
         
-        # Only track on successful GET requests to avoid duplicate tracking
-        if request.method == 'GET' and response.status_code < 400:
+        # Track on successful requests (not just GET)
+        if response.status_code < 400:
             visitor_id = getattr(g, 'visitor_id', None)
             
             if visitor_id:
+                # Get user_id if user is authenticated
+                from flask_jwt_extended import get_jwt_identity, jwt_required
+                try:
+                    user_id = get_jwt_identity()
+                except:
+                    user_id = None
+                
                 # Track the visitor (async in production)
-                track_visitor()
+                track_visitor(user_id)
                 
                 # Set the visitor cookie
                 set_visitor_cookie(response, visitor_id)

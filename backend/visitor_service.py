@@ -29,6 +29,8 @@ def get_request_info():
     else:
         ip_address = request.remote_addr or 'unknown'
     
+    print(f"Captured IP address: {ip_address}")
+    
     user_agent = request.headers.get('User-Agent', '')[:512]
     referrer = request.headers.get('Referer', '')[:512]
     

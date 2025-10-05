@@ -10,8 +10,14 @@ def get_ip_info(ip_address: str) -> Optional[Dict]:
     if not Config.IPGEOLOCATION_API_KEY:
         print("IPGEOLOCATION_API_KEY not configured")
         return None
+    
+    # Skip localhost/private IPs
+    if ip_address in ['127.0.0.1', 'localhost', '::1'] or ip_address.startswith('192.168.') or ip_address.startswith('10.') or ip_address.startswith('172.'):
+        print(f"Skipping geolocation for local/private IP: {ip_address}")
+        return None
         
     try:
+        print(f"Getting geolocation for IP: {ip_address}")
         url = "https://api.ipgeolocation.io/ipgeo"
         params = {
             'apiKey': Config.IPGEOLOCATION_API_KEY,
@@ -21,13 +27,16 @@ def get_ip_info(ip_address: str) -> Optional[Dict]:
         
         if response.status_code == 200:
             data = response.json()
-            return {
+            result = {
                 'region': data.get('state_prov'),  # State/Province
                 'country': data.get('country_code2'),  # 2-letter country code
                 'city': data.get('city')
             }
+            print(f"Geolocation result: {result}")
+            return result
         else:
             print(f"IPGEOLOCATION error: {response.status_code} - {response.text}")
+            print(f"Response: {response.text}")
             
     except requests.exceptions.Timeout:
         print(f"Timeout while getting IP info for {ip_address}")

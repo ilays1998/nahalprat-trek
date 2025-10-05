@@ -224,14 +224,14 @@ export default function Home() {
         
         {/* Hero Content */}
         <motion.div 
-          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center"
+          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 sm:py-24 text-center"
           initial="hidden"
           animate="visible"
           variants={containerVariants}
         >
           <motion.div variants={itemVariants}>
             <motion.h1 
-              className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-6 text-shadow-lg"
+              className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-4 sm:mb-6 text-shadow-lg leading-tight"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5 }}
@@ -240,14 +240,14 @@ export default function Home() {
             </motion.h1>
             
             <motion.p 
-              className="text-2xl md:text-3xl text-desert-100 mb-8 font-medium"
+              className="text-lg sm:text-2xl md:text-3xl text-desert-100 mb-6 sm:mb-8 font-medium"
               variants={itemVariants}
             >
               {currentContent.hero.subtitle}
             </motion.p>
             
             <motion.p 
-              className="text-lg md:text-xl text-gray-200 mb-12 max-w-3xl mx-auto leading-relaxed"
+              className="text-sm sm:text-lg md:text-xl text-gray-200 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-2"
               variants={itemVariants}
             >
               {currentContent.hero.description}

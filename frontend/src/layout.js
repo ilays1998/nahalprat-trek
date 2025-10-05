@@ -7,6 +7,7 @@ import { Button } from "./components/ui/button";
 import { LoginButton } from "./components/auth/LoginButton";
 import { useAuth } from "./contexts/AuthContext";
 import config from "./config";
+import { LanguageToggle } from "./components/navigation/LanguageToggle";
 
 const LanguageContext = createContext();
 
@@ -58,6 +59,9 @@ export default function Layout({ children, currentPageName }) {
   const [language, setLanguage] = useState('he');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [showNav, setShowNav] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const { isAuthenticated, loading } = useAuth();
   
   const t = translations[language];
@@ -65,15 +69,31 @@ export default function Layout({ children, currentPageName }) {
 
   // Don't show navigation on auth callback page only
   const shouldShowNavigation = location.pathname !== '/auth/callback';
+  
+  // Check if we're on the home page to use transparent styling
+  const isHomePage = location.pathname === '/' || location.pathname === '/home';
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
+      const currentScrollY = window.scrollY;
+      
+      setShowScrollTop(currentScrollY > 300);
+      setScrolled(currentScrollY > 50);
+      
+      // Hide navbar when scrolling down past 150px
+      if (currentScrollY > 150) {
+        setShowNav(false);
+      } else {
+        // Only show when near the top (within 150px)
+        setShowNav(true);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -92,122 +112,216 @@ export default function Layout({ children, currentPageName }) {
     setLanguage(prev => prev === 'he' ? 'en' : 'he');
   };
 
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      const originalOverflow = document.documentElement.style.overflow;
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      const handleKey = (e) => {
+        if (e.key === 'Escape') {
+          setMobileMenuOpen(false);
+        }
+      };
+      window.addEventListener('keydown', handleKey);
+      return () => {
+        document.documentElement.style.overflow = originalOverflow;
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKey);
+      };
+    }
+  }, [mobileMenuOpen]);
+
   return (
     <LanguageContext.Provider value={{ language, t, isRTL, toggleLanguage }}>
       <div className={`min-h-screen bg-gradient-to-b from-desert-50 via-white to-desert-50 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
         {/* Navigation - Only show when authenticated */}
         {shouldShowNavigation && (
-          <nav className="relative top-0 w-full bg-gradient-to-r from-desert-50 via-white to-desert-50 backdrop-blur-sm shadow-warm-lg border-b border-desert-200/30 py-4">
+          <>
+            {/* Mobile menu overlay */}
+            {mobileMenuOpen && (
+              <div 
+                className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+                onClick={() => setMobileMenuOpen(false)}
+              />
+            )}
+            
+            <nav 
+              className={`fixed top-0 left-0 right-0 w-full backdrop-blur-md shadow-desert-bar border-b py-3 md:py-4 z-[9999] transition-transform duration-300 ${
+                isHomePage 
+                  ? 'bg-white/15 border-white/20'
+                  : 'bg-desert-solid border-desert-soft'
+              } ${showNav ? 'transform translate-y-0' : 'transform -translate-y-full'}`}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0
+              }}
+            >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className={`flex items-center ${isRTL ? 'gap-3' : 'gap-6'}`}>
+              <div className="flex items-center justify-between gap-4">
                 {/* Logo */}
                 <Link 
                   to={createPageUrl("Home")} 
                   className="flex items-center group"
                 >
                   <div className="relative">
-                    <div className="relative w-16 h-20 flex items-center justify-center transform group-hover:scale-110 transition-all duration-300">
+                    <div className="relative w-12 h-16 md:w-16 md:h-20 flex items-center justify-center transform group-hover:scale-110 transition-all duration-300">
                       <img src="/images/logo.png" alt="TNP Logo" className="w-full h-full object-contain drop-shadow-lg" />
                     </div>
                   </div>
                 </Link>
 
                 {/* Desktop Navigation */}
-                <div className={`hidden lg:flex items-center gap-3 flex-1 ${isRTL ? 'justify-center' : 'justify-end'}`}>
-                  {navigationItems.map((item, index) => (
+                <div className="hidden lg:flex items-center gap-3 flex-1 justify-end">
+                  {navigationItems.map((item) => (
                     <Link
                       key={item.title}
                       to={item.url}
-                      className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ${
+                      className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                         location.pathname === item.url
-                          ? 'bg-desert-gradient text-white shadow-warm-lg transform scale-105 hover:scale-110'
-                          : 'text-gray-800 bg-white/80 backdrop-blur-sm hover:bg-white border border-desert-200/50 hover:border-desert-300 hover:shadow-warm hover:transform hover:scale-105'
+                          ? isHomePage
+                            ? 'bg-white/20 text-white shadow-xl backdrop-blur-lg border border-white/20 transform scale-105'
+                            : 'bg-[#c56f19] text-white shadow-xl transform scale-105 border border-[#dca359]/50'
+                          : isHomePage
+                            ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 hover:border-white/20 hover:transform hover:scale-105'
+                            : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359] hover:transform hover:scale-105'
                       }`}
+                      style={{ animation: location.pathname === item.url ? 'gentlePulse 3s infinite' : 'none' }}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-desert-100/30 to-desert-200/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <item.icon className="relative w-4 h-4 group-hover:scale-110 transition-transform z-10" />
+                      <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl ${
+                        isHomePage ? 'bg-gradient-to-r from-white/20 to-white/30' : 'bg-[#dca359]/25'
+                      }`}></div>
+                      <item.icon className="relative w-4 h-4 group-hover:scale-110 transition-transform z-10 flex-shrink-0" />
                       <span className="relative whitespace-nowrap z-10">{item.title}</span>
                     </Link>
                   ))}
-                  
-                  {/* Language Toggle */}
-                  <Button
-                    onClick={toggleLanguage}
-                    className="relative overflow-hidden group px-4 py-3 rounded-xl bg-white/80 backdrop-blur-sm hover:bg-white text-gray-800 border border-desert-200/50 hover:border-desert-300 transition-all duration-300 shadow-lg hover:shadow-warm font-semibold flex items-center justify-between w-[80px] hover:scale-105"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-desert-100/30 to-desert-200/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <Globe className="relative w-4 h-4 z-10" />
-                    <span className="relative font-semibold text-sm z-10">{language === 'he' ? 'EN' : 'עב'}</span>
-                  </Button>
-
-                  <LoginButton 
-                    className="text-gray-800 bg-white/80 backdrop-blur-sm hover:bg-white border border-desert-200/50 hover:border-desert-300 font-semibold shadow-lg hover:shadow-warm hover:scale-105" 
+                  <LanguageToggle
+                    language={language}
+                    onToggle={toggleLanguage}
+                    variant="desktop"
+                    transparent={isHomePage}
+                  />
+                  <LoginButton
+                    className={`font-medium hover:scale-105 rounded-2xl backdrop-blur-md transition-all duration-300 ${
+                      isHomePage
+                        ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20'
+                        : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359]'
+                    }`}
                   />
                 </div>
 
                 {/* Mobile menu button and controls */}
-                <div className="lg:hidden flex items-center gap-2">
-                  {/* Mobile Language Toggle */}
-                  <Button
-                    onClick={toggleLanguage}
-                    className="relative overflow-hidden group p-2 rounded-xl bg-white/80 backdrop-blur-sm hover:bg-white text-gray-800 border border-desert-200/50 hover:border-desert-300 transition-all duration-300 shadow-lg hover:shadow-warm hover:scale-105"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-desert-100/30 to-desert-200/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <Globe className="relative w-5 h-5 z-10" />
-                  </Button>
-
+                <div className="lg:hidden flex items-center gap-3">
+                  <LanguageToggle
+                    language={language}
+                    onToggle={toggleLanguage}
+                    variant="mobile"
+                    transparent={isHomePage}
+                  />
                   {/* Mobile menu toggle */}
-                  <Button
+                  <button
+                    type="button"
+                    aria-label={mobileMenuOpen ? (language === 'he' ? 'סגור תפריט' : 'Close menu') : (language === 'he' ? 'פתח תפריט' : 'Open menu')}
+                    aria-expanded={mobileMenuOpen}
+                    aria-controls="mobile-navigation"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="relative overflow-hidden group p-2 rounded-xl bg-white/80 backdrop-blur-sm hover:bg-white text-gray-800 border border-desert-200/50 hover:border-desert-300 transition-all duration-300 shadow-lg hover:shadow-warm hover:scale-105"
+                    className={`relative group h-11 w-11 inline-flex items-center justify-center rounded-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-400/60 ${
+                      isHomePage
+                        ? 'bg-white/10 hover:bg-white/20 border border-white/15 hover:border-white/30'
+                        : 'bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992]'
+                    }`}
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-desert-100/30 to-desert-200/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    {mobileMenuOpen ? (
-                      <X className="relative w-6 h-6 z-10" />
-                    ) : (
-                      <Menu className="relative w-6 h-6 z-10" />
-                    )}
-                  </Button>
+                    <span className="sr-only">Menu</span>
+                    {/* Bars */}
+                    <span className={`absolute h-0.5 w-6 origin-center rounded-full transition-all duration-400 ease-out ${
+                      mobileMenuOpen
+                        ? 'rotate-45 translate-y-0 bg-blue-500'
+                        : '-translate-y-2 bg-gray-600 group-hover:bg-gray-900'
+                    } ${isHomePage && !mobileMenuOpen ? 'bg-white/80 group-hover:bg-white' : ''}`}></span>
+                    <span className={`absolute h-0.5 w-6 rounded-full transition-all duration-400 ease-out ${
+                      mobileMenuOpen ? 'opacity-0 scale-x-0' : 'opacity-100 scale-x-100'
+                    } ${isHomePage ? 'bg-white/80 group-hover:bg-white' : 'bg-gray-600 group-hover:bg-gray-900'}`}></span>
+                    <span className={`absolute h-0.5 w-6 origin-center rounded-full transition-all duration-400 ease-out ${
+                      mobileMenuOpen
+                        ? '-rotate-45 translate-y-0 bg-blue-500'
+                        : 'translate-y-2 bg-gray-600 group-hover:bg-gray-900'
+                    } ${isHomePage && !mobileMenuOpen ? 'bg-white/80 group-hover:bg-white' : ''}`}></span>
+                  </button>
                 </div>
               </div>
 
               {/* Mobile Navigation Menu */}
-              <div className={`lg:hidden mt-4 transition-all duration-300 overflow-hidden ${
-                mobileMenuOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
-              }`}>
-                <div className="py-2 space-y-2 border-t border-desert-200/30">
+              <div
+                id="mobile-navigation"
+                className={`lg:hidden mt-6 transition-all duration-500 ease-in-out overflow-hidden ${
+                  mobileMenuOpen ? 'max-h-[85vh] opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4'
+                }`}
+              >
+                <div
+                  className={`relative flex flex-col gap-2 rounded-2xl mx-2 pb-4 pt-4 px-2 backdrop-blur-xl overflow-hidden border shadow-lg ${
+                    isHomePage
+                      ? 'bg-gradient-to-br from-white/15 via-white/10 to-white/5 border-white/25'
+                      : 'bg-desert-solid border-desert-soft'
+                  }`}
+                  style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 92%, transparent 100%)' }}
+                >
+                  <div className="overflow-y-auto overscroll-contain max-h-[60vh] px-1 pr-2 mobile-menu-scroll">
                   {navigationItems.map((item, index) => (
                     <Link
                       key={item.title}
                       to={item.url}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`group relative overflow-hidden flex items-center gap-3 px-3 py-2 rounded-xl text-base font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ${
+                      className={`relative group flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition-all duration-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent ${
                         location.pathname === item.url
-                          ? 'bg-desert-gradient text-white shadow-warm-lg'
-                          : 'text-gray-800 bg-white/80 backdrop-blur-sm hover:bg-white border border-desert-200/50 hover:border-desert-300 hover:shadow-warm'
+                          ? isHomePage
+                            ? 'bg-white/15 text-white shadow-md'
+                            : 'bg-[#c56f19] text-white shadow-sm'
+                          : isHomePage
+                            ? 'text-white/80 hover:text-white hover:bg-white/10'
+                            : 'text-[#743f1f] hover:text-[#3e2211] hover:bg-[#f1ddb8]/70'
                       }`}
+                      style={{ animation: mobileMenuOpen ? `fadeScaleIn 0.4s ${index * 40}ms both` : 'none' }}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-desert-100/30 to-desert-200/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <item.icon className="relative w-5 h-5 group-hover:scale-110 transition-transform z-10" />
-                      <span className="relative z-10">{item.title}</span>
-                      <ChevronRight className="relative w-4 h-4 ml-auto z-10" />
+                      <span className={`absolute left-2 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full bg-gradient-to-b ${
+                        location.pathname === item.url
+                          ? isHomePage
+                            ? 'from-white/70 to-white/30'
+                            : 'from-blue-500 to-blue-300'
+                          : 'opacity-0 group-hover:opacity-40 from-blue-400/40 to-blue-300/30'
+                      } transition-opacity duration-500`}></span>
+                      <item.icon className="relative w-5 h-5 flex-shrink-0 opacity-80 group-hover:opacity-100 transition-opacity" />
+                      <span className="relative flex-1 text-start">{item.title}</span>
+                      <ChevronRight className={`w-4 h-4 ml-auto transition-all ${
+                        location.pathname === item.url ? 'opacity-60' : 'opacity-30 group-hover:opacity-60 translate-x-0 group-hover:translate-x-1'
+                      }`} />
                     </Link>
                   ))}
                   
                   {/* Mobile Login Button */}
-                  <div className="mt-2 border-t border-desert-200/30 pt-2">
-                    <LoginButton 
-                      className="w-full text-gray-800 bg-white/80 backdrop-blur-sm hover:bg-white border border-desert-200/50 hover:border-desert-300 font-semibold shadow-lg hover:shadow-warm py-2 text-base flex items-center justify-center" 
+                  <div
+                    className={`mt-2 pt-3 mx-1 ${
+                      isHomePage ? 'border-t border-white/20' : 'border-t border-gray-200'
+                    }`}
+                  >
+                    <LoginButton
+                      className={`w-full backdrop-blur-md font-medium py-3 text-base flex items-center justify-center rounded-xl transition-all duration-300 hover:scale-[0.98] ${
+                        isHomePage
+                          ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20'
+                          : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359]'
+                      }`}
                     />
+                  </div>
                   </div>
                 </div>
               </div>
             </div>
           </nav>
+          </>
         )}
 
         {/* Main Content */}
-        <main className="flex-1">
+        <main className={`flex-1 ${!isHomePage ? 'pt-20 md:pt-24' : 'pt-16 sm:pt-0'}`}>
           {children}
         </main>
 

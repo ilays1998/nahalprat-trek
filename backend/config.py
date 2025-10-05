@@ -6,7 +6,8 @@ load_dotenv()
 
 class Config:
     # Server Configuration - Change port here
-    BACKEND_PORT = int(os.environ.get("BACKEND_PORT", "5001"))
+    # Use Render's PORT env var if available, otherwise use BACKEND_PORT, fallback to 5001
+    BACKEND_PORT = int(os.environ.get("PORT") or os.environ.get("BACKEND_PORT", "5001"))
     FRONTEND_PORT = int(os.environ.get("FRONTEND_PORT", "3000"))
 
     # Prefer explicit URLs from env (e.g., on Render), then fallback to localhost ports

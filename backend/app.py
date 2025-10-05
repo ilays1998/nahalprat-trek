@@ -60,5 +60,8 @@ def create_app():
     return app
 
 if __name__ == "__main__":
+    import os
     app = create_app()
-    app.run(host='0.0.0.0', debug=True, port=Config.BACKEND_PORT)
+    # Use Render's PORT environment variable, fallback to Config.BACKEND_PORT for local development
+    port = int(os.environ.get("PORT", Config.BACKEND_PORT))
+    app.run(host='0.0.0.0', debug=True, port=port)

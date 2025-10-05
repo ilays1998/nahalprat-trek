@@ -62,7 +62,7 @@ const LogoutConfirmModal = ({ isOpen, onClose, onConfirm, t, isRTL }) => {
   );
 };
 
-export const LoginButton = ({ className = '' }) => {
+export const LoginButton = ({ className = '', transparent = false }) => {
   const { user, loginGoogle, logout, loading, isAuthenticated } = useAuth();
   const { language, t } = useLanguage();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -77,10 +77,19 @@ export const LoginButton = ({ className = '' }) => {
 
   if (loading) {
     return (
-      <Button variant="outline" className={className} disabled>
-        <div className={`animate-spin rounded-full h-4 w-4 border-2 border-amber-200 border-t-amber-600 ${isRTL ? 'ml-2' : 'mr-2'}`}></div>
+      <button
+        disabled
+        className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+          transparent
+            ? 'text-white/90 bg-white/10 backdrop-blur-md border border-white/10'
+            : 'text-[#743f1f] bg-[#f7e9cd]/80 border border-[#e3c992]'
+        } ${className}`}
+      >
+        <div className={`animate-spin rounded-full h-4 w-4 border-2 ${
+          transparent ? 'border-white/30 border-t-white' : 'border-amber-200 border-t-amber-600'
+        }`}></div>
         {t.loading}
-      </Button>
+      </button>
     );
   }
 
@@ -88,33 +97,46 @@ export const LoginButton = ({ className = '' }) => {
     return (
       <>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-lg border border-amber-200">
-            <div className="w-8 h-8 bg-desert-gradient rounded-lg flex items-center justify-center">
-              <User className="w-4 h-4 text-white" />
+          <div className={`flex items-center gap-2 px-3 py-2 rounded-2xl backdrop-blur-md border ${
+            transparent
+              ? 'bg-white/10 border-white/10'
+              : 'bg-[#f7e9cd]/80 border-[#e3c992]'
+          }`}>
+            <div className="w-7 h-7 bg-desert-gradient rounded-lg flex items-center justify-center">
+              <User className="w-3.5 h-3.5 text-white" />
             </div>
             <div className="text-right">
-              <p className="text-sm font-medium text-gray-900">
+              <p className={`text-xs font-medium ${
+                transparent ? 'text-white/90' : 'text-[#743f1f]'
+              }`}>
                 {user.name || user.email}
               </p>
               {user.role === 'admin' && (
                 <div className="flex items-center gap-1">
-                  <Shield className="w-3 h-3 text-blue-600" />
-                  <span className="text-xs text-blue-600 font-medium">
+                  <Shield className={`w-2.5 h-2.5 ${transparent ? 'text-blue-300' : 'text-blue-600'}`} />
+                  <span className={`text-xs font-medium ${
+                    transparent ? 'text-blue-300' : 'text-blue-600'
+                  }`}>
                     {language === 'he' ? 'מנהל' : 'Admin'}
                   </span>
                 </div>
               )}
             </div>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={() => setShowLogoutModal(true)}
-            className={`hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all duration-300 ${className}`}
+            className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 whitespace-nowrap hover:transform hover:scale-105 ${
+              transparent
+                ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 hover:border-white/20'
+                : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359]'
+            } ${className}`}
           >
-            <LogOut className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-            {t.logout}
-          </Button>
+            <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl ${
+              transparent ? 'bg-gradient-to-r from-white/20 to-white/30' : 'bg-[#dca359]/25'
+            }`}></div>
+            <LogOut className={`relative w-4 h-4 group-hover:scale-110 transition-transform z-10 flex-shrink-0 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+            <span className="relative whitespace-nowrap z-10">{t.logout}</span>
+          </button>
         </div>
 
         <LogoutConfirmModal
@@ -130,15 +152,20 @@ export const LoginButton = ({ className = '' }) => {
 
   return (
     <>
-      <Button
+      <button
         onClick={() => setShowLoginModal(true)}
-        className={`bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-amber-300 shadow-lg hover:shadow-xl relative overflow-hidden group ${className}`}
+        className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 whitespace-nowrap hover:transform hover:scale-105 ${
+          transparent
+            ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 hover:border-white/20'
+            : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359]'
+        } ${className}`}
       >
-        <div className="relative flex items-center justify-center gap-3">
-          <LogIn className="w-4 h-4" />
-          <span className="font-medium">{language === 'he' ? 'התחבר' : 'Log In'}</span>
-        </div>
-      </Button>
+        <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl ${
+          transparent ? 'bg-gradient-to-r from-white/20 to-white/30' : 'bg-[#dca359]/25'
+        }`}></div>
+        <LogIn className="relative w-4 h-4 group-hover:scale-110 transition-transform z-10 flex-shrink-0" />
+        <span className="relative whitespace-nowrap z-10">{language === 'he' ? 'התחבר' : 'Log In'}</span>
+      </button>
 
       <LoginModal
         isOpen={showLoginModal}

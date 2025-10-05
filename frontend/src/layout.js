@@ -159,11 +159,11 @@ export default function Layout({ children, currentPageName }) {
               }}
             >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-8">
                 {/* Logo */}
                 <Link 
                   to={createPageUrl("Home")} 
-                  className="flex items-center group"
+                  className="flex items-center group flex-shrink-0"
                 >
                   <div className="relative">
                     <div className="relative w-12 h-16 md:w-16 md:h-20 flex items-center justify-center transform group-hover:scale-110 transition-all duration-300">
@@ -173,42 +173,40 @@ export default function Layout({ children, currentPageName }) {
                 </Link>
 
                 {/* Desktop Navigation */}
-                <div className="hidden lg:flex items-center gap-3 flex-1 justify-end">
-                  {navigationItems.map((item) => (
-                    <Link
-                      key={item.title}
-                      to={item.url}
-                      className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
-                        location.pathname === item.url
-                          ? isHomePage
-                            ? 'bg-white/20 text-white shadow-xl backdrop-blur-lg border border-white/20 transform scale-105'
-                            : 'bg-[#c56f19] text-white shadow-xl transform scale-105 border border-[#dca359]/50'
-                          : isHomePage
-                            ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 hover:border-white/20 hover:transform hover:scale-105'
-                            : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359] hover:transform hover:scale-105'
-                      }`}
-                      style={{ animation: location.pathname === item.url ? 'gentlePulse 3s infinite' : 'none' }}
-                    >
-                      <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl ${
-                        isHomePage ? 'bg-gradient-to-r from-white/20 to-white/30' : 'bg-[#dca359]/25'
-                      }`}></div>
-                      <item.icon className="relative w-4 h-4 group-hover:scale-110 transition-transform z-10 flex-shrink-0" />
-                      <span className="relative whitespace-nowrap z-10">{item.title}</span>
-                    </Link>
-                  ))}
-                  <LanguageToggle
-                    language={language}
-                    onToggle={toggleLanguage}
-                    variant="desktop"
-                    transparent={isHomePage}
-                  />
-                  <LoginButton
-                    className={`font-medium hover:scale-105 rounded-2xl backdrop-blur-md transition-all duration-300 ${
-                      isHomePage
-                        ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20'
-                        : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359]'
-                    }`}
-                  />
+                <div className="hidden lg:flex items-center justify-center flex-1">
+                  <div className="flex items-center gap-3">
+                    {navigationItems.map((item) => (
+                      <Link
+                        key={item.title}
+                        to={item.url}
+                        className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                          location.pathname === item.url
+                            ? isHomePage
+                              ? 'bg-white/20 text-white shadow-xl backdrop-blur-lg border border-white/20 transform scale-105'
+                              : 'bg-[#c56f19] text-white shadow-xl transform scale-105 border border-[#dca359]/50'
+                            : isHomePage
+                              ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 hover:border-white/20 hover:transform hover:scale-105'
+                              : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359] hover:transform hover:scale-105'
+                        }`}
+                        style={{ animation: location.pathname === item.url ? 'gentlePulse 3s infinite' : 'none' }}
+                      >
+                        <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl ${
+                          isHomePage ? 'bg-gradient-to-r from-white/20 to-white/30' : 'bg-[#dca359]/25'
+                        }`}></div>
+                        <item.icon className="relative w-4 h-4 group-hover:scale-110 transition-transform z-10 flex-shrink-0" />
+                        <span className="relative whitespace-nowrap z-10">{item.title}</span>
+                      </Link>
+                    ))}
+                    <LanguageToggle
+                      language={language}
+                      onToggle={toggleLanguage}
+                      variant="desktop"
+                      transparent={isHomePage}
+                    />
+                    <LoginButton
+                      transparent={isHomePage}
+                    />
+                  </div>
                 </div>
 
                 {/* Mobile menu button and controls */}
@@ -305,11 +303,8 @@ export default function Layout({ children, currentPageName }) {
                     }`}
                   >
                     <LoginButton
-                      className={`w-full backdrop-blur-md font-medium py-3 text-base flex items-center justify-center rounded-xl transition-all duration-300 hover:scale-[0.98] ${
-                        isHomePage
-                          ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20'
-                          : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359]'
-                      }`}
+                      transparent={isHomePage}
+                      className="w-full py-3 text-base"
                     />
                   </div>
                   </div>

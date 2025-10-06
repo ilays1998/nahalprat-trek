@@ -309,40 +309,28 @@ def me():
 def logout():
     """Logout by clearing the cookie"""
     from flask import make_response
-    from datetime import datetime, timedelta
+    from flask_jwt_extended import unset_jwt_cookies
     
     response = make_response(jsonify({"message": "Logout successful"}), 200)
     
-    # Manually clear the cookie with exact same parameters as when it was set
+    # First try the official method
+    unset_jwt_cookies(response)
+    
+    # Also manually clear with multiple variations to be absolutely sure
     cookie_name = Config.JWT_ACCESS_COOKIE_NAME
     
-    # Set cookie to expire in the past to delete it
-    past_date = datetime.utcnow() - timedelta(days=1)
-    
-    # Clear cookie for the specific domain
+    # Clear for main domain
     if Config.JWT_COOKIE_DOMAIN:
-        response.set_cookie(
-            cookie_name,
-            '',
-            expires=past_date,
-            domain=Config.JWT_COOKIE_DOMAIN,
-            path=Config.JWT_ACCESS_COOKIE_PATH,
-            secure=Config.JWT_COOKIE_SECURE,
-            httponly=True,
-            samesite=Config.JWT_COOKIE_SAMESITE
-        )
+        response.set_cookie(cookie_name, '', expires=0, domain=Config.JWT_COOKIE_DOMAIN, path='/')
     
-    # Also clear for no domain (fallback)
-    response.set_cookie(
-        cookie_name,
-        '',
-        expires=past_date,
-        path=Config.JWT_ACCESS_COOKIE_PATH,
-        secure=Config.JWT_COOKIE_SECURE,
-        httponly=True,
-        samesite=Config.JWT_COOKIE_SAMESITE
-    )
+    # Clear for current domain (no domain specified)
+    response.set_cookie(cookie_name, '', expires=0, path='/')
     
-    print(f"Manually cleared JWT cookie: {cookie_name} for domain: {Config.JWT_COOKIE_DOMAIN}")
+    # Clear for root domain without dot
+    domain_without_dot = Config.JWT_COOKIE_DOMAIN.lstrip('.') if Config.JWT_COOKIE_DOMAIN else None
+    if domain_without_dot:
+        response.set_cookie(cookie_name, '', expires=0, domain=domain_without_dot, path='/')
+    
+    print(f"Cleared JWT cookies for domain: {Config.JWT_COOKIE_DOMAIN}")
     
     return response

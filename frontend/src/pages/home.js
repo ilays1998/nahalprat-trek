@@ -205,7 +205,7 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-hidden">
       {/* Hero Section with Parallax */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center overflow-hidden z-0">
         {/* Animated Background Images */}
         <div className="absolute inset-0">
           {heroImages.map((image, index) => (
@@ -224,7 +224,8 @@ export default function Home() {
         
         {/* Hero Content */}
         <motion.div 
-          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 sm:py-24 text-center"
+          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-28 pb-20 text-center"
+          style={{ paddingTop: '6rem' }}
           initial="hidden"
           animate="visible"
           variants={containerVariants}
@@ -294,6 +295,9 @@ export default function Home() {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* Spacer to push content below hero */}
+      <div className="h-screen"></div>
 
       {/* Stats Section */}
       <section className="py-16 bg-desert-gradient">
@@ -546,6 +550,26 @@ export default function Home() {
                 </Button>
               </Link>
         </motion.div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 bg-desert-gradient">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {Object.entries(currentContent.stats).map(([key, value], index) => (
+              <motion.div
+                key={key}
+                className="text-center"
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">{value}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );

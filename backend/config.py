@@ -40,8 +40,8 @@ class Config:
     JWT_COOKIE_SAMESITE = 'None' if _is_production else 'Lax'  # 'None' for cross-origin in production
     JWT_ACCESS_COOKIE_NAME = 'access_token_cookie'
     JWT_ACCESS_COOKIE_PATH = '/'
-    # Cookie domain - None means it will be set to the domain of the response
-    JWT_COOKIE_DOMAIN = None
+    # Cookie domain - Use env var for cross-subdomain sharing, fallback to None for same-domain
+    JWT_COOKIE_DOMAIN = os.environ.get("JWT_COOKIE_DOMAIN")
     
     # OAuth Configuration
     GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")

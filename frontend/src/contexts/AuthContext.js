@@ -190,9 +190,6 @@ export const AuthProvider = ({ children }) => {
     
     setUser(null);
     setAuthError(null);
-    
-    // Force reload to ensure clean state
-    window.location.reload();
   };
 
   const value = {

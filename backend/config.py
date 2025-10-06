@@ -13,7 +13,9 @@ class Config:
     # Prefer explicit URLs from env (e.g., on Render), then fallback to localhost ports
     # Get the host IP from environment or default to 0.0.0.0 to listen on all interfaces
     BACKEND_HOST = os.environ.get("BACKEND_HOST", "0.0.0.0")
-    BACKEND_URL = os.environ.get("BACKEND_URL") or os.environ.get("RENDER_EXTERNAL_URL") or f"http://{BACKEND_HOST}:{BACKEND_PORT}"
+    # For OAuth redirect URI, use localhost instead of 0.0.0.0 since Google doesn't accept 0.0.0.0
+    _oauth_host = "localhost" if BACKEND_HOST == "0.0.0.0" else BACKEND_HOST
+    BACKEND_URL = os.environ.get("BACKEND_URL") or os.environ.get("RENDER_EXTERNAL_URL") or f"http://{_oauth_host}:{BACKEND_PORT}"
     # Prefer explicit FRONTEND_URL, otherwise allow constructing from FRONTEND_HOST (e.g., from Render blueprint),
     # else fall back to localhost port
     _frontend_host = os.environ.get("FRONTEND_HOST")

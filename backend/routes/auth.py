@@ -309,16 +309,40 @@ def me():
 def logout():
     """Logout by clearing the cookie"""
     from flask import make_response
-    from flask_jwt_extended import unset_jwt_cookies
+    from datetime import datetime, timedelta
     
     response = make_response(jsonify({"message": "Logout successful"}), 200)
     
-    # Log the cookie clearing process
-    print(f"Clearing JWT cookie. Domain: {Config.JWT_COOKIE_DOMAIN}")
+    # Manually clear the cookie with exact same parameters as when it was set
+    cookie_name = Config.JWT_ACCESS_COOKIE_NAME
     
-    unset_jwt_cookies(response)
+    # Set cookie to expire in the past to delete it
+    past_date = datetime.utcnow() - timedelta(days=1)
     
-    # Log response headers to debug
-    print(f"Response headers: {dict(response.headers)}")
+    # Clear cookie for the specific domain
+    if Config.JWT_COOKIE_DOMAIN:
+        response.set_cookie(
+            cookie_name,
+            '',
+            expires=past_date,
+            domain=Config.JWT_COOKIE_DOMAIN,
+            path=Config.JWT_ACCESS_COOKIE_PATH,
+            secure=Config.JWT_COOKIE_SECURE,
+            httponly=True,
+            samesite=Config.JWT_COOKIE_SAMESITE
+        )
+    
+    # Also clear for no domain (fallback)
+    response.set_cookie(
+        cookie_name,
+        '',
+        expires=past_date,
+        path=Config.JWT_ACCESS_COOKIE_PATH,
+        secure=Config.JWT_COOKIE_SECURE,
+        httponly=True,
+        samesite=Config.JWT_COOKIE_SAMESITE
+    )
+    
+    print(f"Manually cleared JWT cookie: {cookie_name} for domain: {Config.JWT_COOKIE_DOMAIN}")
     
     return response

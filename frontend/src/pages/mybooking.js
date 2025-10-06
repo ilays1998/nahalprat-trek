@@ -121,13 +121,11 @@ export default function MyBookingsPage() {
       );
 
       if (trekDateToUpdate) {
-        // 3. Add the spots back to the available count
-        const spotsField = `available_spots_${bookingToCancel.package_type}`;
-        const currentSpots = trekDateToUpdate[spotsField] || 0;
+        // 3. Add the spots back to the available count (single package system)
+        const currentSpots = trekDateToUpdate.available_spots || 0;
         const spotsToAdd = bookingToCancel.participants_count;
-        
         await TrekDate.update(trekDateToUpdate.id, {
-          [spotsField]: currentSpots + spotsToAdd
+          available_spots: currentSpots + spotsToAdd
         });
       }
 
@@ -160,11 +158,7 @@ export default function MyBookingsPage() {
       noBookingsAdmin: "אין הזמנות במערכת עדיין",
       noBookingsAdminDesc: "כשלקוחות יבצעו הזמנות, הן יופיעו כאן",
       bookingDetails: "פרטי הזמנה",
-      packageTypes: {
-        basic: "בסיסי",
-        pro: "מקצועי", 
-        premium: "פרימיום"
-      },
+      // ...existing code...
       status: {
         pending: "ממתין לאישור",
         confirmed: "מאושר",
@@ -197,11 +191,7 @@ export default function MyBookingsPage() {
       noBookingsAdmin: "No bookings in the system yet",
       noBookingsAdminDesc: "When customers make bookings, they will appear here",
       bookingDetails: "Booking Details",
-      packageTypes: {
-        basic: "Basic",
-        pro: "Pro",
-        premium: "Premium"
-      },
+      // ...existing code...
       status: {
         pending: "Pending Confirmation",
         confirmed: "Confirmed", 

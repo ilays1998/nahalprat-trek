@@ -35,7 +35,7 @@ export default function ManageDates({ trekDates, onDeleteDate, language = 'he' }
       noFuture: 'אין תאריכים עתידיים מתוכננים.',
       noOngoing: 'אין טיולים פעילים כרגע.',
       noPast: 'אין תאריכי עבר.',
-      spots: 'מקומות',
+  spots: 'מקומות פנויים',
       deleteDate: 'מחק תאריך',
       deleteConfirmTitle: 'האם למחוק את התאריך?',
       deleteConfirmDesc: 'פעולה זו תמחק את התאריך באופן סופי. לא ניתן לשחזר אותו. האם להמשיך?',
@@ -71,13 +71,14 @@ export default function ManageDates({ trekDates, onDeleteDate, language = 'he' }
       <CardContent className="space-y-3">
         <div className="flex justify-between items-center text-sm">
           <Badge variant="outline" className="text-blue-700 bg-blue-50 border-blue-200">
-            Basic: {date.available_spots_basic} {t.spots}
+            {/* Removed Basic spots display */}
           </Badge>
           <Badge variant="outline" className="text-green-700 bg-green-50 border-green-200">
-            Pro: {date.available_spots_pro} {t.spots}
+            {/* Removed Pro spots display */}
           </Badge>
           <Badge variant="outline" className="text-purple-700 bg-purple-50 border-purple-200">
-            Premium: {date.available_spots_premium} {t.spots}
+            {/* Removed Premium spots display */}
+            Available Spots: {date.available_spots} {t.spots}
           </Badge>
         </div>
         {!isPast && (

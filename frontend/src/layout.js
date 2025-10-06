@@ -316,7 +316,7 @@ export default function Layout({ children, currentPageName }) {
         )}
 
         {/* Main Content */}
-        <main className={`flex-1 ${!isHomePage ? 'pt-20 md:pt-24' : 'pt-16 sm:pt-0'}`}>
+          <main className={`flex-1 ${!isHomePage ? 'pt-20 md:pt-24' : 'pt-0'}`}>
           {children}
         </main>
 

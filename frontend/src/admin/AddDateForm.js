@@ -19,9 +19,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
   const [showCalendar, setShowCalendar] = useState(false);
 
   const [formData, setFormData] = useState({
-    available_spots_basic: 12,
-    available_spots_pro: 8,
-    available_spots_premium: 4,
+    available_spots: 12,
     season: 'spring',
     weather_notes: ''
   });
@@ -31,9 +29,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
       title: "הוסף תאריך טיול חדש",
       startDate: "תאריך התחלה",
       endDate: "תאריך סיום",
-      basicSpots: "מקומות זמינים - בסיסי",
-      proSpots: "מקומות זמינים - מקצועי",
-      premiumSpots: "מקומות זמינים - פרימיום",
+  spots: "מקומות פנויים",
       season: "עונה",
       weatherNotes: "הערות מזג אוויר",
       seasons: {
@@ -53,9 +49,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
       title: "Add New Trek Date",
       startDate: "Start Date",
       endDate: "End Date",
-      basicSpots: "Available Spots - Basic",
-      proSpots: "Available Spots - Pro",
-      premiumSpots: "Available Spots - Premium",
+  spots: "Available Spots",
       season: "Season",
       weatherNotes: "Weather Notes",
       seasons: {
@@ -98,9 +92,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
   ];
 
   const totalCapacity =
-    (Number(formData.available_spots_basic) || 0) +
-    (Number(formData.available_spots_pro) || 0) +
-    (Number(formData.available_spots_premium) || 0);
+  Number(formData.available_spots) || 0;
 
   const changeSpots = (field, delta, min = 0, max = 50) => {
     setFormData(prev => {
@@ -132,7 +124,9 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
       const dateData = {
         start_date: format(startDate, 'yyyy-MM-dd'),
         end_date: format(endDate, 'yyyy-MM-dd'),
-        ...formData
+        available_spots: formData.available_spots,
+        season: formData.season,
+        weather_notes: formData.weather_notes
       };
 
       await TrekDate.create(dateData);
@@ -140,9 +134,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
       setSuccess(true);
       setStartDate(null);
       setFormData({
-        available_spots_basic: 12,
-        available_spots_pro: 8,
-        available_spots_premium: 4,
+        available_spots: 12,
         season: 'spring',
         weather_notes: ''
       });
@@ -232,61 +224,21 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
 
           <div className="grid md:grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="basicSpots">{currentContent.basicSpots}</Label>
+              <Label htmlFor="spots">{currentContent.spots}</Label>
               <div className="mt-2 flex items-center gap-2">
-                <Button type="button" variant="outline" size="icon" onClick={() => changeSpots('available_spots_basic', -1)}>
+                <Button type="button" variant="outline" size="icon" onClick={() => changeSpots('available_spots', -1)}>
                   <Minus className="w-4 h-4" />
                 </Button>
                 <Input
-                  id="basicSpots"
+                  id="spots"
                   type="number"
                   min="0"
                   max="50"
-                  value={formData.available_spots_basic}
-                  onChange={(e) => handleInputChange('available_spots_basic', parseInt(e.target.value || '0'))}
+                  value={formData.available_spots}
+                  onChange={(e) => handleInputChange('available_spots', parseInt(e.target.value || '0'))}
                   className="text-center"
                 />
-                <Button type="button" variant="outline" size="icon" onClick={() => changeSpots('available_spots_basic', 1)}>
-                  <Plus className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="proSpots">{currentContent.proSpots}</Label>
-              <div className="mt-2 flex items-center gap-2">
-                <Button type="button" variant="outline" size="icon" onClick={() => changeSpots('available_spots_pro', -1)}>
-                  <Minus className="w-4 h-4" />
-                </Button>
-                <Input
-                  id="proSpots"
-                  type="number"
-                  min="0"
-                  max="50"
-                  value={formData.available_spots_pro}
-                  onChange={(e) => handleInputChange('available_spots_pro', parseInt(e.target.value || '0'))}
-                  className="text-center"
-                />
-                <Button type="button" variant="outline" size="icon" onClick={() => changeSpots('available_spots_pro', 1)}>
-                  <Plus className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="premiumSpots">{currentContent.premiumSpots}</Label>
-              <div className="mt-2 flex items-center gap-2">
-                <Button type="button" variant="outline" size="icon" onClick={() => changeSpots('available_spots_premium', -1)}>
-                  <Minus className="w-4 h-4" />
-                </Button>
-                <Input
-                  id="premiumSpots"
-                  type="number"
-                  min="0"
-                  max="50"
-                  value={formData.available_spots_premium}
-                  onChange={(e) => handleInputChange('available_spots_premium', parseInt(e.target.value || '0'))}
-                  className="text-center"
-                />
-                <Button type="button" variant="outline" size="icon" onClick={() => changeSpots('available_spots_premium', 1)}>
+                <Button type="button" variant="outline" size="icon" onClick={() => changeSpots('available_spots', 1)}>
                   <Plus className="w-4 h-4" />
                 </Button>
               </div>

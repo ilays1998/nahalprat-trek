@@ -314,4 +314,19 @@ def logout():
     
     response = make_response(jsonify({"message": "Logout successful"}), 200)
     unset_jwt_cookies(response)
+    
+    # Also manually clear the cookie with explicit domain to ensure it's removed
+    # This handles cases where the cookie domain might not match exactly
+    cookie_name = Config.JWT_ACCESS_COOKIE_NAME
+    response.set_cookie(
+        cookie_name,
+        '',
+        expires=0,
+        domain=Config.JWT_COOKIE_DOMAIN,
+        path='/',
+        secure=Config.JWT_COOKIE_SECURE,
+        httponly=True,
+        samesite=Config.JWT_COOKIE_SAMESITE
+    )
+    
     return response

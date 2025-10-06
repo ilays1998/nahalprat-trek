@@ -36,8 +36,7 @@ def on_load(state):
 def login():
     # Use configurable redirect URI from environment, with fallback to dynamic URL
     redirect_uri = Config.OAUTH_REDIRECT_URI or url_for("auth.authorize", _external=True)
-    # Force fresh Google account selection by adding prompt parameter
-    return oauth.google.authorize_redirect(redirect_uri, prompt='select_account')
+    return oauth.google.authorize_redirect(redirect_uri)
 
 @auth_bp.route("/authorize")
 def authorize():
@@ -313,20 +312,13 @@ def logout():
     from flask_jwt_extended import unset_jwt_cookies
     
     response = make_response(jsonify({"message": "Logout successful"}), 200)
+    
+    # Log the cookie clearing process
+    print(f"Clearing JWT cookie. Domain: {Config.JWT_COOKIE_DOMAIN}")
+    
     unset_jwt_cookies(response)
     
-    # Also manually clear the cookie with explicit domain to ensure it's removed
-    # This handles cases where the cookie domain might not match exactly
-    cookie_name = Config.JWT_ACCESS_COOKIE_NAME
-    response.set_cookie(
-        cookie_name,
-        '',
-        expires=0,
-        domain=Config.JWT_COOKIE_DOMAIN,
-        path='/',
-        secure=Config.JWT_COOKIE_SECURE,
-        httponly=True,
-        samesite=Config.JWT_COOKIE_SAMESITE
-    )
+    # Log response headers to debug
+    print(f"Response headers: {dict(response.headers)}")
     
     return response

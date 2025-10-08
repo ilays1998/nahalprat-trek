@@ -148,4 +148,11 @@ Follow the instructions in `.env_example` to enable Gmail App Passwords for secu
 ### User Login Cookies
 The application uses cookies to keep users logged in. Ensure your browser settings allow cookies for the domain `https://www.treknahalprat.co.il` to maintain session persistence.
 
+# All rights reserved © 2025
+
+All Rights Reserved License
+
+Copyright (c) 2025 Ilays
+
+All rights reserved. No part of this software may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of the copyright owner, except in the case of brief quotations embodied in critical reviews and certain other noncommercial uses permitted by copyright law.
 

@@ -4,6 +4,7 @@ import { createPageUrl } from "../utils";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Mountain, Users, Clock, Shield, Star, MapPin, CalendarIcon, ShieldCheck, Sparkles, Navigation, Heart, Camera, Backpack, Tent, Bus, Bed, Utensils, Map } from "lucide-react";
+import GoogleMapsGPX from "../components/GoogleMapsGPX";
 import { motion } from "framer-motion";
 import { useLanguage } from "../layout";
 
@@ -176,8 +177,8 @@ export default function Home() {
       description: language === 'he' 
         ? 'תיאור של היום הראשון'
         : 'Description of the first day - a fast and exciting journey through the spectacular landscapes of the Judean Desert. We start in Anatot and arrive at Nofei Prat',
-      garminEmbed: "https://connect.garmin.com/modern/activity/embed/19753628830",
-      logo: "/images/logo.png"
+      logo: "/images/logo.png",
+      gpxFile: '/routes/COURSE_409828775.gpx' // Added GPX file for day 1
     },
     { 
       id: 'day2', 
@@ -186,8 +187,8 @@ export default function Home() {
       description: language === 'he'
         ? 'תיאור של היום השני'
         : 'Description of the second day - continuing the journey with new landscapes and unforgettable experiences in the Judean Desert',
-      garminEmbed: "https://connect.garmin.com/modern/activity/embed/19753628830",
-      logo: "/images/logo.png"
+      logo: "/images/logo.png",
+      gpxFile: '/routes/COURSE_409828775.gpx' // Added GPX file for day 2
     },
     { 
       id: 'day3', 
@@ -196,8 +197,8 @@ export default function Home() {
       description: language === 'he'
         ? 'תיאור של היום השלישי'
         : 'Description of the third and final day - completing the journey with deep emotions and memories that will last forever',
-      garminEmbed: "https://connect.garmin.com/modern/activity/embed/19753628830",
-      logo: "/images/logo.png"
+      logo: "/images/logo.png",
+      gpxFile: '/routes/COURSE_409828775.gpx' // Added GPX file for day 3
     }
   ];
 
@@ -416,18 +417,14 @@ export default function Home() {
                       </div>
                       
                       {/* Garmin Map */}
-                      <div className="relative">
-                        <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-inner">
-                          <iframe 
-                            src={day.garminEmbed}
-                            width="100%" 
-                            height="100%" 
-                            title={`${currentContent.journey.day} ${day.dayNumber} - ${currentContent.journey.mapTitle}`}
-                            frameBorder="0"
-                            className="w-full h-full"
-                          />
+                        <div className="relative">
+                          <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-inner">
+                            <GoogleMapsGPX
+                              gpxUrl={day.gpxFile}
+                              height="100%"
+                            />
+                          </div>
                         </div>
-                      </div>
                     </div>
                   </CardContent>
                 </Card>

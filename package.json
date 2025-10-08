@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@mapbox/togeojson": "^0.16.2",
+    "axios": "^1.12.2"
+  }
+}

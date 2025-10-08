@@ -5,6 +5,7 @@ from datetime import date, datetime
 from config import Config
 from sqlalchemy import desc, asc
 import logging
+from email_utils import email_service
 
 bookings_bp = Blueprint("bookings", __name__)
 
@@ -82,12 +83,12 @@ def create_booking():
     if not trekdate:
         return jsonify({"error": "No such trek date"}), 400
 
-    package_field = f"available_spots_{data['package_type']}"
-    if getattr(trekdate, package_field) < data['participants_count']:
+    # Check available spots (single package system)
+    if trekdate.available_spots < data['participants_count']:
         return jsonify({"error": "Not enough spots"}), 400
 
     # Decrement spots
-    setattr(trekdate, package_field, getattr(trekdate, package_field) - data['participants_count'])
+    trekdate.available_spots -= data['participants_count']
 
     booking = Booking(
         user_id=user.id,
@@ -95,10 +96,10 @@ def create_booking():
         last_name=data['last_name'],
         email=data['email'],
         phone=data['phone'],
-        package_type=data['package_type'],
+        package_type='standard',  # Single package system
         trek_date=trek_date_value,
         participants_count=data['participants_count'],
-        total_price=data['total_price'],
+        total_price=1000 * data['participants_count'],  # Fixed price: 1000 NIS per person
         special_requests=data.get('special_requests'),
         emergency_contact_name=data.get('emergency_contact_name'),
         emergency_contact_phone=data.get('emergency_contact_phone'),
@@ -108,7 +109,19 @@ def create_booking():
     db.session.commit()
     db.session.add(trekdate)  # update spots
     db.session.commit()
-    return jsonify(serialize_booking(booking))
+    
+    # Send email notifications
+    booking_dict = serialize_booking(booking)
+    try:
+        # Send confirmation email to customer
+        email_service.send_booking_confirmation(booking_dict)
+        # Send notification to admin
+        email_service.send_admin_booking_notification(booking_dict)
+        logging.info(f"Booking emails sent successfully for booking {booking.id}")
+    except Exception as e:
+        logging.error(f"Failed to send booking emails for booking {booking.id}: {str(e)}")
+    
+    return jsonify(booking_dict)
 
 # Update booking (owner or admin)
 @bookings_bp.route('/<int:booking_id>', methods=['PUT'], strict_slashes=False)
@@ -124,12 +137,31 @@ def update_booking(booking_id: int):
     if not user or (user.role != 'admin' and booking.user_id != user.id):
         return jsonify({"error": "Forbidden"}), 403
 
+    # Track original status for email notifications
+    original_status = booking.status
+    
     # Allow updating limited fields (status for now)
     if 'status' in data:
         booking.status = data['status']
 
     db.session.add(booking)
     db.session.commit()
+    
+    # Send email notifications for status changes
+    if 'status' in data and data['status'] != original_status:
+        booking_dict = serialize_booking(booking)
+        try:
+            if data['status'] == 'confirmed':
+                # Send approval email
+                email_service.send_booking_approval(booking_dict, booking.id)
+                logging.info(f"Booking approval email sent for booking {booking.id}")
+            elif data['status'] == 'cancelled':
+                # Send cancellation email
+                cancellation_reason = data.get('cancellation_reason', '')
+                email_service.send_booking_cancellation(booking_dict, booking.id, cancellation_reason)
+                logging.info(f"Booking cancellation email sent for booking {booking.id}")
+        except Exception as e:
+            logging.error(f"Failed to send status change email for booking {booking.id}: {str(e)}")
 
     return jsonify(serialize_booking(booking))
 
@@ -145,6 +177,15 @@ def delete_booking(booking_id: int):
     # Only owner or admin can delete
     if not user or (user.role != 'admin' and booking.user_id != user.id):
         return jsonify({"error": "Forbidden"}), 403
+
+    # Send cancellation email before deleting
+    booking_dict = serialize_booking(booking)
+    try:
+        cancellation_reason = request.json.get('cancellation_reason', 'Booking cancelled') if request.json else 'Booking cancelled'
+        email_service.send_booking_cancellation(booking_dict, booking.id, cancellation_reason)
+        logging.info(f"Booking cancellation email sent for deleted booking {booking.id}")
+    except Exception as e:
+        logging.error(f"Failed to send cancellation email for deleted booking {booking.id}: {str(e)}")
 
     db.session.delete(booking)
     db.session.commit()

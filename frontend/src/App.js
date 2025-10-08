@@ -3,26 +3,26 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { AuthCallback } from './components/auth/AuthCallback';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import VerifyEmail from './components/auth/VerifyEmail';
 import Layout from './layout';
 import Home from './pages/home';
 import Packages from './pages/packages';
 import Gallery from './pages/gallery';
 import BookingPage from './pages/booking';
 import MyBookingsPage from './pages/mybooking';
+import Contact from './pages/contact';
 
 export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* All pages now require authentication */}
+          {/* Public pages - no authentication required */}
           <Route 
             path="/" 
             element={
               <Layout>
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
+                <Home />
               </Layout>
             } 
           />
@@ -30,9 +30,7 @@ export default function App() {
             path="/packages" 
             element={
               <Layout>
-                <ProtectedRoute>
-                  <Packages />
-                </ProtectedRoute>
+                <Packages />
               </Layout>
             } 
           />
@@ -40,12 +38,20 @@ export default function App() {
             path="/gallery" 
             element={
               <Layout>
-                <ProtectedRoute>
-                  <Gallery />
-                </ProtectedRoute>
+                <Gallery />
               </Layout>
             } 
           />
+          <Route 
+            path="/contact" 
+            element={
+              <Layout>
+                <Contact />
+              </Layout>
+            } 
+          />
+          
+          {/* Protected pages - authentication required */}
           <Route 
             path="/booking" 
             element={
@@ -66,7 +72,10 @@ export default function App() {
               </Layout>
             } 
           />
+          
+          {/* Auth and utility routes */}
           <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route 
             path="/login-error" 
             element={

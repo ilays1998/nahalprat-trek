@@ -1,10 +1,135 @@
-import React, { useState } from "react";
-import { Card, CardContent } from "../components/ui/card"; // TODO: Check if this file exists
-import { Badge } from "../components/ui/badge"; // TODO: Check if this file exists
-import { Button } from "../components/ui/button"; // TODO: Check if this file exists
-import { X, ZoomIn } from "lucide-react";
-import { Dialog, DialogContent } from "../components/ui/dialog"; // TODO: Check if this file exists
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { Card, CardContent } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import { X, ZoomIn, Mountain, Camera, Utensils, Bed } from "lucide-react";
+import { Dialog, DialogContent } from "../components/ui/dialog";
 import { useLanguage } from "../layout";
+
+// Image cache to prevent reloading
+const imageCache = new Map();
+const preloadQueue = new Set();
+
+// Professional gallery image component with instant loading
+const GalleryImage = React.memo(({ image, index, allImages }) => {
+  const [imageState, setImageState] = useState('loading');
+  const [isInView, setIsInView] = useState(false);
+  const imgRef = useRef();
+  const containerRef = useRef();
+
+  // Intersection Observer for viewport detection
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          
+          // Preload next 3 images when current comes into view
+          const currentIndex = allImages.findIndex(img => img.id === image.id);
+          for (let i = 1; i <= 3; i++) {
+            const nextImage = allImages[currentIndex + i];
+            if (nextImage && !preloadQueue.has(nextImage.url)) {
+              preloadQueue.add(nextImage.url);
+              preloadImage(nextImage.url);
+            }
+          }
+        }
+      },
+      { 
+        threshold: 0.1, 
+        rootMargin: '100px' // Start loading when 100px away
+      }
+    );
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [image.id, allImages]);
+
+  // Preload function
+  const preloadImage = useCallback((url) => {
+    if (imageCache.has(url)) return Promise.resolve();
+    
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        imageCache.set(url, img);
+        resolve();
+      };
+      img.onerror = resolve; // Don't block on errors
+      img.src = url;
+    });
+  }, []);
+
+  // Handle image loading
+  useEffect(() => {
+    if (!isInView) return;
+
+    // Check cache first
+    if (imageCache.has(image.url)) {
+      setImageState('loaded');
+      return;
+    }
+
+    // Start loading
+    setImageState('loading');
+    
+    const img = new Image();
+    img.onload = () => {
+      imageCache.set(image.url, img);
+      // Small delay for smooth transition
+      setTimeout(() => setImageState('loaded'), 50);
+    };
+    img.onerror = () => setImageState('error');
+    img.src = image.url;
+
+  }, [isInView, image.url]);
+
+  return (
+    <div 
+      ref={containerRef}
+      className="relative overflow-hidden bg-gray-100 group cursor-pointer"
+      style={{
+        aspectRatio: '1 / 1'
+      }}
+      onClick={() => onImageClick(image)}
+    >
+      {/* Placeholder */}
+      {imageState === 'loading' && (
+        <div 
+          className="absolute inset-0 animate-pulse"
+          style={{
+            backgroundColor: 'rgb(243, 244, 246)'
+          }}
+        />
+      )}
+      
+      {/* Main Image */}
+      {isInView && (
+        <img
+          ref={imgRef}
+          src={image.url}
+          alt={image.title}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+          style={{
+            opacity: imageState === 'loaded' ? 1 : 0,
+            filter: imageState === 'loaded' ? 'blur(0px)' : 'blur(4px)',
+            transition: 'opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease',
+            willChange: imageState === 'loading' ? 'opacity, filter' : 'transform'
+          }}
+          loading={index < 8 ? "eager" : "lazy"}
+          decoding="async"
+        />
+      )}
+      
+      {/* Hover Overlay */}
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center pointer-events-none">
+        <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+    </div>
+  );
+});
 
 export default function Gallery() {
   const { language, isRTL } = useLanguage();
@@ -18,9 +143,9 @@ export default function Gallery() {
       categories: {
         all: "הכל",
         landscape: "נופים",
+        activities: "פעילויות",
         accommodation: "לינה",
-        meals: "ארוחות",
-        activities: "פעילויות"
+        meals: "ארוחות"
       }
     },
     en: {
@@ -29,58 +154,96 @@ export default function Gallery() {
       categories: {
         all: "All",
         landscape: "Landscapes",
+        activities: "Activities",
         accommodation: "Accommodation",
-        meals: "Meals",
-        activities: "Activities"
+        meals: "Meals"
       }
     }
   };
 
   const currentContent = content[language];
 
-  const galleryImages = [
-    {
-      id: 1,
-      url: "/images/desert-landscape-1.jpg",
-      title: language === 'he' ? "נופי המדבר" : "Desert Landscapes",
-      category: "landscape"
+  // Category icons and styles
+  const categoryConfig = {
+    landscape: {
+      icon: Mountain,
+      bgClass: "bg-gradient-to-r from-green-500 to-emerald-600",
+      shadowClass: "shadow-green-500/30"
     },
-    {
-      id: 2,
-      url: "/images/nahal-prat-1.jpg",
-      title: language === 'he' ? "נחל פרת" : "Nahal Prat Stream",
-      category: "landscape"
+    activities: {
+      icon: Camera,
+      bgClass: "bg-gradient-to-r from-blue-500 to-cyan-600",
+      shadowClass: "shadow-blue-500/30"
     },
-    {
-      id: 3,
-      url: "/images/desert-camping-1.jpg",
-      title: language === 'he' ? "קמפינג במדבר" : "Desert Camping",
-      category: "accommodation"
+    meals: {
+      icon: Utensils,
+      bgClass: "bg-gradient-to-r from-orange-500 to-red-600",
+      shadowClass: "shadow-orange-500/30"
     },
-    {
-      id: 4,
-      url: "/images/outdoor-dining-1.jpg",
-      title: language === 'he' ? "ארוחה באוויר הפתוח" : "Outdoor Dining",
-      category: "meals"
-    },
-    {
-      id: 5,
-      url: "/images/trail-hiking-1.jpg",
-      title: language === 'he' ? "הליכה בשביל" : "Trail Hiking",
-      category: "activities"
-    },
-    {
-      id: 6,
-      url: "/images/desert-sunrise-1.jpg",
-      title: language === 'he' ? "זריחה במדבר" : "Desert Sunrise",
-      category: "landscape"
+    accommodation: {
+      icon: Bed,
+      bgClass: "bg-gradient-to-r from-purple-500 to-pink-600",
+      shadowClass: "shadow-purple-500/30"
     }
-  ];
+  };
+
+  // Auto-load images using Vite's import.meta.glob (eager loading for smooth performance)
+  const landscapeImages = import.meta.glob('/public/images/landscapes/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
+  const activitiesImages = import.meta.glob('/public/images/activities/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
+  const mealsImages = import.meta.glob('/public/images/meals/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
+  const accommodationImages = import.meta.glob('/public/images/accommodation/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
+
+  // Generate title from filename only
+  const generateTitle = (filename) => {
+    return filename.replace(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/, '');
+  };
+
+  // Convert imported images to gallery format
+  const createImageObjects = (imageMap, category) => {
+    return Object.entries(imageMap).map(([path, url], index) => {
+      const filename = path.split('/').pop();
+      return {
+        id: `${category}-${index + 1}`,
+        url: url.replace('/public', ''), // Remove /public prefix for correct URL
+        title: generateTitle(filename),
+        category: category
+      };
+    });
+  };
+
+  // Combine all images and mix them for better visual variety
+  const allImages = useMemo(() => [
+    ...createImageObjects(landscapeImages, 'landscape'),
+    ...createImageObjects(activitiesImages, 'activities'),
+    ...createImageObjects(mealsImages, 'meals'),
+    ...createImageObjects(accommodationImages, 'accommodation')
+  ], []);
+
+  // Shuffle function for random order
+  const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  // Use useMemo to shuffle only once and memoize the result
+  const galleryImages = useMemo(() => {
+    return allImages.length > 0 ? shuffleArray(allImages) : [];
+  }, [allImages]);
 
   const categories = Object.entries(currentContent.categories);
+  
+  // For "all" category, use shuffled images; for specific categories, sort by filename for consistency
   const filteredImages = selectedCategory === 'all' 
     ? galleryImages 
-    : galleryImages.filter(img => img.category === selectedCategory);
+    : allImages
+        .filter(img => img.category === selectedCategory)
+        .sort((a, b) => a.title.localeCompare(b.title));
+
+
 
   return (
     <div className="min-h-screen py-12">
@@ -97,44 +260,134 @@ export default function Gallery() {
 
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map(([key, label]) => (
-            <Button
-              key={key}
-              variant={selectedCategory === key ? "default" : "outline"}
-              onClick={() => setSelectedCategory(key)}
-              className={
-                selectedCategory === key 
-                  ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white hover:opacity-90"
-                  : "border-amber-200 text-amber-700 hover:bg-amber-50"
+          {categories.map(([key, label]) => {
+            const categoryStyle = categoryConfig[key];
+            const isSelected = selectedCategory === key;
+            
+            // Define colors for each category (restored original logic)
+            const getButtonStyle = (key, isSelected) => {
+              const baseStyle = {
+                padding: '12px 24px',
+                borderRadius: '6px',
+                border: '2px solid',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                fontWeight: '500',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px'
+              };
+              
+              if (key === 'all') {
+                return {
+                  ...baseStyle,
+                  ...(isSelected ? {
+                    background: 'linear-gradient(to right, rgb(217, 119, 6), rgb(234, 88, 12))',
+                    borderColor: 'rgb(217, 119, 6)',
+                    color: 'white'
+                  } : {
+                    borderColor: 'rgb(252, 231, 202)',
+                    color: 'rgb(180, 83, 9)',
+                    backgroundColor: 'transparent'
+                  })
+                };
               }
-            >
-              {label}
-            </Button>
-          ))}
+              
+              const colorConfigs = {
+                landscape: {
+                  gradient: 'linear-gradient(to right, rgb(34, 197, 94), rgb(16, 185, 129))',
+                  borderColor: 'rgb(34, 197, 94)',
+                  textColor: 'rgb(22, 163, 74)'
+                },
+                activities: {
+                  gradient: 'linear-gradient(to right, rgb(59, 130, 246), rgb(6, 182, 212))',
+                  borderColor: 'rgb(59, 130, 246)',
+                  textColor: 'rgb(37, 99, 235)'
+                },
+                meals: {
+                  gradient: 'linear-gradient(to right, rgb(249, 115, 22), rgb(239, 68, 68))',
+                  borderColor: 'rgb(249, 115, 22)',
+                  textColor: 'rgb(234, 88, 12)'
+                },
+                accommodation: {
+                  gradient: 'linear-gradient(to right, rgb(168, 85, 247), rgb(236, 72, 153))',
+                  borderColor: 'rgb(168, 85, 247)',
+                  textColor: 'rgb(147, 51, 234)'
+                }
+              };
+              
+              const config = colorConfigs[key];
+              if (!config) return baseStyle;
+              
+              return {
+                ...baseStyle,
+                ...(isSelected ? {
+                  background: config.gradient,
+                  borderColor: config.borderColor,
+                  color: 'white'
+                } : {
+                  borderColor: config.borderColor,
+                  color: config.textColor,
+                  backgroundColor: 'transparent'
+                })
+              };
+            };
+            
+            return (
+              <div
+                key={key}
+                onClick={() => setSelectedCategory(key)}
+                style={getButtonStyle(key, isSelected)}
+                onMouseEnter={(e) => {
+                  if (!isSelected) {
+                    e.target.style.backgroundColor = 'rgba(0,0,0,0.05)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSelected) {
+                    e.target.style.backgroundColor = 'transparent';
+                  }
+                }}
+              >
+                {categoryStyle && isSelected && (() => {
+                  const IconComponent = categoryStyle.icon;
+                  return <IconComponent style={{ width: '16px', height: '16px' }} />;
+                })()}
+                {label}
+              </div>
+            );
+          })}
         </div>
 
         {/* Image Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredImages.map((image) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 gallery-grid">
+          {filteredImages.map((image, index) => (
             <Card 
               key={image.id} 
-              className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer group"
+              className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer group gallery-card"
               onClick={() => setSelectedImage(image)}
             >
               <div className="relative">
-                <img
-                  src={image.url}
-                  alt={image.title}
-                  className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-                  <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-                <div className="absolute top-4 right-4">
-                  <Badge className="bg-white/90 text-gray-800">
-                    {currentContent.categories[image.category]}
-                  </Badge>
-                </div>
+                <GalleryImage image={image} index={index} allImages={filteredImages} />
+                {/* Modern Category Badge - Only show when viewing "All" */}
+                {selectedCategory === 'all' && (
+                  <div className="absolute top-3 right-3">
+                    <div className={`
+                      ${categoryConfig[image.category]?.bgClass || 'bg-gradient-to-r from-gray-500 to-gray-600'}
+                      ${categoryConfig[image.category]?.shadowClass || 'shadow-gray-500/30'}
+                      flex items-center gap-1.5 px-3 py-1.5 rounded-full 
+                      text-white text-xs font-medium shadow-lg
+                      backdrop-blur-sm border border-white/20
+                      transform transition-all duration-300 hover:scale-105
+                    `}>
+                      {categoryConfig[image.category] && (() => {
+                        const IconComponent = categoryConfig[image.category].icon;
+                        return <IconComponent className="w-3 h-3" />;
+                      })()}
+                      <span>{currentContent.categories[image.category]}</span>
+                    </div>
+                  </div>
+                )}
               </div>
               <CardContent className="p-4">
                 <h3 className="font-semibold text-gray-900">{image.title}</h3>
@@ -145,7 +398,7 @@ export default function Gallery() {
 
         {/* Image Modal */}
         <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-          <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+          <DialogContent className="max-w-4xl max-h-[90vh] p-0 gallery-modal">
             {selectedImage && (
               <div className="relative">
                 <Button
@@ -160,6 +413,9 @@ export default function Gallery() {
                   src={selectedImage.url}
                   alt={selectedImage.title}
                   className="w-full h-auto max-h-[80vh] object-contain"
+                  loading="eager"
+                  decoding="async"
+                  style={{ willChange: 'transform' }}
                 />
                 <div className="p-6 bg-white">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">

@@ -5,6 +5,7 @@ export function createPageUrl(pageName) {
     Gallery: '/gallery',
     Booking: '/booking',
     MyBookings: '/mybooking',
+    Contact: '/contact',
   };
   return map[pageName] || '/';
 }

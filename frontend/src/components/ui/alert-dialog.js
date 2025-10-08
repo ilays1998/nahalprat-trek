@@ -10,15 +10,28 @@ export function AlertDialog({ children, open, onOpenChange, ...props }) {
     if (onOpenChange) onOpenChange(newOpen);
   };
 
-  if (!isOpen) return null;
+  // Split children into trigger and content
+  const trigger = React.Children.toArray(children).find(
+    child => child.type === AlertDialogTrigger
+  );
+  const content = React.Children.toArray(children).filter(
+    child => child.type !== AlertDialogTrigger
+  );
 
   return (
     <AlertDialogContext.Provider value={{ isOpen, handleOpenChange }}>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" {...props}>
-        <div onClick={(e) => e.stopPropagation()}>
-          {children}
+      {trigger}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" 
+          onClick={() => handleOpenChange(false)}
+          {...props}
+        >
+          <div onClick={(e) => e.stopPropagation()}>
+            {content}
+          </div>
         </div>
-      </div>
+      )}
     </AlertDialogContext.Provider>
   );
 }
@@ -39,11 +52,23 @@ export function AlertDialogTitle({ children, className = "", ...props }) {
   );
 }
 
-export function AlertDialogTrigger({ children, onClick, ...props }) {
+export function AlertDialogTrigger({ children, onClick, asChild, ...props }) {
   const { handleOpenChange } = useContext(AlertDialogContext) || {};
   
+  if (asChild) {
+    return React.cloneElement(children, {
+      onClick: (e) => {
+        if (handleOpenChange) handleOpenChange(true);
+        if (onClick) onClick(e);
+        if (children.props.onClick) children.props.onClick(e);
+      },
+      ...props
+    });
+  }
+
   return (
-    <div
+    <button
+      type="button"
       onClick={() => {
         if (handleOpenChange) handleOpenChange(true);
         if (onClick) onClick();
@@ -51,7 +76,7 @@ export function AlertDialogTrigger({ children, onClick, ...props }) {
       {...props}
     >
       {children}
-    </div>
+    </button>
   );
 }
 

@@ -3,9 +3,14 @@ from authlib.integrations.flask_client import OAuth
 from models import db, AppUser
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from config import Config
+from email_utils import email_service
+from werkzeug.security import generate_password_hash, check_password_hash
+from visitor_service import track_visitor
 import os
 import json
-from datetime import timedelta
+import uuid
+import secrets
+from datetime import timedelta, datetime
 
 auth_bp = Blueprint("auth", __name__)
 oauth = OAuth()
@@ -29,7 +34,8 @@ def on_load(state):
 
 @auth_bp.route("/login")
 def login():
-    redirect_uri = url_for("auth.authorize", _external=True)
+    # Use configurable redirect URI from environment, with fallback to dynamic URL
+    redirect_uri = Config.OAUTH_REDIRECT_URI or url_for("auth.authorize", _external=True)
     return oauth.google.authorize_redirect(redirect_uri)
 
 @auth_bp.route("/authorize")
@@ -49,24 +55,234 @@ def authorize():
     if not user:
         # Make you admin if email matches
         role = "admin" if email == Config.ADMIN_EMAIL else "user"
-        user = AppUser(email=email, name=name, role=role)
+        user = AppUser(
+            email=email, 
+            name=name, 
+            role=role,
+            auth_method='google',
+            is_verified=True  # Google users are pre-verified
+        )
         db.session.add(user)
         db.session.commit()
+    else:
+        # User exists - check if it's an email auth user trying to use Google
+        if user.auth_method == 'email':
+            # Allow Google login for existing email users
+            # Keep original auth_method but mark as verified since Google verified them
+            user.is_verified = True  # Google accounts are always verified
+            if not user.name and name:  # Update name from Google if not set
+                user.name = name
+            db.session.commit()
+        # If user.auth_method == 'google', they can already use Google, so just continue
+
+    # Update last_seen and track visitor
+    user.last_seen = datetime.utcnow()
+    db.session.commit()
+    
+    # Track visitor with user_id (links anonymous visitor to authenticated user)
+    track_visitor(user_id=user.id)
 
     # Flask-JWT-Extended expects identity to be a simple value, not an object
-    expires_delta = timedelta(minutes=int(os.environ.get("JWT_ACCESS_TOKEN_EXPIRES_MINUTES", "15")))
+    expires_delta = timedelta(days=7)  # Longer expiry for cookie-based auth
     access_token = create_access_token(identity=str(user.id), expires_delta=expires_delta)
     
-    # Redirect to frontend with token and user data
+    # Redirect to frontend callback
     frontend_callback_url = f"{Config.FRONTEND_URL}/auth/callback"
-    user_data = {"email": user.email, "role": user.role, "name": user.name}
     
-    # Encode user data for URL
-    import urllib.parse
-    encoded_user_data = urllib.parse.quote(json.dumps(user_data))
+    # Create response with redirect
+    from flask import make_response
+    response = make_response(redirect(frontend_callback_url))
     
-    callback_url = f"{frontend_callback_url}?access_token={access_token}&user={encoded_user_data}"
-    return redirect(callback_url)
+    # Set JWT token as HttpOnly cookie
+    from flask_jwt_extended import set_access_cookies
+    set_access_cookies(response, access_token)
+    
+    return response
+
+@auth_bp.route("/register", methods=["POST"])
+def register():
+    """Register a new user with email and password"""
+    try:
+        data = request.get_json()
+        email = data.get('email', '').lower().strip()
+        password = data.get('password', '')
+        name = data.get('name', '').strip()
+        
+        # Validation
+        if not email or not password or not name:
+            return jsonify({"error": "Email, password, and name are required"}), 400
+            
+        if len(password) < 8:
+            return jsonify({"error": "Password must be at least 8 characters long"}), 400
+            
+        # Check if user already exists
+        existing_user = AppUser.query.filter_by(email=email).first()
+        if existing_user:
+            if existing_user.auth_method == 'google':
+                return jsonify({
+                    "error": "An account with this email already exists via Google login. Please log in with Google, or contact support to link accounts."
+                }), 409
+            else:
+                return jsonify({"error": "User with this email already exists"}), 409
+            
+        # Generate verification token
+        verification_token = secrets.token_urlsafe(32)
+        
+        # Create new user
+        password_hash = generate_password_hash(password)
+        role = "admin" if email == Config.ADMIN_EMAIL else "user"
+        
+        user = AppUser(
+            email=email,
+            name=name,
+            password_hash=password_hash,
+            auth_method='email',
+            is_verified=False,
+            verification_token=verification_token,
+            role=role
+        )
+        
+        db.session.add(user)
+        db.session.commit()
+        
+        # Send verification email
+        email_sent = email_service.send_email_verification(email, name, verification_token)
+        
+        if not email_sent:
+            # If email fails, still return success but log the error
+            print(f"Failed to send verification email to {email}")
+        
+        return jsonify({
+            "message": "Registration successful! Please check your email to verify your account.",
+            "email_sent": email_sent
+        }), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@auth_bp.route("/verify-email", methods=["POST"])
+def verify_email():
+    """Verify email address using token"""
+    try:
+        data = request.get_json()
+        token = data.get('token', '')
+        
+        if not token:
+            return jsonify({"error": "Verification token is required"}), 400
+            
+        # Find user by verification token
+        user = AppUser.query.filter_by(verification_token=token).first()
+        if not user:
+            return jsonify({"error": "Invalid or expired verification token"}), 400
+            
+        if user.is_verified:
+            # Already verified - return success message but don't clear token yet
+            # This allows the same link to work multiple times for user convenience
+            return jsonify({"message": "Email already verified. You can log in now."}), 200
+            
+        # Mark user as verified but keep token for now (can be cleared later)
+        user.is_verified = True
+        db.session.commit()
+        
+        return jsonify({"message": "Email verified successfully! You can now log in."}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@auth_bp.route("/login-email", methods=["POST"])
+def login_email():
+    """Login with email and password"""
+    try:
+        data = request.get_json()
+        email = data.get('email', '').lower().strip()
+        password = data.get('password', '')
+        
+        if not email or not password:
+            return jsonify({"error": "Email and password are required"}), 400
+            
+        # Find user by email (regardless of auth_method, but they must have a password)
+        user = AppUser.query.filter_by(email=email).first()
+        if not user or not user.password_hash:
+            return jsonify({"error": "Invalid email or password"}), 401
+            
+        # Check password
+        if not check_password_hash(user.password_hash, password):
+            return jsonify({"error": "Invalid email or password"}), 401
+            
+        # Check if email is verified
+        if not user.is_verified:
+            return jsonify({
+                "error": "Please verify your email address before logging in",
+                "needs_verification": True
+            }), 401
+            
+        # Update last_seen and track visitor
+        user.last_seen = datetime.utcnow()
+        db.session.commit()
+        
+        # Track visitor with user_id (links anonymous visitor to authenticated user)
+        track_visitor(user_id=user.id)
+        
+        # Create JWT token
+        expires_delta = timedelta(days=7)  # Longer expiry for cookie-based auth
+        access_token = create_access_token(identity=str(user.id), expires_delta=expires_delta)
+        
+        user_data = {
+            "id": user.id,
+            "email": user.email,
+            "name": user.name,
+            "role": user.role
+        }
+        
+        # Create response and set cookie
+        from flask import make_response
+        from flask_jwt_extended import set_access_cookies
+        response = make_response(jsonify({
+            "user": user_data,
+            "message": "Login successful"
+        }), 200)
+        set_access_cookies(response, access_token)
+        
+        return response
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@auth_bp.route("/resend-verification", methods=["POST"])
+def resend_verification():
+    """Resend verification email"""
+    try:
+        data = request.get_json()
+        email = data.get('email', '').lower().strip()
+        
+        if not email:
+            return jsonify({"error": "Email is required"}), 400
+            
+        user = AppUser.query.filter_by(email=email).first()
+        if not user or user.auth_method != 'email':
+            return jsonify({"error": "User not found or not registered with email/password"}), 404
+            
+        if user.is_verified:
+            return jsonify({"message": "Email already verified"}), 200
+            
+        # Generate new verification token
+        verification_token = secrets.token_urlsafe(32)
+        user.verification_token = verification_token
+        db.session.commit()
+        
+        # Send verification email
+        email_sent = email_service.send_email_verification(email, user.name, verification_token)
+        
+        if email_sent:
+            return jsonify({"message": "Verification email sent successfully"}), 200
+        else:
+            return jsonify({"error": "Failed to send verification email"}), 500
+            
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
 
 @auth_bp.route("/me")
 @jwt_required()
@@ -88,3 +304,33 @@ def me():
         return jsonify(user_data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@auth_bp.route("/logout", methods=["POST"])
+def logout():
+    """Logout by clearing the cookie"""
+    from flask import make_response
+    from flask_jwt_extended import unset_jwt_cookies
+    
+    response = make_response(jsonify({"message": "Logout successful"}), 200)
+    
+    # First try the official method
+    unset_jwt_cookies(response)
+    
+    # Also manually clear with multiple variations to be absolutely sure
+    cookie_name = Config.JWT_ACCESS_COOKIE_NAME
+    
+    # Clear for main domain
+    if Config.JWT_COOKIE_DOMAIN:
+        response.set_cookie(cookie_name, '', expires=0, domain=Config.JWT_COOKIE_DOMAIN, path='/')
+    
+    # Clear for current domain (no domain specified)
+    response.set_cookie(cookie_name, '', expires=0, path='/')
+    
+    # Clear for root domain without dot
+    domain_without_dot = Config.JWT_COOKIE_DOMAIN.lstrip('.') if Config.JWT_COOKIE_DOMAIN else None
+    if domain_without_dot:
+        response.set_cookie(cookie_name, '', expires=0, domain=domain_without_dot, path='/')
+    
+    print(f"Cleared JWT cookies for domain: {Config.JWT_COOKIE_DOMAIN}")
+    
+    return response

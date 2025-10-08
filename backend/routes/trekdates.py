@@ -13,8 +13,8 @@ def list_trekdates():
     # Get sort parameter
     sort_param = request.args.get('sort', 'start_date')
     
-    # Build query
-    query = TrekDate.query.filter(TrekDate.end_date >= today)
+    # Build query - get all trek dates
+    query = TrekDate.query
     
     # Handle sorting
     if sort_param == '-start_date':
@@ -46,9 +46,7 @@ def add_trekdate():
     td = TrekDate(
         start_date=start_date,
         end_date=end_date,
-        available_spots_basic=data.get('available_spots_basic', 12),
-        available_spots_pro=data.get('available_spots_pro', 8),
-        available_spots_premium=data.get('available_spots_premium', 4),
+        available_spots=data.get('available_spots', 20),  # Single package system
         season=data.get('season'),
         weather_notes=data.get('weather_notes')
     )
@@ -78,7 +76,7 @@ def update_trekdate(trekdate_id: int):
             td.end_date = datetime.strptime(data['end_date'], '%Y-%m-%d').date()
         except Exception:
             return jsonify({"error": "Invalid end_date format, expected YYYY-MM-DD"}), 400
-    for field in ['available_spots_basic', 'available_spots_pro', 'available_spots_premium', 'season', 'weather_notes']:
+    for field in ['available_spots', 'season', 'weather_notes']:
         if field in data:
             setattr(td, field, data[field])
 
@@ -95,6 +93,12 @@ def delete_trekdate(trekdate_id: int):
         return jsonify({"error": "Only admin"}), 403
 
     td = TrekDate.query.get_or_404(trekdate_id)
+    
+    # Check if trek date is in the past
+    today = date.today()
+    if td.end_date < today:
+        return jsonify({"error": "Cannot delete past trek dates"}), 400
+        
     db.session.delete(td)
     db.session.commit()
     return jsonify({"success": True})
@@ -104,9 +108,7 @@ def serialize_trekdate(d):
         "id": d.id,
         "start_date": d.start_date.isoformat(),
         "end_date": d.end_date.isoformat(),
-        "available_spots_basic": d.available_spots_basic,
-        "available_spots_pro": d.available_spots_pro,
-        "available_spots_premium": d.available_spots_premium,
+        "available_spots": d.available_spots,  # Single package system
         "season": d.season,
         "weather_notes": d.weather_notes
     }

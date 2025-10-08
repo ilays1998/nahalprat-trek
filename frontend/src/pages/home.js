@@ -1,10 +1,9 @@
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
-import { Mountain, Users, Clock, Shield, Star, MapPin, CalendarIcon, ShieldCheck, Sparkles, Navigation, Heart, Camera, Backpack, Tent } from "lucide-react";
+import { Mountain, Users, Clock, Shield, Star, MapPin, CalendarIcon, ShieldCheck, Sparkles, Navigation, Heart, Camera, Backpack, Tent, Bus, Bed, Utensils, Map } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../layout";
 
@@ -13,9 +12,9 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const heroImages = [
-    "/images/hero-desert-1.jpg",
-    "/images/hero-nahal-prat-1.jpg",
-    "/images/hero-landscape-1.jpg"
+    "/images/landscapes/DSC_0346.JPG",
+    "/images/landscapes/DSC_0379.JPG",
+    "/images/landscapes/DSC_0431.JPG"
   ];
 
   useEffect(() => {
@@ -28,75 +27,56 @@ export default function Home() {
   const content = {
     he: {
       hero: {
-        title: "מסלול נחל פרת",
-        subtitle: "חוויית טיול מודרכת בת 3 ימים במדבר יהודה",
-        description: "גלה את יופיו של המדבר היהודי במסלול מאורגן ומודרך בהשראת הליכה אירופאית בין בקתות הרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה ייחודית במדבר.",
+        title: "טרק נחל פרת",
+        subtitle: "חוויית טיול בת 3 ימים במדבר יהודה",
+        description: "גלה את יופיו של מדבר יהודה בטרק מאורגן בהשראת הליכה אירופאית בין בקתות הרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה בבקתה במדבר.",
         cta: "התחל את ההרפתקה",
-        viewPackages: "צפה בחבילות"
+        viewPricing: "צפה במחיר"
       },
       features: {
-        title: "למה לבחור במסלול שלנו?",
+        title: "אתם הולכים אנחנו דואגים לכל השאר",
         subtitle: "חוויה מקצועית ומאורגנת עד הפרט האחרון",
         items: [
           {
-            icon: Mountain,
-            title: "נופים מדהימים",
-            description: "הליכה דרך נופי מדבר עוצרי נשימה ואתרים היסטוריים עתיקים"
+            icon: Bus,
+            title: "העברות",
+            description: "מירושלים עד לתחילת הטרק ובחזרה"
           },
           {
-            icon: Users,
-            title: "מדריכים מנוסים",
-            description: "מדריכים מקצועיים עם ידע עמוק על האזור והטבע המקומי"
+            icon: Bed,
+            title: "לינה",
+            description: "בקתה מעץ הכוללת שירותים, מקלחת, מיטה מפנקת ואווירה קסומה"
           },
           {
-            icon: ShieldCheck,
-            title: "ביטול גמיש",
-            description: "תהנה משקט נפשי עם אפשרות ביטול חינם עד 7 ימים לפני הטיול"
+            icon: Utensils,
+            title: "אוכל",
+            description: "נדאג לספק לכם ארוחות בוקר וערב ונשנושים לטרק"
           },
           {
-            icon: Clock,
-            title: "הכל מאורגן",
-            description: "ארוחות, לינה ותחבורה - הכל כלול ומאורגן מראש"
+            icon: Map,
+            title: "טרק",
+            description: "טרק מותאם שעובר בכל המקומות היפים באיזור"
           }
         ]
       },
       stats: {
-        trekkers: "1,200+ מטיילים",
-        rating: "4.9 דירוג",
-        trails: "12 מסלולים",
-        years: "8 שנות ניסיון"
+        distance: "35 ק״מ",
+        springs: "3 מעיינות",
+        pools: "עלייה 800 מ'",
+        stream: "נחל אחד"
       },
-      packages: {
-        title: "חבילות הטיול שלנו",
-        subtitle: "בחר את החבילה המתאימה לך",
-        viewAll: "צפה בכל החבילות",
-        from: "החל מ",
-        perPerson: "לאדם",
-        details: "פרטים נוספים"
+      journey: {
+        title: "סיפור דרך",
+        subtitle: "מסע של שלושה ימים במדבר יהודה",
+        viewAll: "צפה במחיר המלא",
+        day: "יום",
+        mapTitle: "מפת הטרק"
       },
-      testimonials: {
-        title: "מה אומרים המטיילים",
-        subtitle: "חוויות אמיתיות ממטיילים שלנו",
-        items: [
-          {
-            name: "שרה כהן",
-            text: "חוויה בלתי נשכחת! הארגון היה מושלם והנופים פשוט מדהימים.",
-            role: "מטיילת מירושלים",
-            rating: 5
-          },
-          {
-            name: "דוד לוי",
-            text: "המדריכים היו נהדרים והלינה הייתה מעל הציפיות. ממליץ בחום!",
-            role: "מטייל מתל אביב",
-            rating: 5
-          },
-          {
-            name: "מיכל ברק",
-            text: "טיול מאורגן להפליא עם תשומת לב לכל פרט. נחזור בהחלט!",
-            role: "מטיילת מחיפה",
-            rating: 5
-          }
-        ]
+      about: {
+        title: "עלינו",
+        subtitle: "הכירו את משפחת סופר - המארחים שלכם להרפתקה במדבר",
+        text: "אנחנו משפחת סופר, גרים בנופי פרת כבר 27 שנים. מאז ומתמיד הייתה לנו אהבה גדולה לטבע ולהליכה בו. הכנו בשבילכם טרק בהשראת הטרקים באיטליה ואוסטריה עם אוכל טוב ולינה נוחה. המטרה שלנו היא לאפשר לכם לצאת למסע שבו תוכלו להתנתק מהרעש וההמולה ששוררת במדינה שלנו בדרך קבע, ולתת לעצמכם את השקט שרק המרחבים הבראשיתיים של מדבר יהודה יכולים לתת.",
+        image: "/images/aboutus/DSC_0325.JPG"
       },
       cta: {
         title: "מוכנים להרפתקה?",
@@ -107,74 +87,55 @@ export default function Home() {
     en: {
       hero: {
         title: "Nahal Prat Trek",
-        subtitle: "3-Day Guided Desert Adventure",
-        description: "Discover the beauty of the Judean Desert through an organized, guided trek inspired by European hut-to-hut hiking. Three days of hiking, breathtaking landscapes, and unique desert accommodation.",
+        subtitle: "3-Day Desert Adventure",
+        description: "Discover the beauty of the Judean Desert through an organized trek inspired by European hut-to-hut hiking. Three days of hiking, breathtaking landscapes, and unique desert accommodation.",
         cta: "Start Your Adventure",
-        viewPackages: "View Packages"
+        viewPricing: "View Pricing"
       },
       features: {
-        title: "Why Choose Our Trek?",
+        title: "You Walk, We Handle Everything Else",
         subtitle: "Professional and organized experience down to every detail",
         items: [
           {
-            icon: Mountain,
-            title: "Stunning Landscapes",
-            description: "Hike through breathtaking desert scenery and ancient historical sites"
+            icon: Bus,
+            title: "Transportation",
+            description: "From Jerusalem to the trail start and back"
           },
           {
-            icon: Users,
-            title: "Expert Guides",
-            description: "Professional guides with deep knowledge of the region and local nature"
+            icon: Bed,
+            title: "Accommodation",
+            description: "Wooden cabin with restrooms, shower, comfortable bed and magical atmosphere"
           },
           {
-            icon: ShieldCheck,
-            title: "Flexible Cancellation",
-            description: "Enjoy peace of mind with free cancellation up to 7 days before your trek"
+            icon: Utensils,
+            title: "Food",
+            description: "We'll provide you with breakfast and dinner meals plus snacks for the trail"
           },
           {
-            icon: Clock,
-            title: "All Inclusive",
-            description: "Meals, accommodation, and transportation - everything included and organized"
+            icon: Map,
+            title: "Route",
+            description: "Customized route that passes through all the beautiful spots in the area"
           }
         ]
       },
       stats: {
-        trekkers: "1,200+ Trekkers",
-        rating: "4.9 Rating",
-        trails: "12 Trails",
-        years: "8 Years Experience"
+        distance: "35 KM",
+        springs: "3 Springs",
+        pools: "800m Elevation",
+        stream: "One Stream"
       },
-      packages: {
-        title: "Our Trek Packages",
-        subtitle: "Choose the package that suits you",
-        viewAll: "View All Packages",
-        from: "From",
-        perPerson: "per person",
-        details: "View Details"
+      journey: {
+        title: "Journey Story",
+        subtitle: "A three-day adventure through the Judean Desert",
+        viewAll: "View Full Pricing",
+        day: "Day",
+        mapTitle: "Trail Map"
       },
-      testimonials: {
-        title: "What Trekkers Say",
-        subtitle: "Real experiences from our trekkers",
-        items: [
-          {
-            name: "Sarah Cohen",
-            text: "Unforgettable experience! The organization was perfect and the views were simply amazing.",
-            role: "Trekker from Jerusalem",
-            rating: 5
-          },
-          {
-            name: "David Levy",
-            text: "The guides were wonderful and the accommodation exceeded expectations. Highly recommend!",
-            role: "Trekker from Tel Aviv",
-            rating: 5
-          },
-          {
-            name: "Michal Barak",
-            text: "Amazingly organized trip with attention to every detail. We'll definitely be back!",
-            role: "Trekker from Haifa",
-            rating: 5
-          }
-        ]
+      about: {
+        title: "About Us",
+        subtitle: "Meet the Sofer Family - Your Desert Adventure Hosts",
+        text: "We are the Sofer family, living in the landscapes of Prat for 27 years. We have always had a great love for nature and hiking in it. We have prepared a route for you inspired by the treks in Italy and Austria with good food and comfortable accommodation. Our goal is to allow you to go on a journey where you can disconnect from the noise and hustle and bustle that constantly prevails in our country, and give yourself the quiet that only the pristine expanses of the Judean Desert can provide.",
+        image: "/images/aboutus/DSC_0325.JPG"
       },
       cta: {
         title: "Ready for Adventure?",
@@ -207,50 +168,51 @@ export default function Home() {
     }
   };
 
-  const packages = [
+  const journeyDays = [
     { 
-      id: 'basic', 
-      name: language === 'he' ? 'בסיסי' : 'Basic', 
-      price: '1,000',
-      features: language === 'he' 
-        ? ['3 ימי הליכה', 'לינה בסיסית', 'ארוחות כלולות', 'מדריך מקצועי']
-        : ['3 days hiking', 'Basic accommodation', 'Meals included', 'Professional guide'],
-      icon: Tent
+      id: 'day1', 
+      dayNumber: 1,
+      title: language === 'he' ? 'מענתות לנופי פרת' : 'Anatot to Nofei Prat', 
+      description: language === 'he' 
+        ? 'תיאור של היום הראשון'
+        : 'Description of the first day - a fast and exciting journey through the spectacular landscapes of the Judean Desert. We start in Anatot and arrive at Nofei Prat',
+      garminEmbed: "https://connect.garmin.com/modern/activity/embed/19753628830",
+      logo: "/images/logo.png"
     },
     { 
-      id: 'pro', 
-      name: language === 'he' ? 'מקצועי' : 'Pro', 
-      price: '2,000',
-      popular: true,
-      features: language === 'he'
-        ? ['3 ימי הליכה', 'לינה משודרגת', 'ארוחות גורמה', 'מדריך מומחה', 'ציוד מקצועי']
-        : ['3 days hiking', 'Upgraded accommodation', 'Gourmet meals', 'Expert guide', 'Pro equipment'],
-      icon: Backpack
+      id: 'day2', 
+      dayNumber: 2,
+      title: language === 'he' ? 'היום השני במדבר' : 'Second Day in the Desert', 
+      description: language === 'he'
+        ? 'תיאור של היום השני'
+        : 'Description of the second day - continuing the journey with new landscapes and unforgettable experiences in the Judean Desert',
+      garminEmbed: "https://connect.garmin.com/modern/activity/embed/19753628830",
+      logo: "/images/logo.png"
     },
     { 
-      id: 'premium', 
-      name: language === 'he' ? 'פרימיום' : 'Premium', 
-      price: '3,000',
-      features: language === 'he'
-        ? ['3 ימי הליכה', 'לינה יוקרתית', 'שף פרטי', 'מדריך VIP', 'הסעה פרטית', 'צילום מקצועי']
-        : ['3 days hiking', 'Luxury accommodation', 'Private chef', 'VIP guide', 'Private transport', 'Pro photography'],
-      icon: Sparkles
+      id: 'day3', 
+      dayNumber: 3,
+      title: language === 'he' ? 'היום השלישי וההגעה' : 'Third Day and Arrival', 
+      description: language === 'he'
+        ? 'תיאור של היום השלישי'
+        : 'Description of the third and final day - completing the journey with deep emotions and memories that will last forever',
+      garminEmbed: "https://connect.garmin.com/modern/activity/embed/19753628830",
+      logo: "/images/logo.png"
     }
   ];
 
   return (
     <div className="min-h-screen overflow-hidden">
       {/* Hero Section with Parallax */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center overflow-hidden z-0">
         {/* Animated Background Images */}
         <div className="absolute inset-0">
           {heroImages.map((image, index) => (
             <motion.div
               key={index}
-              className="absolute inset-0 bg-cover bg-center"
-          style={{
-                backgroundImage: `url(${image})`,
-                opacity: currentImageIndex === index ? 1 : 0
+              className={`hero-slide ${currentImageIndex === index ? 'active' : ''}`}
+              style={{
+                backgroundImage: `url(${image})`
               }}
               animate={{ opacity: currentImageIndex === index ? 1 : 0 }}
               transition={{ duration: 1 }}
@@ -261,14 +223,15 @@ export default function Home() {
         
         {/* Hero Content */}
         <motion.div 
-          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center"
+          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-28 pb-20 text-center"
+          style={{ paddingTop: '6rem' }}
           initial="hidden"
           animate="visible"
           variants={containerVariants}
         >
           <motion.div variants={itemVariants}>
             <motion.h1 
-              className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-6 text-shadow-lg"
+              className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-4 sm:mb-6 text-shadow-lg leading-tight"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5 }}
@@ -277,14 +240,14 @@ export default function Home() {
             </motion.h1>
             
             <motion.p 
-              className="text-2xl md:text-3xl text-desert-100 mb-8 font-medium"
+              className="text-lg sm:text-2xl md:text-3xl text-desert-100 mb-6 sm:mb-8 font-medium"
               variants={itemVariants}
             >
               {currentContent.hero.subtitle}
             </motion.p>
             
             <motion.p 
-              className="text-lg md:text-xl text-gray-200 mb-12 max-w-3xl mx-auto leading-relaxed"
+              className="text-sm sm:text-lg md:text-xl text-gray-200 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-2"
               variants={itemVariants}
             >
               {currentContent.hero.description}
@@ -313,7 +276,7 @@ export default function Home() {
                   variant="outline" 
                   className="bg-white text-desert-700 hover:bg-desert-50 text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
                 >
-                  {currentContent.hero.viewPackages}
+                  {currentContent.hero.viewPricing}
                 </Button>
               </Link>
             </motion.div>
@@ -331,6 +294,9 @@ export default function Home() {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* Spacer to push content below hero */}
+      <div className="h-screen"></div>
 
       {/* Stats Section */}
       <section className="py-16 bg-desert-gradient">
@@ -396,7 +362,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Package Preview Section */}
+      {/* Journey Story Section */}
       <section className="py-24 bg-gradient-to-b from-desert-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
@@ -406,63 +372,63 @@ export default function Home() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
-              {currentContent.packages.title}
+              {currentContent.journey.title}
             </h2>
-            <p className="text-xl text-gray-600">{currentContent.packages.subtitle}</p>
+            <p className="text-xl text-gray-600">{currentContent.journey.subtitle}</p>
           </motion.div>
             
-            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {packages.map((pkg, index) => (
+            <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-12 max-w-6xl mx-auto">
+            {journeyDays.map((day, index) => (
               <motion.div
-                key={pkg.id}
+                key={day.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className={pkg.popular ? 'transform md:-translate-y-4' : ''}
               >
-                <Card className={`relative h-full border-none shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden ${
-                  pkg.popular ? 'border-2 border-desert-400' : ''
-                }`}>
-                  {pkg.popular && (
-                    <div className="absolute top-0 right-0 bg-desert-gradient text-white px-4 py-1 rounded-bl-xl text-sm font-medium">
-                      {language === 'he' ? 'פופולרי' : 'Popular'}
-                    </div>
-                  )}
-                  
+                <Card className="border-none shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
                   <CardContent className="p-8">
-                    <div className="text-center mb-8">
-                      <div className="w-16 h-16 bg-desert-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <pkg.icon className="w-8 h-8 text-desert-600" />
+                    <div className="grid md:grid-cols-2 gap-8 items-start">
+                      {/* Day Info */}
+                      <div>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-12 h-14 flex items-center justify-center">
+                            <img src={day.logo} alt="TNP Logo" className="w-full h-full object-contain drop-shadow-lg" />
+                          </div>
+                          <div>
+                            <h3 className="text-2xl font-display font-bold text-gray-900">
+                              {currentContent.journey.day} {day.dayNumber}
+                            </h3>
+                            <h4 className="text-lg font-medium text-desert-600">
+                              {day.title}
+                            </h4>
+                          </div>
+                        </div>
+                        
+                        <p className="text-gray-600 leading-relaxed mb-6">
+                          {day.description}
+                        </p>
+                        
+                        <div className="flex items-center gap-2 text-sm text-desert-600 font-medium">
+                          <MapPin className="w-4 h-4" />
+                          {currentContent.journey.mapTitle}
+                        </div>
                       </div>
-                      <h3 className="text-2xl font-display font-bold text-gray-900 mb-2">
-                        {pkg.name}
-                    </h3>
-                      <div className="flex items-baseline justify-center gap-1">
-                        <span className="text-sm text-gray-500">{currentContent.packages.from}</span>
-                        <span className="text-4xl font-bold text-desert-600">₪{pkg.price}</span>
+                      
+                      {/* Garmin Map */}
+                      <div className="relative">
+                        <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-inner">
+                          <iframe 
+                            src={day.garminEmbed}
+                            width="100%" 
+                            height="100%" 
+                            title={`${currentContent.journey.day} ${day.dayNumber} - ${currentContent.journey.mapTitle}`}
+                            frameBorder="0"
+                            className="w-full h-full"
+                          />
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-500 mt-1">{currentContent.packages.perPerson}</p>
                     </div>
-                    
-                    <ul className="space-y-3 mb-8">
-                      {pkg.features.map((feature, i) => (
-                        <li key={i} className="flex items-center gap-2 text-gray-600">
-                          <Heart className="w-4 h-4 text-desert-400 flex-shrink-0" />
-                          <span className="text-sm">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    
-                    <Link to={createPageUrl("Packages")}>
-                      <Button className={`w-full ${
-                        pkg.popular 
-                          ? 'bg-desert-gradient text-white hover:shadow-lg' 
-                          : 'bg-desert-100 text-desert-700 hover:bg-desert-200'
-                      } transition-all duration-300`}>
-                        {currentContent.packages.details}
-                      </Button>
-                    </Link>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -481,14 +447,14 @@ export default function Home() {
                 variant="outline" 
                 className="border-desert-300 text-desert-700 hover:bg-desert-50 rounded-xl"
               >
-                  {currentContent.packages.viewAll}
+                  {currentContent.journey.viewAll}
                 </Button>
               </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* About Us Section */}
       <section className="py-24 bg-gradient-to-b from-white to-desert-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
@@ -498,40 +464,58 @@ export default function Home() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
-              {currentContent.testimonials.title}
+              {currentContent.about.title}
             </h2>
-            <p className="text-xl text-gray-600">{currentContent.testimonials.subtitle}</p>
+            <p className="text-xl text-gray-600">{currentContent.about.subtitle}</p>
           </motion.div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {currentContent.testimonials.items.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="h-full border-none shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-desert-50">
-                <CardContent className="p-8">
-                  <div className="flex items-center gap-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="w-5 h-5 fill-desert-400 text-desert-400" />
-                    ))}
-                  </div>
-                    <p className="text-gray-700 mb-6 leading-relaxed text-lg italic">
-                    "{testimonial.text}"
-                  </p>
-                    <div>
-                      <div className="font-display font-semibold text-gray-900">
-                        {testimonial.name}
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="grid md:grid-cols-2 gap-12 items-center"
+            >
+              {/* Image */}
+              <div className="order-2 md:order-1">
+                <motion.div
+                  className="relative rounded-2xl overflow-hidden shadow-2xl"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img
+                    src={currentContent.about.image}
+                    alt={currentContent.about.title}
+                    className="w-full h-auto object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                </motion.div>
+              </div>
+              
+              {/* Text Content */}
+              <div className="order-1 md:order-2">
+                <Card className="border-none shadow-xl bg-gradient-to-br from-white to-desert-50/50">
+                  <CardContent className="p-8 lg:p-12">
+                    <p className="text-lg text-gray-700 leading-relaxed font-medium">
+                      {currentContent.about.text}
+                    </p>
+                    
+                    <div className="mt-8 pt-6 border-t border-desert-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-desert-gradient rounded-full flex items-center justify-center">
+                          <Heart className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-display font-bold text-gray-900 text-lg">
+                            {language === 'he' ? 'משפחת סופר' : 'Sofer Family'}
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-500">{testimonial.role}</div>
                     </div>
-                </CardContent>
-              </Card>
-              </motion.div>
-            ))}
+                  </CardContent>
+                </Card>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>

@@ -58,7 +58,7 @@ build/
 
 # Vite
 .vite/
-
+.env_production_backend
 # IDEs and Editors
 .vscode/
 .idea/

@@ -7,46 +7,34 @@ export const AuthCallback = () => {
   const [searchParams] = useSearchParams();
   const { handleAuthCallback } = useAuth();
 
-    useEffect(() => {
+  useEffect(() => {
     const handleCallback = async () => {
-      // Check if we have authentication data in URL hash or search params
-      const hash = window.location.hash;
-      const urlParams = new URLSearchParams(window.location.search);
+      // Check if this is actually a Google OAuth callback
+      // Google sends 'code' or 'state' parameters
+      const hasOAuthParams = searchParams.has('code') || searchParams.has('state');
       
-      let accessToken = null;
-      let userData = null;
-
-      // Handle different callback formats
-      if (hash) {
-        const hashParams = new URLSearchParams(hash.substring(1));
-        accessToken = hashParams.get('access_token');
-      } else {
-        accessToken = urlParams.get('access_token');
+      if (!hasOAuthParams) {
+        console.log('⚠️ AuthCallback loaded without OAuth params - redirecting to home');
+        // This is likely browser history, not a real OAuth callback
+        navigate('/', { replace: true });
+        return;
       }
 
-      // If we have an access token in the URL, use it
-      if (accessToken) {
-        try {
-          // Parse user data if available
-          const userDataParam = urlParams.get('user');
-          if (userDataParam) {
-            userData = JSON.parse(decodeURIComponent(userDataParam));
-          }
-
-          const path = handleAuthCallback(accessToken, userData);
-          navigate(path, { replace: true });
-        } catch (error) {
-          console.error('Error handling auth callback:', error);
-          navigate('/login-error', { replace: true });
-        }
-      } else {
-        // No token found, redirect to home
-        navigate('/', { replace: true });
+      console.log('✅ Valid OAuth callback detected - processing...');
+      
+      try {
+        // Cookie is already set by backend during OAuth redirect
+        // Just fetch user info and redirect
+        const path = await handleAuthCallback();
+        navigate(path, { replace: true });
+      } catch (error) {
+        console.error('Error handling auth callback:', error);
+        navigate('/login-error', { replace: true });
       }
     };
 
     handleCallback();
-  }, [navigate, handleAuthCallback]);
+  }, [navigate, handleAuthCallback, searchParams]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">

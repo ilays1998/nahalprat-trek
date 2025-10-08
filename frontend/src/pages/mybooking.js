@@ -5,6 +5,9 @@ import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
+import { Label } from "../components/ui/label";
 import { CalendarIcon, Users, Phone, Mail, Shield, ShieldCheck, ShieldClose, Ban, Clock, Check, Trash2, LogIn } from "lucide-react";
 import { format, parseISO, isAfter } from "date-fns";
 import AddDateForm from "../admin/AddDateForm";
@@ -34,6 +37,8 @@ export default function MyBookingsPage() {
   const [trekDates, setTrekDates] = useState([]);
   const [error, setError] = useState(null);
   const [isAuthError, setIsAuthError] = useState(false);
+  const [selectedBookingToCancel, setSelectedBookingToCancel] = useState(null);
+  const [cancellationReason, setCancellationReason] = useState('');
 
   useEffect(() => {
     loadData();
@@ -101,10 +106,14 @@ export default function MyBookingsPage() {
     }
   };
 
-  const handleCancelBooking = async (bookingToCancel) => {
+  const handleCancelBooking = async (bookingToCancel, cancellationReason = '') => {
     try {
-      // 1. Update booking status to 'cancelled'
-      await Booking.update(bookingToCancel.id, { status: 'cancelled' });
+      // 1. Update booking status to 'cancelled' with optional reason
+      const updateData = { 
+        status: 'cancelled',
+        ...(cancellationReason && { cancellation_reason: cancellationReason })
+      };
+      await Booking.update(bookingToCancel.id, updateData);
 
       // 2. Find the corresponding trek date
       const trekDateToUpdate = trekDates.find(td => 
@@ -112,13 +121,11 @@ export default function MyBookingsPage() {
       );
 
       if (trekDateToUpdate) {
-        // 3. Add the spots back to the available count
-        const spotsField = `available_spots_${bookingToCancel.package_type}`;
-        const currentSpots = trekDateToUpdate[spotsField] || 0;
+        // 3. Add the spots back to the available count (single package system)
+        const currentSpots = trekDateToUpdate.available_spots || 0;
         const spotsToAdd = bookingToCancel.participants_count;
-        
         await TrekDate.update(trekDateToUpdate.id, {
-          [spotsField]: currentSpots + spotsToAdd
+          available_spots: currentSpots + spotsToAdd
         });
       }
 
@@ -151,11 +158,7 @@ export default function MyBookingsPage() {
       noBookingsAdmin: "אין הזמנות במערכת עדיין",
       noBookingsAdminDesc: "כשלקוחות יבצעו הזמנות, הן יופיעו כאן",
       bookingDetails: "פרטי הזמנה",
-      packageTypes: {
-        basic: "בסיסי",
-        pro: "מקצועי", 
-        premium: "פרימיום"
-      },
+      // ...existing code...
       status: {
         pending: "ממתין לאישור",
         confirmed: "מאושר",
@@ -173,6 +176,8 @@ export default function MyBookingsPage() {
       cancelBooking: "בטל הזמנה",
       cancelConfirmTitle: "האם לבטל את ההזמנה?",
       cancelConfirmDesc: "פעולה זו תבטל את הזמנתך באופן סופי. המקומות שהזמנת ישוחררו. האם להמשיך?",
+      cancellationReason: "סיבת הביטול (אופציונלי)",
+      cancellationReasonPlaceholder: "הסבר את הסיבה לביטול ההזמנה...",
       confirm: "אשר",
       back: "חזור",
     },
@@ -186,11 +191,7 @@ export default function MyBookingsPage() {
       noBookingsAdmin: "No bookings in the system yet",
       noBookingsAdminDesc: "When customers make bookings, they will appear here",
       bookingDetails: "Booking Details",
-      packageTypes: {
-        basic: "Basic",
-        pro: "Pro",
-        premium: "Premium"
-      },
+      // ...existing code...
       status: {
         pending: "Pending Confirmation",
         confirmed: "Confirmed", 
@@ -208,6 +209,8 @@ export default function MyBookingsPage() {
       cancelBooking: "Cancel Booking",
       cancelConfirmTitle: "Are you sure you want to cancel?",
       cancelConfirmDesc: "This will permanently cancel your booking and release your spots. This action cannot be undone.",
+      cancellationReason: "Cancellation Reason (Optional)",
+      cancellationReasonPlaceholder: "Please explain the reason for cancelling this booking...",
       confirm: "Confirm",
       back: "Back",
     }
@@ -318,7 +321,7 @@ export default function MyBookingsPage() {
           </div>
         )}
       </CardContent>
-      {showUserInfo && !isCancelled && (
+      {showUserInfo && !isCancelled && isFutureBooking && (
         <CardFooter className="grid grid-cols-2 gap-2">
           {booking.status === 'pending' && (
              <Button variant="default" size="sm" onClick={() => handleApproveBooking(booking)} className="bg-green-600 hover:bg-green-700 text-white">
@@ -326,54 +329,76 @@ export default function MyBookingsPage() {
                 {currentContent.approveBooking}
               </Button>
           )}
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm" className={booking.status === 'pending' ? '' : 'col-span-2'}>
-                <Ban className="w-4 h-4 mr-2" />
-                {currentContent.cancelBooking}
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>{currentContent.cancelConfirmTitle}</AlertDialogTitle>
-                <AlertDialogDescription>{currentContent.cancelConfirmDesc}</AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>{currentContent.back}</AlertDialogCancel>
-                <AlertDialogAction onClick={() => handleCancelBooking(booking)}>{currentContent.confirm}</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <Button 
+            variant="destructive" 
+            size="sm" 
+            className={booking.status === 'pending' ? '' : 'col-span-2'}
+            onClick={() => setSelectedBookingToCancel(booking)}
+          >
+            <Ban className="w-4 h-4 mr-2" />
+            {currentContent.cancelBooking}
+          </Button>
         </CardFooter>
       )}
       {!showUserInfo && !isCancelled && isFutureBooking && (
         <CardFooter>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm" className="w-full">
-                <Ban className="w-4 h-4 mr-2" />
-                {currentContent.cancelBooking}
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>{currentContent.cancelConfirmTitle}</AlertDialogTitle>
-                <AlertDialogDescription>
-                  {currentContent.cancelConfirmDesc}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>{currentContent.back}</AlertDialogCancel>
-                <AlertDialogAction onClick={() => handleCancelBooking(booking)}>
-                  {currentContent.confirm}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <Button 
+            variant="destructive" 
+            size="sm" 
+            className="w-full"
+            onClick={() => setSelectedBookingToCancel(booking)}
+          >
+            <Ban className="w-4 h-4 mr-2" />
+            {currentContent.cancelBooking}
+          </Button>
         </CardFooter>
       )}
     </Card>
   )};
+
+  // Cancellation Dialog Component - outside of the mapping loop
+  const CancellationDialog = () => (
+    <AlertDialog open={!!selectedBookingToCancel} onOpenChange={(open) => {
+      if (!open) {
+        setSelectedBookingToCancel(null);
+        setCancellationReason('');
+      }
+    }}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{currentContent.cancelConfirmTitle}</AlertDialogTitle>
+          <AlertDialogDescription>{currentContent.cancelConfirmDesc}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <div className="my-4">
+          <Label htmlFor="cancellationReasonDialog">{currentContent.cancellationReason}</Label>
+          <Textarea
+            id="cancellationReasonDialog"
+            value={cancellationReason}
+            onChange={(e) => setCancellationReason(e.target.value)}
+            placeholder={currentContent.cancellationReasonPlaceholder}
+            className="mt-2"
+            rows={3}
+            autoFocus
+          />
+        </div>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={() => {
+            setSelectedBookingToCancel(null);
+            setCancellationReason('');
+          }}>{currentContent.back}</AlertDialogCancel>
+          <AlertDialogAction onClick={() => {
+            if (selectedBookingToCancel) {
+              handleCancelBooking(selectedBookingToCancel, cancellationReason);
+              setSelectedBookingToCancel(null);
+              setCancellationReason('');
+            }
+          }}>
+            {currentContent.confirm}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 
   if (loading) {
     return (
@@ -549,6 +574,7 @@ export default function MyBookingsPage() {
           )}
         </Tabs>
       </div>
+      <CancellationDialog />
     </div>
   );
 }

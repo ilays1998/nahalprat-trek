@@ -1,7 +1,7 @@
 # Nahal Prat Trek
 
 ## 🌐 Live Website
-[Visit Nahal Prat Trek](https://nahalprat-frontend.onrender.com)
+[Visit Nahal Prat Trek](https://www.treknahalprat.co.il)
 
 Booking and information app for guided treks at Nahal Prat.
 
@@ -79,6 +79,8 @@ Prerequisites:
 - `BACKEND_PORT` (default `5001`)
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ADMIN_EMAIL`
 - `FLASK_APP=app:create_app` (for Flask CLI commands like migrations)
+- `SMTP_SERVER`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD` (for email sending)
+- `CONTACT_EMAIL` (recipient for contact forms)
 
 ### Frontend (`frontend/.env`)
 - `VITE_BACKEND_URL` (explicit full backend URL, e.g. `http://localhost:5001`)
@@ -92,7 +94,6 @@ Prerequisites:
 
 This repo includes a Render Blueprint (`render.yaml`) that provisions:
 - Web Service: Backend (Flask + Gunicorn)
-- Web Service: Frontend (Vite preview server)
 - Managed PostgreSQL database
 
 Steps:
@@ -101,11 +102,14 @@ Steps:
 3. Provide the required environment variables for the backend service:
    - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ADMIN_EMAIL`
    - Other secrets can be auto-generated or inherited from the database connection.
-4. Render will build and start both services. Database migrations are executed on boot via the backend start command.
+4. Render will build and start the backend service. Database migrations are executed on boot via the backend start command.
 
 After deployment:
-- Frontend will be served at the frontend Render URL.
-- Backend will be served at the backend Render URL; the frontend is configured to reach it via `VITE_BACKEND_HOST` set by the blueprint.
+- Backend will be served at the backend Render URL.
+
+### Frontend Deployment
+
+The frontend is hosted through Cloudflare and is accessible at `https://www.treknahalprat.co.il`. Ensure the `VITE_BACKEND_URL` in the frontend `.env` points to the backend's deployed URL.
 
 ### Deploy with Docker (manual option)
 
@@ -131,5 +135,17 @@ docker run --rm \
 Notes:
 - Ensure your backend `.env` points at a reachable Postgres instance from inside the container (e.g., a Docker network or a managed DB).
 - The backend container runs `flask db upgrade` automatically on start.
+
+## Additional Features
+
+### Email Sending
+The backend is configured to send emails using Gmail SMTP. Ensure the following environment variables are set in `backend/.env`:
+- `SMTP_SERVER`, `SMTP_PORT`
+- `SMTP_USERNAME`, `SMTP_PASSWORD`
+
+Follow the instructions in `.env_example` to enable Gmail App Passwords for secure email sending.
+
+### User Login Cookies
+The application uses cookies to keep users logged in. Ensure your browser settings allow cookies for the domain `https://www.treknahalprat.co.il` to maintain session persistence.
 
 

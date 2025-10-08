@@ -5,45 +5,32 @@ services:
     rootDir: backend
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: FLASK_APP=app:create_app flask db upgrade || true && gunicorn wsgi:app --bind 0.0.0.0:$PORT
+    startCommand: FLASK_APP=app:create_app flask db upgrade && gunicorn wsgi:app --bind 0.0.0.0:$PORT
     envVars:
-      - key: SECRET_KEY
-        generateValue: true
-      - key: JWT_SECRET_KEY
-        generateValue: true
       - key: SQLALCHEMY_DATABASE_URI
         fromDatabase:
           name: nahalprat-db
           property: connectionString
       - key: FLASK_APP
         value: app:create_app
-      - key: FRONTEND_HOST
-        fromService:
-          name: nahalprat-frontend
-          type: web
-          property: host
-      - key: CORS_ORIGINS
-        value: "*"
-      - key: GOOGLE_CLIENT_ID
-        sync: false
-      - key: GOOGLE_CLIENT_SECRET
-        sync: false
-      - key: ADMIN_EMAIL
-        sync: false
+    # All other environment variables should be set in Render Dashboard
+    # See .env_production_backend for required variables
 
   - type: web
     name: nahalprat-frontend
-    runtime: node
+    runtime: static
     rootDir: frontend
-    plan: free
     buildCommand: npm ci && npm run build
-    startCommand: npm run preview -- --host --port $PORT
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
-      - key: VITE_BACKEND_HOST
-        fromService:
-          name: nahalprat-backend
-          type: web
-          property: host
+      - key: VITE_BACKEND_URL
+        value: https://api.treknahalprat.co.il
+      - key: VITE_GOOGLE_CLIENT_ID
+        value: 361028788793-igfr700b6nd8bq7mr2ed7it7jgcoascb.apps.googleusercontent.com
 
 databases:
   - name: nahalprat-db

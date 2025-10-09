@@ -77,7 +77,9 @@ export default function Home() {
       about: {
         title: "עלינו",
         subtitle: "הכירו את משפחת סופר - המארחים שלכם להרפתקה במדבר",
-        text: "אנחנו משפחת סופר, גרים בנופי פרת כבר 27 שנים. מאז ומתמיד הייתה לנו אהבה גדולה לטבע ולהליכה בו. הכנו בשבילכם טרק בהשראת הטרקים באיטליה ואוסטריה עם אוכל טוב ולינה נוחה. המטרה שלנו היא לאפשר לכם לצאת למסע שבו תוכלו להתנתק מהרעש וההמולה ששוררת במדינה שלנו בדרך קבע, ולתת לעצמכם את השקט שרק המרחבים הבראשיתיים של מדבר יהודה יכולים לתת.",
+        text: `אנחנו משפחת סופר, גרים בנופי פרת כבר 27 שנים. מאז ומתמיד הייתה לנו אהבה גדולה לטבע ולהליכה בו. הכנו בשבילכם טרק בהשראת הטרקים באיטליה ואוסטריה עם אוכל טוב ולינה נוחה.
+        
+        המטרה שלנו היא לאפשר לכם לצאת למסע שבו תוכלו להתנתק מהרעש וההמולה ששוררת במדינה שלנו בדרך קבע, ולתת לעצמכם את השקט שרק המרחבים הבראשיתיים של מדבר יהודה יכולים לתת.`,
         image: "/images/aboutus/DSC_0325.JPG"
       },
       cta: {
@@ -494,7 +496,7 @@ export default function Home() {
               <div className="order-1 md:order-2">
                 <Card className="border-none shadow-xl bg-gradient-to-br from-white to-desert-50/50">
                   <CardContent className="p-8 lg:p-12">
-                    <p className="text-lg text-gray-700 leading-relaxed font-medium">
+                    <p className="text-lg text-gray-700 leading-relaxed font-medium whitespace-pre-line">
                       {currentContent.about.text}
                     </p>
                     

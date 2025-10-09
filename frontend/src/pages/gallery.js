@@ -294,6 +294,12 @@ export default function Gallery() {
                 key={key}
                 onClick={() => setSelectedCategory(key)}
                 style={getButtonStyle(key, isSelected)}
+                onMouseEnter={(e) => {
+                  if (!isSelected) e.target.style.backgroundColor = 'rgba(0,0,0,0.05)';
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSelected) e.target.style.backgroundColor = 'transparent';
+                }}
               >
                 {categoryStyle && isSelected && (() => {
                   const Icon = categoryStyle.icon;

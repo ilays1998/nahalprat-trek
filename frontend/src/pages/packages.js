@@ -31,7 +31,7 @@ export default function Packages() {
           {
             icon: Bus,
             title: "העברות מלאות",
-            description: "אל הטרק ובחזרה מירושלים"
+            description: "אל הטרק ובחזרה לירושלים"
           },
           {
             icon: Bed,
@@ -46,7 +46,7 @@ export default function Packages() {
           {
             icon: ShieldCheck,
             title: "ביטול חינם",
-            description: "עד 3 ימים לפני הטיול - ללא עמלות"
+            description: "עד 3 ימים לפני הטיול - ביטול חינם"
           },
           {
             icon: Coffee,

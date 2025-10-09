@@ -8,6 +8,7 @@ import { LoginButton } from "./components/auth/LoginButton";
 import { useAuth } from "./contexts/AuthContext";
 import config from "./config";
 import { LanguageToggle } from "./components/navigation/LanguageToggle";
+import { cfImage } from "./utils/image";
 
 const LanguageContext = createContext();
 
@@ -167,7 +168,7 @@ export default function Layout({ children, currentPageName }) {
                 >
                   <div className="relative">
                     <div className="relative w-12 h-16 md:w-16 md:h-20 flex items-center justify-center transform group-hover:scale-110 transition-all duration-300">
-                      <img src="/images/logo.png" alt="TNP Logo" className="w-full h-full object-contain drop-shadow-lg" />
+                      <img src={cfImage("/images/logo.png")} alt="TNP Logo" className="w-full h-full object-contain drop-shadow-lg" />
                     </div>
                   </div>
                 </Link>
@@ -346,7 +347,7 @@ export default function Layout({ children, currentPageName }) {
               <div>
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-12 flex items-center justify-center">
-                    <img src="/images/logo.png" alt="TNP Logo" className="w-full h-full object-contain drop-shadow-lg" />
+                    <img src={cfImage("/images/logo.png")} alt="TNP Logo" className="w-full h-full object-contain drop-shadow-lg" />
                   </div>
                   <h3 className="text-xl font-display font-bold">{t.title}</h3>
                 </div>

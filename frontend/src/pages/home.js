@@ -7,15 +7,16 @@ import { Mountain, Users, Clock, Shield, Star, MapPin, CalendarIcon, ShieldCheck
 import GoogleMapsGPX from "../components/GoogleMapsGPX";
 import { motion } from "framer-motion";
 import { useLanguage } from "../layout";
+import { cfImage } from "../utils/image";
 
 export default function Home() {
   const { language, t, isRTL } = useLanguage();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const heroImages = [
-    "/images/landscapes/DSC_0346.JPG",
-    "/images/landscapes/DSC_0379.JPG",
-    "/images/landscapes/DSC_0431.JPG"
+    cfImage("/images/landscapes/DSC_0346.JPG"),
+    cfImage("/images/landscapes/DSC_0379.JPG"),
+    cfImage("/images/landscapes/DSC_0431.JPG")
   ];
 
   useEffect(() => {
@@ -177,7 +178,7 @@ export default function Home() {
       description: language === 'he' 
         ? 'תיאור של היום הראשון'
         : 'Description of the first day - a fast and exciting journey through the spectacular landscapes of the Judean Desert. We start in Anatot and arrive at Nofei Prat',
-      logo: "/images/logo.png",
+      logo: cfImage("/images/logo.png"),
       gpxFile: '/routes/COURSE_409828775.gpx' // Added GPX file for day 1
     },
     { 
@@ -187,7 +188,7 @@ export default function Home() {
       description: language === 'he'
         ? 'תיאור של היום השני'
         : 'Description of the second day - continuing the journey with new landscapes and unforgettable experiences in the Judean Desert',
-      logo: "/images/logo.png",
+      logo: cfImage("/images/logo.png"),
       gpxFile: '/routes/COURSE_409828775.gpx' // Added GPX file for day 2
     },
     { 
@@ -197,7 +198,7 @@ export default function Home() {
       description: language === 'he'
         ? 'תיאור של היום השלישי'
         : 'Description of the third and final day - completing the journey with deep emotions and memories that will last forever',
-      logo: "/images/logo.png",
+      logo: cfImage("/images/logo.png"),
       gpxFile: '/routes/COURSE_409828775.gpx' // Added GPX file for day 3
     }
   ];

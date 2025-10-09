@@ -5,6 +5,7 @@ import { Button } from "../components/ui/button";
 import { X, ZoomIn, Mountain, Camera, Utensils, Bed } from "lucide-react";
 import { Dialog, DialogContent } from "../components/ui/dialog";
 import { useLanguage } from "../layout";
+import { cfImage } from "../utils/image";
 
 // Image cache to prevent reloading
 const imageCache = new Map();
@@ -184,7 +185,7 @@ export default function Gallery() {
       const filename = path.split('/').pop();
       return {
         id: `${category}-${index + 1}`,
-        url: url.replace('/public', ''),
+        url: cfImage(url.replace('/public', '')),
         title: generateTitle(filename),
         category
       };

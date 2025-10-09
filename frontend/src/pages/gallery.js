@@ -10,8 +10,8 @@ import { useLanguage } from "../layout";
 const imageCache = new Map();
 const preloadQueue = new Set();
 
-// Professional gallery image component with instant loading
-const GalleryImage = React.memo(({ image, index, allImages }) => {
+// ✅ GalleryImage now receives `onImageClick` as a prop
+const GalleryImage = React.memo(({ image, index, allImages, onImageClick }) => {
   const [imageState, setImageState] = useState('loading');
   const [isInView, setIsInView] = useState(false);
   const imgRef = useRef();
@@ -25,7 +25,7 @@ const GalleryImage = React.memo(({ image, index, allImages }) => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsInView(true);
-          
+
           // Preload next 3 images when current comes into view
           const currentIndex = allImages.findIndex(img => img.id === image.id);
           for (let i = 1; i <= 3; i++) {
@@ -37,9 +37,9 @@ const GalleryImage = React.memo(({ image, index, allImages }) => {
           }
         }
       },
-      { 
-        threshold: 0.1, 
-        rootMargin: '100px' // Start loading when 100px away
+      {
+        threshold: 0.1,
+        rootMargin: '100px'
       }
     );
 
@@ -50,7 +50,7 @@ const GalleryImage = React.memo(({ image, index, allImages }) => {
   // Preload function
   const preloadImage = useCallback((url) => {
     if (imageCache.has(url)) return Promise.resolve();
-    
+
     return new Promise((resolve) => {
       const img = new Image();
       img.onload = () => {
@@ -66,46 +66,32 @@ const GalleryImage = React.memo(({ image, index, allImages }) => {
   useEffect(() => {
     if (!isInView) return;
 
-    // Check cache first
     if (imageCache.has(image.url)) {
       setImageState('loaded');
       return;
     }
 
-    // Start loading
     setImageState('loading');
-    
     const img = new Image();
     img.onload = () => {
       imageCache.set(image.url, img);
-      // Small delay for smooth transition
       setTimeout(() => setImageState('loaded'), 50);
     };
     img.onerror = () => setImageState('error');
     img.src = image.url;
-
   }, [isInView, image.url]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative overflow-hidden bg-gray-100 group cursor-pointer"
-      style={{
-        aspectRatio: '1 / 1'
-      }}
+      style={{ aspectRatio: '1 / 1' }}
       onClick={() => onImageClick(image)}
     >
-      {/* Placeholder */}
       {imageState === 'loading' && (
-        <div 
-          className="absolute inset-0 animate-pulse"
-          style={{
-            backgroundColor: 'rgb(243, 244, 246)'
-          }}
-        />
+        <div className="absolute inset-0 animate-pulse bg-gray-100" />
       )}
-      
-      {/* Main Image */}
+
       {isInView && (
         <img
           ref={imgRef}
@@ -122,8 +108,7 @@ const GalleryImage = React.memo(({ image, index, allImages }) => {
           decoding="async"
         />
       )}
-      
-      {/* Hover Overlay */}
+
       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center pointer-events-none">
         <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
@@ -163,7 +148,6 @@ export default function Gallery() {
 
   const currentContent = content[language];
 
-  // Category icons and styles
   const categoryConfig = {
     landscape: {
       icon: Mountain,
@@ -187,31 +171,25 @@ export default function Gallery() {
     }
   };
 
-  // Auto-load images using Vite's import.meta.glob (eager loading for smooth performance)
   const landscapeImages = import.meta.glob('/public/images/landscapes/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
   const activitiesImages = import.meta.glob('/public/images/activities/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
   const mealsImages = import.meta.glob('/public/images/meals/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
   const accommodationImages = import.meta.glob('/public/images/accommodation/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
 
-  // Generate title from filename only
-  const generateTitle = (filename) => {
-    return filename.replace(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/, '');
-  };
+  const generateTitle = (filename) =>
+    filename.replace(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/, '');
 
-  // Convert imported images to gallery format
-  const createImageObjects = (imageMap, category) => {
-    return Object.entries(imageMap).map(([path, url], index) => {
+  const createImageObjects = (imageMap, category) =>
+    Object.entries(imageMap).map(([path, url], index) => {
       const filename = path.split('/').pop();
       return {
         id: `${category}-${index + 1}`,
-        url: url.replace('/public', ''), // Remove /public prefix for correct URL
+        url: url.replace('/public', ''),
         title: generateTitle(filename),
-        category: category
+        category
       };
     });
-  };
 
-  // Combine all images and mix them for better visual variety
   const allImages = useMemo(() => [
     ...createImageObjects(landscapeImages, 'landscape'),
     ...createImageObjects(activitiesImages, 'activities'),
@@ -219,7 +197,6 @@ export default function Gallery() {
     ...createImageObjects(accommodationImages, 'accommodation')
   ], []);
 
-  // Shuffle function for random order
   const shuffleArray = (array) => {
     const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -229,21 +206,19 @@ export default function Gallery() {
     return shuffled;
   };
 
-  // Use useMemo to shuffle only once and memoize the result
-  const galleryImages = useMemo(() => {
-    return allImages.length > 0 ? shuffleArray(allImages) : [];
-  }, [allImages]);
+  const galleryImages = useMemo(
+    () => (allImages.length > 0 ? shuffleArray(allImages) : []),
+    [allImages]
+  );
 
   const categories = Object.entries(currentContent.categories);
-  
-  // For "all" category, use shuffled images; for specific categories, sort by filename for consistency
-  const filteredImages = selectedCategory === 'all' 
-    ? galleryImages 
-    : allImages
-        .filter(img => img.category === selectedCategory)
-        .sort((a, b) => a.title.localeCompare(b.title));
 
-
+  const filteredImages =
+    selectedCategory === 'all'
+      ? galleryImages
+      : allImages
+          .filter((img) => img.category === selectedCategory)
+          .sort((a, b) => a.title.localeCompare(b.title));
 
   return (
     <div className="min-h-screen py-12">
@@ -263,10 +238,9 @@ export default function Gallery() {
           {categories.map(([key, label]) => {
             const categoryStyle = categoryConfig[key];
             const isSelected = selectedCategory === key;
-            
-            // Define colors for each category (restored original logic)
+
             const getButtonStyle = (key, isSelected) => {
-              const baseStyle = {
+              const base = {
                 padding: '12px 24px',
                 borderRadius: '6px',
                 border: '2px solid',
@@ -277,81 +251,52 @@ export default function Gallery() {
                 alignItems: 'center',
                 gap: '8px'
               };
-              
-              if (key === 'all') {
-                return {
-                  ...baseStyle,
-                  ...(isSelected ? {
-                    background: 'linear-gradient(to right, rgb(217, 119, 6), rgb(234, 88, 12))',
-                    borderColor: 'rgb(217, 119, 6)',
-                    color: 'white'
-                  } : {
-                    borderColor: 'rgb(252, 231, 202)',
-                    color: 'rgb(180, 83, 9)',
-                    backgroundColor: 'transparent'
-                  })
-                };
-              }
-              
+
               const colorConfigs = {
+                all: {
+                  gradient: 'linear-gradient(to right, rgb(217, 119, 6), rgb(234, 88, 12))',
+                  border: 'rgb(217, 119, 6)',
+                  text: 'rgb(180, 83, 9)'
+                },
                 landscape: {
                   gradient: 'linear-gradient(to right, rgb(34, 197, 94), rgb(16, 185, 129))',
-                  borderColor: 'rgb(34, 197, 94)',
-                  textColor: 'rgb(22, 163, 74)'
+                  border: 'rgb(34, 197, 94)',
+                  text: 'rgb(22, 163, 74)'
                 },
                 activities: {
                   gradient: 'linear-gradient(to right, rgb(59, 130, 246), rgb(6, 182, 212))',
-                  borderColor: 'rgb(59, 130, 246)',
-                  textColor: 'rgb(37, 99, 235)'
+                  border: 'rgb(59, 130, 246)',
+                  text: 'rgb(37, 99, 235)'
                 },
                 meals: {
                   gradient: 'linear-gradient(to right, rgb(249, 115, 22), rgb(239, 68, 68))',
-                  borderColor: 'rgb(249, 115, 22)',
-                  textColor: 'rgb(234, 88, 12)'
+                  border: 'rgb(249, 115, 22)',
+                  text: 'rgb(234, 88, 12)'
                 },
                 accommodation: {
                   gradient: 'linear-gradient(to right, rgb(168, 85, 247), rgb(236, 72, 153))',
-                  borderColor: 'rgb(168, 85, 247)',
-                  textColor: 'rgb(147, 51, 234)'
+                  border: 'rgb(168, 85, 247)',
+                  text: 'rgb(147, 51, 234)'
                 }
               };
-              
-              const config = colorConfigs[key];
-              if (!config) return baseStyle;
-              
-              return {
-                ...baseStyle,
-                ...(isSelected ? {
-                  background: config.gradient,
-                  borderColor: config.borderColor,
-                  color: 'white'
-                } : {
-                  borderColor: config.borderColor,
-                  color: config.textColor,
-                  backgroundColor: 'transparent'
-                })
-              };
+
+              const cfg = colorConfigs[key];
+              if (!cfg) return base;
+
+              return isSelected
+                ? { ...base, background: cfg.gradient, borderColor: cfg.border, color: 'white' }
+                : { ...base, borderColor: cfg.border, color: cfg.text, backgroundColor: 'transparent' };
             };
-            
+
             return (
               <div
                 key={key}
                 onClick={() => setSelectedCategory(key)}
                 style={getButtonStyle(key, isSelected)}
-                onMouseEnter={(e) => {
-                  if (!isSelected) {
-                    e.target.style.backgroundColor = 'rgba(0,0,0,0.05)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isSelected) {
-                    e.target.style.backgroundColor = 'transparent';
-                  }
-                }}
               >
                 {categoryStyle && isSelected && (() => {
-                  const IconComponent = categoryStyle.icon;
-                  return <IconComponent style={{ width: '16px', height: '16px' }} />;
+                  const Icon = categoryStyle.icon;
+                  return <Icon style={{ width: '16px', height: '16px' }} />;
                 })()}
                 {label}
               </div>
@@ -362,27 +307,32 @@ export default function Gallery() {
         {/* Image Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 gallery-grid">
           {filteredImages.map((image, index) => (
-            <Card 
-              key={image.id} 
+            <Card
+              key={image.id}
               className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer group gallery-card"
-              onClick={() => setSelectedImage(image)}
             >
               <div className="relative">
-                <GalleryImage image={image} index={index} allImages={filteredImages} />
-                {/* Modern Category Badge - Only show when viewing "All" */}
+                <GalleryImage
+                  image={image}
+                  index={index}
+                  allImages={filteredImages}
+                  onImageClick={setSelectedImage} // ✅ FIX
+                />
                 {selectedCategory === 'all' && (
                   <div className="absolute top-3 right-3">
-                    <div className={`
-                      ${categoryConfig[image.category]?.bgClass || 'bg-gradient-to-r from-gray-500 to-gray-600'}
-                      ${categoryConfig[image.category]?.shadowClass || 'shadow-gray-500/30'}
-                      flex items-center gap-1.5 px-3 py-1.5 rounded-full 
-                      text-white text-xs font-medium shadow-lg
-                      backdrop-blur-sm border border-white/20
-                      transform transition-all duration-300 hover:scale-105
-                    `}>
+                    <div
+                      className={`
+                        ${categoryConfig[image.category]?.bgClass || 'bg-gradient-to-r from-gray-500 to-gray-600'}
+                        ${categoryConfig[image.category]?.shadowClass || 'shadow-gray-500/30'}
+                        flex items-center gap-1.5 px-3 py-1.5 rounded-full 
+                        text-white text-xs font-medium shadow-lg
+                        backdrop-blur-sm border border-white/20
+                        transform transition-all duration-300 hover:scale-105
+                      `}
+                    >
                       {categoryConfig[image.category] && (() => {
-                        const IconComponent = categoryConfig[image.category].icon;
-                        return <IconComponent className="w-3 h-3" />;
+                        const Icon = categoryConfig[image.category].icon;
+                        return <Icon className="w-3 h-3" />;
                       })()}
                       <span>{currentContent.categories[image.category]}</span>
                     </div>
@@ -396,7 +346,7 @@ export default function Gallery() {
           ))}
         </div>
 
-        {/* Image Modal */}
+        {/* Modal */}
         <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
           <DialogContent className="max-w-4xl max-h-[90vh] p-0 gallery-modal">
             {selectedImage && (
@@ -415,7 +365,6 @@ export default function Gallery() {
                   className="w-full h-auto max-h-[80vh] object-contain"
                   loading="eager"
                   decoding="async"
-                  style={{ willChange: 'transform' }}
                 />
                 <div className="p-6 bg-white">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">

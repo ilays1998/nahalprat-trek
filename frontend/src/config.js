@@ -1,7 +1,7 @@
 // Frontend Configuration
 const config = {
   // Change backend port here
-  BACKEND_PORT: import.meta.env.VITE_BACKEND_PORT || '5001',
+  BACKEND_PORT: import.meta.env.VITE_BACKEND_PORT || '5000',
   FRONTEND_PORT: import.meta.env.VITE_FRONTEND_PORT || '3000',
   BACKEND_URL_ENV: import.meta.env.VITE_BACKEND_URL,
   BACKEND_HOST_ENV: import.meta.env.VITE_BACKEND_HOST,

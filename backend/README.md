@@ -24,7 +24,7 @@
    SECRET_KEY=dev_secret
    JWT_SECRET_KEY=dev_jwt_secret
    FRONTEND_URL=http://localhost:3000
-   BACKEND_PORT=5001
+   BACKEND_PORT=5000
    FLASK_APP=app:create_app
    ```
 3. **Initialize database**
@@ -36,7 +36,7 @@
    ```bash
    python app.py
    ```
-   The server runs at `http://localhost:5001` (configurable via `BACKEND_PORT`).
+   The server runs at `http://localhost:5000` (configurable via `BACKEND_PORT`).
 
 ## Useful commands
 

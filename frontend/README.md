@@ -15,13 +15,13 @@ cp .env_example .env  # optional for local dev; default ports work
 npm start             # starts Vite dev server on http://localhost:3000
 ```
 
-By default the app calls the backend at `http://localhost:5001`.
+By default the app calls the backend at `http://localhost:5000`.
 
 ### Environment variables (`.env`)
 
-- `VITE_BACKEND_URL` (overrides backend URL entirely, e.g. `http://localhost:5001`)
+- `VITE_BACKEND_URL` (overrides backend URL entirely, e.g. `http://localhost:5000`)
 - `VITE_BACKEND_HOST` (used in Render; becomes `https://<host>`)
-- `VITE_BACKEND_PORT` (default `5001`)
+- `VITE_BACKEND_PORT` (default `5000`)
 - `VITE_FRONTEND_PORT` (default `3000`)
 
 ### Build & Preview (local)

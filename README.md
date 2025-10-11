@@ -42,7 +42,7 @@ Prerequisites:
    ```
    SQLALCHEMY_DATABASE_URI=postgresql://postgres:YOUR_PASSWORD@localhost:5432/nahalprat
    FRONTEND_URL=http://localhost:3000
-   BACKEND_PORT=5001
+   BACKEND_PORT=5000
    FLASK_APP=app:create_app
    ```
 3. Create DB and run migrations:
@@ -54,7 +54,7 @@ Prerequisites:
    ```bash
    python app.py
    ```
-   The API will be available at `http://localhost:5001/api` by default.
+   The API will be available at `http://localhost:5000/api` by default.
 
 ### 2) Frontend (SPA)
 
@@ -68,7 +68,7 @@ Prerequisites:
    ```bash
    npm start
    ```
-   The app will open at `http://localhost:3000` and will call the API at `http://localhost:5001` by default.
+   The app will open at `http://localhost:3000` and will call the API at `http://localhost:5000` by default.
 
 ## Environment variables
 
@@ -76,16 +76,16 @@ Prerequisites:
 - `SECRET_KEY`, `JWT_SECRET_KEY`
 - `SQLALCHEMY_DATABASE_URI` (Postgres connection string)
 - `FRONTEND_URL` (default `http://localhost:3000`)
-- `BACKEND_PORT` (default `5001`)
+- `BACKEND_PORT` (default `5000`)
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ADMIN_EMAIL`
 - `FLASK_APP=app:create_app` (for Flask CLI commands like migrations)
 - `SMTP_SERVER`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD` (for email sending)
 - `CONTACT_EMAIL` (recipient for contact forms)
 
 ### Frontend (`frontend/.env`)
-- `VITE_BACKEND_URL` (explicit full backend URL, e.g. `http://localhost:5001`)
+- `VITE_BACKEND_URL` (explicit full backend URL, e.g. `http://localhost:5000`)
 - `VITE_BACKEND_HOST` (used on Render; backend host becomes `https://<host>`)
-- `VITE_BACKEND_PORT` (default `5001`)
+- `VITE_BACKEND_PORT` (default `5000`)
 - `VITE_FRONTEND_PORT` (default `3000`)
 
 ## Deployment

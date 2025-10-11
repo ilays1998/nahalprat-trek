@@ -57,7 +57,10 @@ const translations = {
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
-  const [language, setLanguage] = useState('he');
+  const [language, setLanguage] = useState(() => {
+    // Load language from localStorage, default to 'he' if not found
+    return localStorage.getItem('preferred-language') || 'he';
+  });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -110,7 +113,12 @@ export default function Layout({ children, currentPageName }) {
   ];
 
   const toggleLanguage = () => {
-    setLanguage(prev => prev === 'he' ? 'en' : 'he');
+    setLanguage(prev => {
+      const newLanguage = prev === 'he' ? 'en' : 'he';
+      // Save the new language preference to localStorage
+      localStorage.setItem('preferred-language', newLanguage);
+      return newLanguage;
+    });
   };
 
   useEffect(() => {

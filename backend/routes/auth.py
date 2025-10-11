@@ -34,9 +34,16 @@ def on_load(state):
 
 @auth_bp.route("/login")
 def login():
-    # Use configurable redirect URI from environment, with fallback to dynamic URL
+    from flask import session, request
+
+    next_url = request.args.get("next", "/")
+    if not next_url.startswith("/"):
+        next_url = "/"
+    session["oauth_next"] = next_url  # temporarily store where user came from
+
     redirect_uri = Config.OAUTH_REDIRECT_URI or url_for("auth.authorize", _external=True)
     return oauth.google.authorize_redirect(redirect_uri)
+
 
 @auth_bp.route("/authorize")
 def authorize():
@@ -87,8 +94,9 @@ def authorize():
     access_token = create_access_token(identity=str(user.id), expires_delta=expires_delta)
     
     # Redirect to frontend callback
-    frontend_callback_url = f"{Config.FRONTEND_URL}/auth/callback"
-    
+    next_url = session.pop("oauth_next", "/")
+    frontend_callback_url = f"{Config.FRONTEND_URL}/auth/callback?next={next_url}"
+
     # Create response with redirect
     from flask import make_response
     response = make_response(redirect(frontend_callback_url))

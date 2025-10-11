@@ -63,19 +63,22 @@ export const AuthProvider = ({ children }) => {
   };
 
   const loginGoogle = () => {
-    // Redirect to backend login endpoint
-    window.location.href = `${API_BASE_URL}/auth/login`;
+    const currentPath = window.location.pathname + window.location.search;
+    localStorage.setItem('redirectPath', currentPath); // store for safety
+    const nextParam = encodeURIComponent(currentPath);
+    window.location.href = `${API_BASE_URL}/auth/login?next=${nextParam}`;
   };
+  
 
   const loginEmail = async (email, password) => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login-email`, {
-        method: 'POST',
+          method: 'POST',
         credentials: 'include',  // Include cookies in request
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();

@@ -9,24 +9,13 @@ export const AuthCallback = () => {
 
   useEffect(() => {
     const handleCallback = async () => {
-      // Check if this is actually a Google OAuth callback
-      // Google sends 'code' or 'state' parameters
-      const hasOAuthParams = searchParams.has('code') || searchParams.has('state');
-      
-      if (!hasOAuthParams) {
-        console.log('⚠️ AuthCallback loaded without OAuth params - redirecting to home');
-        // This is likely browser history, not a real OAuth callback
-        navigate('/', { replace: true });
-        return;
-      }
+      const nextParam = searchParams.get('next');
+      const redirectPath = nextParam || localStorage.getItem('redirectPath') || '/';
+      console.log('🔁 Redirect target after login:', redirectPath);
 
-      console.log('✅ Valid OAuth callback detected - processing...');
-      
       try {
-        // Cookie is already set by backend during OAuth redirect
-        // Just fetch user info and redirect
-        const path = await handleAuthCallback();
-        navigate(path, { replace: true });
+        await handleAuthCallback();
+        navigate(redirectPath, { replace: true });
       } catch (error) {
         console.error('Error handling auth callback:', error);
         navigate('/login-error', { replace: true });
@@ -44,4 +33,4 @@ export const AuthCallback = () => {
       </div>
     </div>
   );
-}; 
+};

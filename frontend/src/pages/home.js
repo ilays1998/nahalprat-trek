@@ -220,7 +220,7 @@ export default function Home() {
     The ascent is about 1 km long and ends at Yonatan Lookout at the entrance to the community, offering breathtaking views of the canyon below.
     From there, walk through the village to the cozy desert cabin where we’ll stay for the night.`,
       logo: cfImage("/images/logo.png"),
-      gpxFile: '/routes/COURSE_409828775.gpx'
+      gpxFile: '/routes/COURSE_411278476.gpx' // Added GPX file for day 1
     },
     { 
       id: 'day2', 

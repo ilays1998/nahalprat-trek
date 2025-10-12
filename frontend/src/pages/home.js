@@ -173,15 +173,54 @@ export default function Home() {
   };
 
   const journeyDays = [
-    { 
-      id: 'day1', 
+    {
+      id: 'day1',
       dayNumber: 1,
-      title: language === 'he' ? 'מענתות לנופי פרת' : 'Anatot to Nofei Prat', 
-      description: language === 'he' 
-        ? 'תיאור של היום הראשון'
-        : 'Description of the first day - a fast and exciting journey through the spectacular landscapes of the Judean Desert. We start in Anatot and arrive at Nofei Prat',
+      title: language === 'he' ? 'מענתות לנופי פרת' : 'Anatot to Nofei Prat',
+      description: language === 'he'
+        ? `אנו מתחילים מכיכר על כביש 437 — כיכר שבו נמצאת הפניה ליישוב עלמון (ענתות).
+    הולכים על כביש הגישה לכיוון עלמון כ־100 מטר, ואז מחפשים בצד הצפוני של הדרך את סימון השבילים הירוק.
+
+    מתחילים ללכת עם הסימון הירוק, ולאחר כ־200 מטר מגיעים לקבר שייח'. ממשיכים בשביל המטפס על הגבעה 'חורבת עלמית', בין בורות מים, מערות מגורים ושרידי יישוב עתיקים.
+    יש להיזהר — ישנם בורות פתוחים בדרך.
+    בראש הגבעה נשקף נוף מרהיב לכיוון מזרח, וביום בהיר ניתן לראות אפילו את ים המלח.
+
+    ממשיכים בירידה מתונה לאורך גדר היישוב עלמון. לאחר כ־2 ק״מ רואים את שלט הכניסה לשמורת נחל פרת.
+    השביל עובר על המצוקים בגדה הדרומית של הנחל, והירידות הופכות חדות יותר, עם עלייה קטנה לקראת פיצול שבילים (לאחר כ־4 ק״מ מההתחלה) עם סימון כחול.
+    כאן פונים שמאלה וממשיכים לרדת לשמורה עוד כחצי קילומטר, עוברים סמוך למנזר פרן — המנזר הראשון במדבר יהודה.
+
+    בתוך השמורה (בתשלום סמלי) אפשר להתרחץ בבריכות, לנוח על שולחנות הפיקניק, לקנות ארטיק או שתייה, ולמלא מים להמשך הדרך.
+    לאחר המנוחה יוצאים מזרחה עם הסימון הירוק, ואחרי כחצי קילומטר פונים שמאלה לסימון הכחול, הממשיך בתוך הנחל.
+
+    השביל עובר כמה יתדות טיפוס על הגדה הדרומית, ואחרי כקילומטר מגיעים לבריכת החרוב — נקודת רחצה מומלצת במיוחד.
+    משם ממשיכים עוד כקילומטר עד לנקודת חיבור של נחל יבש מצפון, ושם עולים בסימון ירוק עד ליישוב נופי פרת.
+
+    העלייה באורך של כקילומטר מסתיימת בתצפית יונתן שבכניסה ליישוב, ממנה נשקף נוף פנורמי מרהיב של הנחל.
+    בסיום, ממשיכים בתוך היישוב עד לצימר המפנק שבו נלון בלילה.`
+        : `We start at the roundabout on Road 437 — the one with the turnoff to the village of Almon (Anatot).
+    Walk about 100 meters along the access road toward Almon, then look on the north side of the road for the green trail marker.
+
+    Follow the green trail. After about 200 meters, you’ll reach a sheikh’s tomb.
+    Continue up the green-marked path that climbs the hill called “Horvat Almit,” passing ancient water cisterns, cave dwellings, and archaeological remains.
+    Walk carefully — there are open pits along the way.
+    From the top, you’ll enjoy a panoramic view eastward, and on clear days you can even see the Dead Sea.
+
+    Continue on the green trail downhill along Almon’s fence.
+    After about 2 km you’ll reach the entrance sign to Nahal Prat Nature Reserve.
+    The trail now follows the cliffs on the southern bank of the wadi, with steeper descents and a short ascent before a junction with a blue trail (about 4 km from the start).
+    Turn left and descend another half kilometer toward the reserve, passing by the ancient Monastery of St. Chariton — the first monastery ever built in the Judean Desert.
+
+    Inside the reserve (entry fee required) you can swim in the pools, rest at picnic tables, buy an ice cream or cold drink, and refill water for the rest of the trek.
+    After relaxing, continue east along the green trail for about 0.5 km, then turn left to follow the blue trail, which enters the wadi.
+
+    The blue trail includes some metal handholds for climbing up the southern side of the wadi.
+    After about 1 km you’ll reach Haruv Pool — a beautiful natural pool and perfect spot for a swim.
+    Continue another kilometer to where a dry tributary joins from the north; here, leave the blue trail and climb up the green-marked path toward Nofei Prat.
+
+    The ascent is about 1 km long and ends at Yonatan Lookout at the entrance to the community, offering breathtaking views of the canyon below.
+    From there, walk through the village to the cozy desert cabin where we’ll stay for the night.`,
       logo: cfImage("/images/logo.png"),
-      gpxFile: '/routes/COURSE_409828775.gpx' // Added GPX file for day 1
+      gpxFile: '/routes/COURSE_409828775.gpx'
     },
     { 
       id: 'day2', 
@@ -409,10 +448,10 @@ export default function Home() {
                           </div>
                         </div>
                         
-                        <p className="text-gray-600 leading-relaxed mb-6">
+                        <div className="text-gray-600 leading-relaxed mb-6 whitespace-pre-line max-h-48 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-desert-300 scrollbar-track-desert-100 rounded-md">
                           {day.description}
-                        </p>
-                        
+                        </div>
+
                         <div className="flex items-center gap-2 text-sm text-desert-600 font-medium">
                           <MapPin className="w-4 h-4" />
                           {currentContent.journey.mapTitle}

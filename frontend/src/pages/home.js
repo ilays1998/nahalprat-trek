@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { TrendingUp, TrendingDown, Ruler } from "lucide-react";
+
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "../components/ui/button";
@@ -220,7 +222,9 @@ export default function Home() {
     The ascent is about 1 km long and ends at Yonatan Lookout at the entrance to the community, offering breathtaking views of the canyon below.
     From there, walk through the village to the cozy desert cabin where we’ll stay for the night.`,
       logo: cfImage("/images/logo.png"),
-      gpxFile: '/routes/COURSE_411278476.gpx' // Added GPX file for day 1
+      gpxFile: '/routes/COURSE_411278476.gpx', // Added GPX file for day 1
+      stats: { distance: "8", ascent: "300", descent: "400" }
+
     },
     { 
       id: 'day2', 
@@ -230,7 +234,8 @@ export default function Home() {
         ? 'תיאור של היום השני'
         : 'Description of the second day - continuing the journey with new landscapes and unforgettable experiences in the Judean Desert',
       logo: cfImage("/images/logo.png"),
-      gpxFile: '/routes/COURSE_409828775.gpx' // Added GPX file for day 2
+      gpxFile: '/routes/COURSE_409828775.gpx', // Added GPX file for day 2
+      stats: { distance: "12", ascent: "250", descent: "150" }
     },
     { 
       id: 'day3', 
@@ -240,7 +245,8 @@ export default function Home() {
         ? 'תיאור של היום השלישי'
         : 'Description of the third and final day - completing the journey with deep emotions and memories that will last forever',
       logo: cfImage("/images/logo.png"),
-      gpxFile: '/routes/COURSE_409828775.gpx' // Added GPX file for day 3
+      gpxFile: '/routes/COURSE_409828775.gpx', // Added GPX file for day 3
+      stats: { distance: "15", ascent: "250", descent: "250" }
     }
   ];
 
@@ -420,7 +426,7 @@ export default function Home() {
             <p className="text-xl text-gray-600">{currentContent.journey.subtitle}</p>
           </motion.div>
             
-            <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-12 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-12 max-w-6xl mx-auto">
             {journeyDays.map((day, index) => (
               <motion.div
                 key={day.id}
@@ -432,11 +438,16 @@ export default function Home() {
                 <Card className="border-none shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
                   <CardContent className="p-8">
                     <div className="grid md:grid-cols-2 gap-8 items-start">
-                      {/* Day Info */}
-                      <div>
+                      
+                      {/* Left column: Day Info & Description */}
+                      <div className="flex flex-col justify-start">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-12 h-14 flex items-center justify-center">
-                            <img src={day.logo} alt="TNP Logo" className="w-full h-full object-contain drop-shadow-lg" />
+                            <img 
+                              src={day.logo} 
+                              alt="TNP Logo" 
+                              className="w-full h-full object-contain drop-shadow-lg" 
+                            />
                           </div>
                           <div>
                             <h3 className="text-2xl font-display font-bold text-gray-900">
@@ -447,51 +458,87 @@ export default function Home() {
                             </h4>
                           </div>
                         </div>
-                        
-                        <div className="text-gray-600 leading-relaxed mb-6 whitespace-pre-line max-h-48 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-desert-300 scrollbar-track-desert-100 rounded-md">
+
+                        <div className="text-gray-600 leading-relaxed mb-6 whitespace-pre-line max-h-[600px] md:max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-desert-300 scrollbar-track-desert-100 rounded-md">
                           {day.description}
                         </div>
-
-                        <div className="flex items-center gap-2 text-sm text-desert-600 font-medium">
-                          <MapPin className="w-4 h-4" />
-                          {currentContent.journey.mapTitle}
-                        </div>
                       </div>
-                      
-                      {/* Garmin Map */}
-                        <div className="relative">
-                          <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-inner">
-                            <GoogleMapsGPX
-                              gpxUrl={day.gpxFile}
-                              height="100%"
-                            />
+
+                      {/* Right column: Map + Stats */}
+                      <div className="flex flex-col items-center">
+                        {/* Map Title */}
+                        <div className="flex items-center gap-2 text-desert-600 font-medium mb-3">
+                          <MapPin className="w-5 h-5" />
+                          <span className="text-base">{currentContent.journey.mapTitle}</span>
+                        </div>
+
+                        {/* Garmin Map */}
+                        <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-inner w-full">
+                          <GoogleMapsGPX 
+                            gpxUrl={day.gpxFile} 
+                            height="100%" 
+                          />
+                        </div>
+
+                        {/* Trek Stats Section */}
+                        <div className="mt-6 grid grid-cols-3 gap-4 w-full text-center">
+                          <div className="flex flex-col items-center justify-center bg-desert-50 p-4 rounded-xl shadow-inner">
+                            <Ruler className="w-6 h-6 text-desert-600 mb-2" />
+                            <span className="text-lg font-semibold text-gray-800">
+                              {day.stats.distance}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              {language === 'he' ? 'מרחק (ק"מ)' : 'Distance (km)'}
+                            </span>
+                          </div>
+
+                          <div className="flex flex-col items-center justify-center bg-desert-50 p-4 rounded-xl shadow-inner">
+                            <TrendingUp className="w-6 h-6 text-desert-600 mb-2" />
+                            <span className="text-lg font-semibold text-gray-800">
+                              {day.stats.ascent}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              {language === 'he' ? 'עלייה (מ)' : 'Ascent (m)'}
+                            </span>
+                          </div>
+
+                          <div className="flex flex-col items-center justify-center bg-desert-50 p-4 rounded-xl shadow-inner">
+                            <TrendingDown className="w-6 h-6 text-desert-600 mb-2" />
+                            <span className="text-lg font-semibold text-gray-800">
+                              {day.stats.descent}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              {language === 'he' ? 'ירידה (מ)' : 'Descent (m)'}
+                            </span>
                           </div>
                         </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
               </motion.div>
-              ))}
-            </div>
-            
+            ))}
+          </div>
+          
           <motion.div 
             className="mt-12 text-center"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
-              <Link to={createPageUrl("Packages")}>
+            <Link to={createPageUrl("Packages")}>
               <Button 
                 size="lg" 
                 variant="outline" 
                 className="border-desert-300 text-desert-700 hover:bg-desert-50 rounded-xl"
               >
-                  {currentContent.journey.viewAll}
-                </Button>
-              </Link>
+                {currentContent.journey.viewAll}
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>
+
 
       {/* About Us Section */}
       <section className="py-24 bg-gradient-to-b from-white to-desert-50">

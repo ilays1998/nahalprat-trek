@@ -223,19 +223,71 @@ export default function Home() {
     From there, walk through the village to the cozy desert cabin where we’ll stay for the night.`,
       logo: cfImage("/images/logo.png"),
       gpxFile: '/routes/COURSE_411278476.gpx', // Added GPX file for day 1
-      stats: { distance: "8", ascent: "300", descent: "400" }
+      stats: { distance: "8", ascent: "296", descent: "477" }
 
     },
     { 
       id: 'day2', 
       dayNumber: 2,
-      title: language === 'he' ? 'היום השני במדבר' : 'Second Day in the Desert', 
+      title: language === 'he' ? 'מנופי פרת לעין קלט' : 'Nofei Prat to Ein Qelt',
       description: language === 'he'
-        ? 'תיאור של היום השני'
-        : 'Description of the second day - continuing the journey with new landscapes and unforgettable experiences in the Judean Desert',
+        ? `את היום השני אנו מתחילים מתצפית יונתן בכניסה ליישוב נופי פרת.
+    מהתצפית נרד לנחל בסימון שבילים ירוק. הירידה אינה תלולה ונמשכת כקילומטר (בערך 30 – 40 דקות).
+    כאשר נגיע לנחל נפנה מזרחה (ימינה) ונלך על הסימון הכחול אותו עזבנו אתמול.
+
+    לאחר כמה דקות נרד באמצעות מעקה ויתדות לבריכה הנקראת 'הנקיק' — בריכה עמוקה (בחלקה מעל גובה אדם, סכנת טביעה למי שאינו יודע לשחות) עם מפל יפה.
+    מי שרוצה יכול לטבול במים הקרירים.
+
+    משם אנו ממשיכים עוד כ־700 מטר עד לצמד בריכות עם מפל ביניהן, המכונות 'הג׳קוזי' על שם המפל הקטן שבבריכה הראשונה. גם זו בריכה יפה ונעימה.
+
+    לאחר מכן נמשיך עם הסימון הכחול, ולאחר 200 מטר יש שביל שחור העולה לכיוון כפר אדומים. אנו נמשיך במורד הנחל עם הסימון הכחול, ולאחר עוד 200 מטר נגיע לבריכה נוספת הנקראת 'הצ׳יבלבל'.
+
+    המשך הדרך בנחל עם הסימון הכחול עוברת בין בריכות יפות, ירידות ועליות ולעיתים יתדות העוזרות להתגבר על מצוקים. לאורך הנחל נראות מערות רבות.
+    לאחר הליכה של כ־1.5 ק״מ נגיע לרחבה גדולה עם בריכה עמוקה ויפה הנקראת 'יונתן הקטן'. גם כאן אפשר לנוח, לאכול ולטבול במים.
+
+    משם נמשיך בסימון הכחול העובר בסבך עצי במבוק ומטפס על הגדה הדרומית. לאחר עוד חצי קילומטר נשפך נחל מכמש לתוך נחל פרת, ובנקודה זו הסימון הכחול מתחבר לירוק המוביל לכביש אלון.
+
+    מכאן ואילך המים בנחל מזוהמים בביוב מנחל מכמש, ולכן אין להיכנס למים.
+    לאחר עוד כחצי קילומטר נגיע לחניה של רשות הטבע והגנים, שבה בימי חג פועלת תחנת מידע.
+
+    המשך המסלול מעין פואר ועד עין קלט סגור בשל שיפוצים במעיין הפועם ועקב זיהום הנחל. נכון לעכשיו לא ניתן להמשיך בתוך הנחל אלא בשבילים חלופיים ללא סימון (הדרכה בעל פה). המרחק מעין פואר לעין קלט כ־4 ק״מ. עין קלט עצמו עדיין מזוהם ואין להיכנס למים.
+
+    מעין קלט נעלה לכיוון מצפה יריחו בשביל עפר נוח 4×4 בסימון שחור. העלייה נמשכת כ־2 ק״מ (40 – 60 דקות).
+    מהחניה בתצפית שבראש השביל ניתן להזמין הסעה חזרה לצימר בו נישן הלילה.`
+        : `We begin Day 2 at Yonatan Lookout at the entrance to Nofei Prat.
+    From the lookout we descend into the canyon following the green trail, about 1 km (30–40 minutes), a gentle downhill section.
+    At the bottom we turn east (right) and rejoin the blue trail we left yesterday.
+
+    After a few minutes we descend using handrails and metal holds to reach a deep pool known locally as “Ha-Nekik” (“the Crevice”) — a deep pool (in parts above head height, so non-swimmers must be cautious) with a lovely waterfall.
+    Those who wish may take a refreshing dip.
+
+    From there we continue roughly 700 m to two adjacent pools separated by a small waterfall, nicknamed “the Jacuzzi” by locals.
+    After another 200 m a black-marked path branches up toward Kfar Adumim, but we continue downstream on the blue trail.
+    After 200 m we reach another scenic pool called “Ha-Chiblabal.”
+
+    The trail continues along the stream with small climbs and descents between rock formations and pools, sometimes aided by metal handholds.
+    You’ll notice numerous caves carved into the cliffs.
+    After about 1.5 km we arrive at a wide open area with a large beautiful pool known as “Little Yonatan.”
+    It’s a great spot for a break, snack, and a cool swim.
+
+    From there the blue trail winds through thick bamboo and climbs up the southern bank.
+    Half a kilometer later Nahal Mikhmash joins Nahal Prat.
+    At this confluence the blue trail merges with the green trail leading to the Alon Road.
+
+    From this point the water becomes polluted by sewage flowing from Nahal Mikhmash — swimming is not possible.
+    After another 0.5 km we reach the Israel Nature and Parks Authority parking lot, where on holidays an information booth operates.
+
+    The path beyond this point — from Ein Fuar to Ein Qelt — is currently closed due to renovations and pollution.
+    Alternative unmarked routes are possible (given verbally).
+    The distance from Ein Fuar to Ein Qelt is about 4 km.
+    Ein Qelt itself remains polluted and unsafe for swimming.
+
+    From Ein Qelt we ascend toward Mitzpe Yericho along a comfortable 4×4 dirt road marked in black.
+    The climb is 2 km (40–60 minutes).
+    At the top lookout parking area, transportation can be arranged back to our lodge for the night.`,
       logo: cfImage("/images/logo.png"),
-      gpxFile: '/routes/COURSE_409828775.gpx', // Added GPX file for day 2
-      stats: { distance: "12", ascent: "250", descent: "150" }
+      gpxFile: '/routes/COURSE_411300434.gpx', // Added GPX file for day 2
+      stats: { distance: "13", ascent: "321", descent: "623" }
     },
     { 
       id: 'day3', 

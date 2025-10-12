@@ -86,8 +86,11 @@ const ICONS = {
   DEFAULT: "data:image/svg+xml;charset=UTF-8," +
     encodeURIComponent(`
       <svg xmlns='http://www.w3.org/2000/svg' width='22' height='22'>
-        <circle cx='11' cy='11' r='9' fill='gray' stroke='white' stroke-width='2'/>
-      </svg>`),
+        <circle cx='11' cy='11' r='9' fill='#17a2b8' stroke='white' stroke-width='2'/>
+        <text x='11' y='15' font-size='12' text-anchor='middle' fill='white' font-family='Arial, sans-serif'>i</text>
+      </svg>
+    `),
+
 };
 
 // ----------------------------------------------------

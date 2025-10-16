@@ -6,6 +6,7 @@ import { X, ZoomIn, Mountain, Camera, Utensils, Bed } from "lucide-react";
 import { Dialog, DialogContent } from "../components/ui/dialog";
 import { useLanguage } from "../layout";
 import { cfImage } from "../utils/image";
+import { filenameTitleMap } from "../utils";
 
 // Image cache to prevent reloading
 const imageCache = new Map();
@@ -122,6 +123,11 @@ export default function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const getTitle = (filename) =>
+    (filenameTitleMap[filename] &&
+      filenameTitleMap[filename][language]) ||
+    filename.replace(/\.(jpg|jpeg|png)$/i, "");
+
   const content = {
     he: {
       title: "גלריית תמונות",
@@ -177,26 +183,33 @@ export default function Gallery() {
   const mealsImages = import.meta.glob('/public/images/meals/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
   const accommodationImages = import.meta.glob('/public/images/accommodation/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
 
-  const generateTitle = (filename) =>
-    filename.replace(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/, '');
+  const generateTitle = (filename, language) => {
+    const entry = filenameTitleMap[filename];
+    if (entry && entry[language]) {
+      return entry[language];
+    }
+    return filename.replace(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/, '');
+  };
 
+    // ✅ Keep the title dynamic — only store filename once
   const createImageObjects = (imageMap, category) =>
-    Object.entries(imageMap).map(([path, url], index) => {
-      const filename = path.split('/').pop();
-      return {
-        id: `${category}-${index + 1}`,
-        url: cfImage(url.replace('/public', '')),
-        title: generateTitle(filename),
-        category
-      };
-    });
+    Object.entries(imageMap).map(([path, url], index) => ({
+      id: `${category}-${index + 1}`,
+      url: cfImage(url.replace("/public", "")),
+      filename: path.split("/").pop(),
+      category,
+    }));
 
-  const allImages = useMemo(() => [
-    ...createImageObjects(landscapeImages, 'landscape'),
-    ...createImageObjects(activitiesImages, 'activities'),
-    ...createImageObjects(mealsImages, 'meals'),
-    ...createImageObjects(accommodationImages, 'accommodation')
-  ], []);
+  const allImages = useMemo(
+    () => [
+      ...createImageObjects(landscapeImages, "landscape"),
+      ...createImageObjects(activitiesImages, "activities"),
+      ...createImageObjects(mealsImages, "meals"),
+      ...createImageObjects(accommodationImages, "accommodation"),
+    ],
+    []
+  );
+
 
   const shuffleArray = (array) => {
     const shuffled = [...array];
@@ -347,7 +360,9 @@ export default function Gallery() {
                 )}
               </div>
               <CardContent className="p-4">
-                <h3 className="font-semibold text-gray-900">{image.title}</h3>
+                <h3 className="font-semibold text-gray-900">
+                  {getTitle(image.filename)}
+                </h3>
               </CardContent>
             </Card>
           ))}
@@ -375,7 +390,7 @@ export default function Gallery() {
                 />
                 <div className="p-6 bg-white">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    {selectedImage.title}
+                    {getTitle(selectedImage.filename)}
                   </h3>
                   <Badge className="bg-gradient-to-r from-amber-600 to-orange-600 text-white">
                     {currentContent.categories[selectedImage.category]}

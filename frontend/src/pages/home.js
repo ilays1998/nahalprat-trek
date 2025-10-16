@@ -305,7 +305,7 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-hidden">
       {/* Hero Section with Parallax */}
-      <section className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center overflow-hidden z-0">
+      <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden z-0">
         {/* Animated Background Images */}
         <div className="absolute inset-0">
           {heroImages.map((image, index) => (
@@ -395,9 +395,6 @@ export default function Home() {
           </motion.div>
         </motion.div>
       </section>
-
-      {/* Spacer to push content below hero */}
-      <div className="h-screen"></div>
 
       {/* Stats Section */}
       <section className="py-16 bg-desert-gradient">

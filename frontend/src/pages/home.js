@@ -21,12 +21,20 @@ export default function Home() {
     cfImage("/images/landscapes/DSC_0431.JPG")
   ];
 
-  useEffect(() => {
+    useEffect(() => {
+    // Preload all hero images before the loop starts
+    heroImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
+    }, 7000); // slightly slower transition to prevent skips
+
     return () => clearInterval(interval);
   }, []);
+
 
   const content = {
     he: {
@@ -311,16 +319,17 @@ export default function Home() {
           {heroImages.map((image, index) => (
             <motion.div
               key={index}
-              className={`hero-slide ${currentImageIndex === index ? 'active' : ''}`}
+              className={`hero-slide absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out`}
               style={{
-                backgroundImage: `url(${image})`
+                backgroundImage: `url(${image})`,
+                opacity: currentImageIndex === index ? 1 : 0,
+                position: "absolute",
               }}
-              animate={{ opacity: currentImageIndex === index ? 1 : 0 }}
-              transition={{ duration: 1 }}
             />
           ))}
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50" />
         </div>
+
         
         {/* Hero Content */}
         <motion.div 
@@ -348,12 +357,16 @@ export default function Home() {
             </motion.p>
             
             <motion.p 
-              className="text-sm sm:text-lg md:text-xl text-gray-200 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-2"
+              className="text-gray-200 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-2"
+              style={{
+                fontSize: "clamp(0.95rem, 0.8vw + 0.9rem, 1.4rem)",
+                textShadow: "0 2px 10px rgba(0, 0, 0, 0.6)"
+              }}
               variants={itemVariants}
             >
               {currentContent.hero.description}
             </motion.p>
-            
+
             <motion.div 
               className="flex flex-col sm:flex-row gap-4 justify-center"
               variants={itemVariants}
@@ -508,7 +521,11 @@ export default function Home() {
                           </div>
                         </div>
 
-                        <div className="text-gray-600 leading-relaxed mb-6 whitespace-pre-line max-h-[600px] md:max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-desert-300 scrollbar-track-desert-100 rounded-md">
+                        <div className="text-gray-600 leading-relaxed mb-6 whitespace-pre-line 
+                            max-h-[250px] sm:max-h-[300px] md:max-h-[400px] 
+                            overflow-y-auto pr-2 
+                            scrollbar-thin scrollbar-thumb-desert-300 scrollbar-track-desert-100 
+                            rounded-md">
                           {day.description}
                         </div>
                       </div>
@@ -522,7 +539,8 @@ export default function Home() {
                         </div>
 
                         {/* Garmin Map */}
-                        <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-inner w-full">
+                        <div className="w-full bg-gray-100 rounded-xl overflow-hidden shadow-inner 
+                                        aspect-[2/1] sm:aspect-[16/9] md:aspect-video">
                           <GoogleMapsGPX 
                             gpxUrl={day.gpxFile} 
                             height="100%" 

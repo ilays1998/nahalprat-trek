@@ -228,11 +228,14 @@ export default function Gallery() {
   const categories = Object.entries(currentContent.categories);
 
   const filteredImages =
-    selectedCategory === 'all'
-      ? galleryImages
-      : allImages
-          .filter((img) => img.category === selectedCategory)
-          .sort((a, b) => a.title.localeCompare(b.title));
+  selectedCategory === 'all'
+    ? galleryImages
+    : allImages
+        .filter((img) => img.category === selectedCategory)
+        .sort((a, b) =>
+          (getTitle(a.filename) || "").localeCompare(getTitle(b.filename) || "")
+        );
+
 
   return (
     <div className="min-h-screen py-12">

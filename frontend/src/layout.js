@@ -123,22 +123,12 @@ export default function Layout({ children, currentPageName }) {
 
   useEffect(() => {
     if (mobileMenuOpen) {
-      const originalOverflow = document.documentElement.style.overflow;
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
-      const handleKey = (e) => {
-        if (e.key === 'Escape') {
-          setMobileMenuOpen(false);
-        }
-      };
-      window.addEventListener('keydown', handleKey);
-      return () => {
-        document.documentElement.style.overflow = originalOverflow;
-        document.body.style.overflow = '';
-        window.removeEventListener('keydown', handleKey);
-      };
+      document.body.classList.add('mobile-menu-open');
+    } else {
+      document.body.classList.remove('mobile-menu-open');
     }
   }, [mobileMenuOpen]);
+
 
   return (
     <LanguageContext.Provider value={{ language, t, isRTL, toggleLanguage }}>

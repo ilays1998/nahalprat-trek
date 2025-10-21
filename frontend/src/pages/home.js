@@ -313,7 +313,10 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-hidden">
       {/* Hero Section with Parallax */}
-      <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden z-0">
+      <section
+        className="relative flex items-center justify-center overflow-hidden z-0"
+        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
+      >
         {/* Animated Background Images */}
         <div className="absolute inset-0">
           {heroImages.map((image, index) => (

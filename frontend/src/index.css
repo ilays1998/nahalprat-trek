@@ -377,3 +377,19 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
+/* Prevent iOS rubber-banding when menu open */
+html, body {
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* This class is added dynamically when the mobile menu opens */
+.mobile-menu-open {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
+}
+
+

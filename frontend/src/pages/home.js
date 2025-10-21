@@ -35,7 +35,18 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  const [heroHeight, setHeroHeight] = useState('100vh');
 
+  useEffect(() => {
+    // ✅ Fix Safari jumping: lock hero height on mount
+    if (typeof window !== 'undefined') {
+      const h = window.innerHeight;
+      setHeroHeight(`${h}px`);
+    }
+  }, []);
+
+  
+  
   const content = {
     he: {
       hero: {
@@ -315,7 +326,7 @@ export default function Home() {
       {/* Hero Section with Parallax */}
       <section
         className="relative flex items-center justify-center overflow-hidden z-0"
-        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
+        style={{ height: heroHeight }}
       >
         {/* Animated Background Images */}
         <div className="absolute inset-0">
@@ -336,12 +347,13 @@ export default function Home() {
         
         {/* Hero Content */}
         <motion.div 
-          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-28 pb-20 text-center"
-          style={{ paddingTop: '6rem' }}
+          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 text-center
+                    pt-[4rem] sm:pt-[6rem] md:pt-[7rem]"
           initial="hidden"
           animate="visible"
           variants={containerVariants}
         >
+
           <motion.div variants={itemVariants}>
             <motion.h1 
               className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-4 sm:mb-6 text-shadow-lg leading-tight"
@@ -491,7 +503,8 @@ export default function Home() {
             <p className="text-xl text-gray-600">{currentContent.journey.subtitle}</p>
           </motion.div>
             
-          <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-12 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-12 max-w-6xl mx-auto items-stretch">
+
             {journeyDays.map((day, index) => (
               <motion.div
                 key={day.id}
@@ -502,7 +515,8 @@ export default function Home() {
               >
                 <Card className="border-none shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
                   <CardContent className="p-8">
-                    <div className="grid md:grid-cols-2 gap-8 items-start">
+                    <div className="grid md:grid-cols-2 gap-8 items-center">
+
                       
                       {/* Left column: Day Info & Description */}
                       <div className="flex flex-col justify-start">
@@ -543,8 +557,8 @@ export default function Home() {
 
                         {/* Garmin Map */}
                         <div className="w-full bg-gray-100 rounded-xl overflow-hidden shadow-inner 
-                                        aspect-[2/1] sm:aspect-[16/9] md:aspect-video">
-                          <GoogleMapsGPX 
+                                      aspect-[4/3] sm:aspect-[16/9] md:aspect-video">
+                         <GoogleMapsGPX 
                             gpxUrl={day.gpxFile} 
                             height="100%" 
                           />

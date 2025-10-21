@@ -145,7 +145,7 @@ export default function Layout({ children, currentPageName }) {
             )}
             
             <nav 
-              className={`fixed top-0 left-0 right-0 w-full backdrop-blur-md shadow-desert-bar border-b py-3 md:py-4 z-[9999] transition-transform duration-300 ${
+              className={`fixed top-0 left-0 right-0 w-full backdrop-blur-md shadow-desert-bar border-b py-0.5 sm:py-2 md:py-3 z-[9999] transition-transform duration-300 ${
                 isHomePage 
                   ? 'bg-white/15 border-white/20'
                   : 'bg-desert-solid border-desert-soft'
@@ -158,11 +158,11 @@ export default function Layout({ children, currentPageName }) {
               }}
             >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center gap-8">
+              <div className="flex items-center justify-between gap-4 sm:gap-6 lg:gap-8 h-[54px] sm:h-[64px]">
                 {/* Logo */}
                 <Link 
                   to={createPageUrl("Home")} 
-                  className="flex items-center group flex-shrink-0"
+                  className="flex items-center group flex-shrink-0 mt-5 sm:mt-0"
                 >
                   <div className="relative">
                     <div className="relative w-12 h-16 md:w-16 md:h-20 flex items-center justify-center transform group-hover:scale-110 transition-all duration-300">
@@ -209,7 +209,7 @@ export default function Layout({ children, currentPageName }) {
                 </div>
 
                 {/* Mobile menu button and controls */}
-                <div className="lg:hidden flex items-center gap-3">
+                <div className="lg:hidden flex items-center gap-3 mt-6 sm:mt-0">
                   <LanguageToggle
                     language={language}
                     onToggle={toggleLanguage}

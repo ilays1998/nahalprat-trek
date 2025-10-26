@@ -177,9 +177,9 @@ export default function Packages() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <Card className="border-none shadow-2xl bg-white/90 backdrop-blur-sm relative overflow-hidden">
+            <Card className="border-none shadow-2xl bg-desert-light backdrop-blur-sm relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0">
-              <div className="bg-desert-gradient text-white text-center py-4">
+              <div className="bg-[#c56f19] text-white text-center py-4">
                 <div className="flex items-center justify-center gap-2">
                   <Star className="w-5 h-5 fill-current" />
                   <span className="text-lg font-semibold">{currentContent.package.name}</span>
@@ -201,7 +201,7 @@ export default function Packages() {
             <CardContent className="px-8 pb-12">
               <div className="text-center mb-10">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{currentContent.included}</h3>
-                <div className="w-24 h-1 bg-desert-gradient mx-auto rounded-full"></div>
+                <div className="w-24 h-1 bg-[#c56f19] mx-auto rounded-full"></div>
               </div>
               
               <div className="grid md:grid-cols-2 gap-6 mb-10">
@@ -211,9 +211,9 @@ export default function Packages() {
                     initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1, duration: 0.5 }}
-                    className="flex items-start gap-4 p-4 bg-gradient-to-r from-white to-desert-50/30 rounded-xl border border-desert-200/30"
+                    className="flex items-start gap-4 p-4 bg-desert-solid rounded-xl border border-desert-200/30"
                   >
-                    <div className="w-12 h-12 bg-desert-gradient rounded-xl flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-[#c56f19] rounded-xl flex items-center justify-center flex-shrink-0">
                       <feature.icon className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -231,7 +231,7 @@ export default function Packages() {
                 className="text-center"
               >
                 <Link to={createPageUrl("Booking")}>
-                  <Button className="group relative overflow-hidden bg-desert-gradient text-white text-xl px-12 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                  <Button className="group relative overflow-hidden bg-[#c56f19] text-white text-xl px-12 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
                     <span className="relative z-10 flex items-center gap-3">
                       <CheckCircle className="w-6 h-6" />
                       {currentContent.bookNow}
@@ -251,14 +251,14 @@ export default function Packages() {
 
         {/* Trust & Transparency Section */}
         <motion.section 
-          className="bg-gradient-to-r from-desert-50 to-orange-50 rounded-3xl p-12 shadow-warm"
+          className="bg-desert-light rounded-3xl p-12 shadow-warm"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
           <div className="text-center max-w-3xl mx-auto">
             <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-desert-gradient rounded-2xl flex items-center justify-center">
+              <div className="w-16 h-16 bg-[#c56f19] rounded-2xl flex items-center justify-center">
                 <ShieldCheck className="w-8 h-8 text-white" />
               </div>
             </div>
@@ -314,7 +314,7 @@ export default function Packages() {
 
             <div className="mt-10">
               <Link to={createPageUrl("Booking")}>
-                <Button size="lg" className="bg-desert-gradient text-white hover:opacity-90 text-lg px-12 py-4 rounded-xl shadow-warm hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                <Button size="lg" className="bg-[#c56f19] text-white hover:opacity-90 text-lg px-12 py-4 rounded-xl shadow-warm hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
                   {language === 'he' ? 'בואו נתחיל!' : "Let's Get Started!"}
                 </Button>
               </Link>

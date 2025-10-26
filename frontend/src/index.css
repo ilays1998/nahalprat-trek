@@ -19,8 +19,6 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', 'Rubik', system-ui, sans-serif;
   }
-
-
 }
 
 /* Custom Component Styles */
@@ -97,12 +95,13 @@
     border-radius: 0.75rem;
     transform: translateY(0);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: linear-gradient(135deg, #f4dfad 0%, #ecc878 25%, #db8b1e 50%, #c56f19 100%);
-    box-shadow: 0 10px 30px -5px rgba(219, 139, 30, 0.15);
+    background-color: #c56f19;
+    box-shadow: 0 10px 30px -5px rgba(197, 111, 25, 0.15);
   }
   
   .btn-primary:hover {
-    box-shadow: 0 20px 50px -10px rgba(219, 139, 30, 0.25);
+    background-color: #b36317;
+    box-shadow: 0 20px 50px -10px rgba(197, 111, 25, 0.25);
     transform: translateY(-2px);
   }
   
@@ -134,7 +133,7 @@
   
   .card-hover:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 50px -10px rgba(219, 139, 30, 0.25);
+    box-shadow: 0 20px 50px -10px rgba(197, 111, 25, 0.25);
   }
 
   /* Smooth fade animations */
@@ -176,30 +175,31 @@
     font-family: 'Rubik', 'Poppins', system-ui, sans-serif;
   }
 
-
-
   /* Background gradients */
   .bg-desert-gradient {
-    background: linear-gradient(135deg, #f4dfad 0%, #ecc878 25%, #db8b1e 50%, #c56f19 100%);
+    background-color: #c56f19;
   }
   
   .bg-sunset-gradient {
-    background: linear-gradient(to bottom, #fdf8ef 0%, #faf0d7 25%, #f4dfad 50%, #ecc878 100%);
+    background-color: #f4dfad;
   }
 
   .bg-desert-nav {
-    background: linear-gradient(145deg, #f8eed7 0%, #f4dfad 20%, #ecc878 55%, #db8b1e 85%, #c56f19 100%);
+    background-color: #ecc878;
   }
   
   .backdrop-desert-nav {
-    background: linear-gradient(135deg, rgba(244, 223, 173, 0.92) 0%, rgba(236, 200, 120, 0.92) 40%, rgba(219, 139, 30, 0.92) 85%);
+    background-color: rgba(236, 200, 120, 0.92);
   }
 
   /* Solid desert colors */
   .bg-desert-solid {
     background-color: #f4e3be; /* warm light desert sand */
   }
-  
+  /* Lighter variation */
+  .bg-desert-light {
+    background-color: #fbf2df; /* Sunlit Sand — extra light desert tone */
+  }
   .bg-desert-solid-deep {
     background-color: #dca359; /* slightly deeper accent if needed */
   }
@@ -394,5 +394,3 @@ html, body {
   overflow: hidden;
   height: 100%;
 }
-
-

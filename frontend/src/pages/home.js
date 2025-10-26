@@ -221,13 +221,13 @@ export default function Home() {
         : `We start at the roundabout on Road 437 — the one with the turnoff to the village of Almon (Anatot).
     Walk about 100 meters along the access road toward Almon, then look on the north side of the road for the green trail marker.
 
-    Follow the green trail. After about 200 meters, you’ll reach a sheikh’s tomb.
-    Continue up the green-marked path that climbs the hill called “Horvat Almit,” passing ancient water cisterns, cave dwellings, and archaeological remains.
+    Follow the green trail. After about 200 meters, you'll reach a sheikh's tomb.
+    Continue up the green-marked path that climbs the hill called "Horvat Almit," passing ancient water cisterns, cave dwellings, and archaeological remains.
     Walk carefully — there are open pits along the way.
-    From the top, you’ll enjoy a panoramic view eastward, and on clear days you can even see the Dead Sea.
+    From the top, you'll enjoy a panoramic view eastward, and on clear days you can even see the Dead Sea.
 
-    Continue on the green trail downhill along Almon’s fence.
-    After about 2 km you’ll reach the entrance sign to Nahal Prat Nature Reserve.
+    Continue on the green trail downhill along Almon's fence.
+    After about 2 km you'll reach the entrance sign to Nahal Prat Nature Reserve.
     The trail now follows the cliffs on the southern bank of the wadi, with steeper descents and a short ascent before a junction with a blue trail (about 4 km from the start).
     Turn left and descend another half kilometer toward the reserve, passing by the ancient Monastery of St. Chariton — the first monastery ever built in the Judean Desert.
 
@@ -235,13 +235,13 @@ export default function Home() {
     After relaxing, continue east along the green trail for about 0.5 km, then turn left to follow the blue trail, which enters the wadi.
 
     The blue trail includes some metal handholds for climbing up the southern side of the wadi.
-    After about 1 km you’ll reach Haruv Pool — a beautiful natural pool and perfect spot for a swim.
+    After about 1 km you'll reach Haruv Pool — a beautiful natural pool and perfect spot for a swim.
     Continue another kilometer to where a dry tributary joins from the north; here, leave the blue trail and climb up the green-marked path toward Nofei Prat.
 
     The ascent is about 1 km long and ends at Yonatan Lookout at the entrance to the community, offering breathtaking views of the canyon below.
-    From there, walk through the village to the cozy desert cabin where we’ll stay for the night.`,
+    From there, walk through the village to the cozy desert cabin where we'll stay for the night.`,
       logo: cfImage("/images/logo.png"),
-      gpxFile: '/routes/COURSE_411278476.gpx', // Added GPX file for day 1
+      gpxFile: '/routes/COURSE_411278476.gpx',
       stats: { distance: "8", ascent: "296", descent: "477" }
 
     },
@@ -277,17 +277,17 @@ export default function Home() {
     From the lookout we descend into the canyon following the green trail, about 1 km (30–40 minutes), a gentle downhill section.
     At the bottom we turn east (right) and rejoin the blue trail we left yesterday.
 
-    After a few minutes we descend using handrails and metal holds to reach a deep pool known locally as “Ha-Nekik” (“the Crevice”) — a deep pool (in parts above head height, so non-swimmers must be cautious) with a lovely waterfall.
+    After a few minutes we descend using handrails and metal holds to reach a deep pool known locally as "Ha-Nekik" ("the Crevice") — a deep pool (in parts above head height, so non-swimmers must be cautious) with a lovely waterfall.
     Those who wish may take a refreshing dip.
 
-    From there we continue roughly 700 m to two adjacent pools separated by a small waterfall, nicknamed “the Jacuzzi” by locals.
+    From there we continue roughly 700 m to two adjacent pools separated by a small waterfall, nicknamed "the Jacuzzi" by locals.
     After another 200 m a black-marked path branches up toward Kfar Adumim, but we continue downstream on the blue trail.
-    After 200 m we reach another scenic pool called “Ha-Chiblabal.”
+    After 200 m we reach another scenic pool called "Ha-Chiblabal."
 
     The trail continues along the stream with small climbs and descents between rock formations and pools, sometimes aided by metal handholds.
-    You’ll notice numerous caves carved into the cliffs.
-    After about 1.5 km we arrive at a wide open area with a large beautiful pool known as “Little Yonatan.”
-    It’s a great spot for a break, snack, and a cool swim.
+    You'll notice numerous caves carved into the cliffs.
+    After about 1.5 km we arrive at a wide open area with a large beautiful pool known as "Little Yonatan."
+    It's a great spot for a break, snack, and a cool swim.
 
     From there the blue trail winds through thick bamboo and climbs up the southern bank.
     Half a kilometer later Nahal Mikhmash joins Nahal Prat.
@@ -305,7 +305,7 @@ export default function Home() {
     The climb is 2 km (40–60 minutes).
     At the top lookout parking area, transportation can be arranged back to our lodge for the night.`,
       logo: cfImage("/images/logo.png"),
-      gpxFile: '/routes/COURSE_411300434.gpx', // Added GPX file for day 2
+      gpxFile: '/routes/COURSE_411300434.gpx',
       stats: { distance: "13", ascent: "321", descent: "623" }
     },
     { 
@@ -316,7 +316,7 @@ export default function Home() {
         ? 'תיאור של היום השלישי'
         : 'Description of the third and final day - completing the journey with deep emotions and memories that will last forever',
       logo: cfImage("/images/logo.png"),
-      gpxFile: '/routes/COURSE_409828775.gpx', // Added GPX file for day 3
+      gpxFile: '/routes/COURSE_409828775.gpx',
       stats: { distance: "15", ascent: "250", descent: "250" }
     }
   ];
@@ -389,24 +389,27 @@ export default function Home() {
               <Link to={createPageUrl("Booking")}>
                 <Button 
                   size="lg" 
-                  className="group relative overflow-hidden bg-desert-gradient text-white text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                  className="group relative overflow-hidden bg-[#c56f19] hover:bg-[#b36317] text-white text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     <CalendarIcon className="w-5 h-5" />
                   {currentContent.hero.cta}
                   </span>
-                  <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Button>
               </Link>
               
               <Link to={createPageUrl("Packages")}>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="bg-white text-desert-700 hover:bg-desert-50 text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
-                >
-                  {currentContent.hero.viewPricing}
-                </Button>
+                <Link to={createPageUrl("Packages")}>
+                  <Button
+                    size="lg"
+                    className="group relative overflow-hidden bg-desert-light hover:bg-desert-solid text-desert-700 text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      {currentContent.hero.viewPricing}
+                    </span>
+                  </Button>
+                </Link>
+
               </Link>
             </motion.div>
           </motion.div>
@@ -425,7 +428,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-desert-gradient">
+      <section className="py-16 bg-[#c56f19]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {Object.entries(currentContent.stats).map(([key, value], index) => (
@@ -471,8 +474,8 @@ export default function Home() {
                 <Card className="h-full border-none shadow-warm hover:shadow-warm-lg card-hover group">
                 <CardContent className="p-8 text-center">
                     <div className="relative mb-6">
-                      <div className="absolute inset-0 bg-desert-gradient rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
-                      <div className="relative w-20 h-20 bg-desert-gradient rounded-2xl flex items-center justify-center mx-auto transform group-hover:scale-110 transition-transform duration-300">
+                      <div className="absolute inset-0 bg-[#c56f19] rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
+                      <div className="relative w-20 h-20 bg-[#c56f19] hover:bg-[#b36317] rounded-2xl flex items-center justify-center mx-auto transform group-hover:scale-110 transition-all duration-300">
                         <feature.icon className="w-10 h-10 text-white" />
                       </div>
                   </div>
@@ -672,7 +675,7 @@ export default function Home() {
                     
                     <div className="mt-8 pt-6 border-t border-desert-200">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-desert-gradient rounded-full flex items-center justify-center">
+                        <div className="w-12 h-12 bg-[#c56f19] rounded-full flex items-center justify-center">
                           <Heart className="w-6 h-6 text-white" />
                         </div>
                         <div>
@@ -691,7 +694,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-desert-gradient relative overflow-hidden">
+      <section className="py-24 bg-[#c56f19] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full filter blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full filter blur-3xl"></div>
@@ -703,16 +706,16 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-6">
+          <h2 className="text-4xl md:text-5xl font-display font-bold text-desert-300 mb-6">
             {currentContent.cta.title}
               </h2>
-          <p className="text-xl text-desert-100 mb-8">
+          <p className="text-xl text-desert-300 mb-8">
             {currentContent.cta.subtitle}
           </p>
           <Link to={createPageUrl("Booking")}>
             <Button 
               size="lg" 
-              className="bg-white text-desert-700 hover:bg-desert-50 text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+              className="bg-desert-solid text-desert-700 hover:bg-desert-solid text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
             >
               <CalendarIcon className="w-5 h-5 mr-2" />
               {currentContent.cta.button}

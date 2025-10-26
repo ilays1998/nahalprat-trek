@@ -344,7 +344,7 @@ export default function Contact() {
             </Card>
 
             {/* WhatsApp Contact */}
-            <div className="bg-desert-50 rounded-lg p-6">
+            <div className="bg-desert-light rounded-lg p-6">
               <h3 className="text-lg font-semibold text-desert-800 mb-3 flex items-center gap-2">
                 <FaWhatsapp className="w-5 h-5 text-green-600" />
                 {language === 'he' ? 'WhatsApp' : 'WhatsApp'}

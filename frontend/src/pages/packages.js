@@ -180,9 +180,14 @@ export default function Packages() {
             <Card className="border-none shadow-2xl bg-desert-light backdrop-blur-sm relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0">
               <div className="bg-[#c56f19] text-white text-center py-4">
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-center gap-2 text-center">
                   <Star className="w-5 h-5 fill-current" />
-                  <span className="text-lg font-semibold">{currentContent.package.name}</span>
+                  <span
+                    className="font-semibold text-center whitespace-nowrap"
+                    style={{ fontSize: "clamp(0.9rem, 3vw, 1.25rem)" }}
+                  >
+                    {currentContent.package.name}
+                  </span>
                   <Star className="w-5 h-5 fill-current" />
                 </div>
               </div>
@@ -211,7 +216,7 @@ export default function Packages() {
                     initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1, duration: 0.5 }}
-                    className="flex items-start gap-4 p-4 bg-desert-solid rounded-xl border border-desert-200/30"
+                    className="flex items-center gap-4 p-4 bg-desert-solid rounded-xl border border-desert-200/30"
                   >
                     <div className="w-12 h-12 bg-[#c56f19] rounded-xl flex items-center justify-center flex-shrink-0">
                       <feature.icon className="w-6 h-6 text-white" />

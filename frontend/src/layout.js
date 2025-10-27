@@ -219,32 +219,67 @@ export default function Layout({ children, currentPageName }) {
                   {/* Mobile menu toggle */}
                   <button
                     type="button"
-                    aria-label={mobileMenuOpen ? (language === 'he' ? 'סגור תפריט' : 'Close menu') : (language === 'he' ? 'פתח תפריט' : 'Open menu')}
+                    aria-label={
+                      mobileMenuOpen
+                        ? language === "he"
+                          ? "סגור תפריט"
+                          : "Close menu"
+                        : language === "he"
+                        ? "פתח תפריט"
+                        : "Open menu"
+                    }
                     aria-expanded={mobileMenuOpen}
                     aria-controls="mobile-navigation"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className={`relative group h-11 w-11 inline-flex items-center justify-center rounded-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-400/60 ${
-                      isHomePage
-                        ? 'bg-white/10 hover:bg-white/20 border border-white/15 hover:border-white/30'
-                        : 'bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992]'
-                    }`}
+                    className={`relative group h-11 w-11 inline-flex items-center justify-center rounded-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#dca359]/60
+                      ${
+                        isHomePage
+                          ? mobileMenuOpen
+                            ? "bg-white/20 text-white shadow-xl backdrop-blur-lg border border-white/20 transform scale-105 hover:scale-110 hover:shadow-2xl hover:bg-white/25"
+                            : "bg-white/10 hover:bg-white/20 border border-white/15 hover:border-white/30"
+                          : "bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992]"
+                      }`}
                   >
                     <span className="sr-only">Menu</span>
-                    {/* Bars */}
-                    <span className={`absolute h-0.5 w-6 origin-center rounded-full transition-all duration-400 ease-out ${
-                      mobileMenuOpen
-                        ? 'rotate-45 translate-y-0 bg-blue-500'
-                        : '-translate-y-2 bg-gray-600 group-hover:bg-gray-900'
-                    } ${isHomePage && !mobileMenuOpen ? 'bg-white/80 group-hover:bg-white' : ''}`}></span>
-                    <span className={`absolute h-0.5 w-6 rounded-full transition-all duration-400 ease-out ${
-                      mobileMenuOpen ? 'opacity-0 scale-x-0' : 'opacity-100 scale-x-100'
-                    } ${isHomePage ? 'bg-white/80 group-hover:bg-white' : 'bg-gray-600 group-hover:bg-gray-900'}`}></span>
-                    <span className={`absolute h-0.5 w-6 origin-center rounded-full transition-all duration-400 ease-out ${
-                      mobileMenuOpen
-                        ? '-rotate-45 translate-y-0 bg-blue-500'
-                        : 'translate-y-2 bg-gray-600 group-hover:bg-gray-900'
-                    } ${isHomePage && !mobileMenuOpen ? 'bg-white/80 group-hover:bg-white' : ''}`}></span>
+
+                    {/* Top bar */}
+                    <span
+                      className={`absolute h-0.5 w-6 origin-center rounded-full transition-all duration-400 ease-out ${
+                        mobileMenuOpen
+                          ? isHomePage
+                            ? "rotate-45 translate-y-0 bg-white/80"
+                            : "rotate-45 translate-y-0 bg-[#c56f19]"
+                          : isHomePage
+                          ? "-translate-y-2 bg-white/80 group-hover:bg-white"
+                          : "-translate-y-2 bg-gray-600 group-hover:bg-gray-900"
+                      }`}
+                    ></span>
+
+                    {/* Middle bar */}
+                    <span
+                      className={`absolute h-0.5 w-6 rounded-full transition-all duration-400 ease-out ${
+                        mobileMenuOpen ? "opacity-0 scale-x-0" : "opacity-100 scale-x-100"
+                      } ${
+                        isHomePage
+                          ? "bg-white/80 group-hover:bg-white"
+                          : "bg-gray-600 group-hover:bg-gray-900"
+                      }`}
+                    ></span>
+
+                    {/* Bottom bar */}
+                    <span
+                      className={`absolute h-0.5 w-6 origin-center rounded-full transition-all duration-400 ease-out ${
+                        mobileMenuOpen
+                          ? isHomePage
+                            ? "-rotate-45 translate-y-0 bg-white/80"
+                            : "-rotate-45 translate-y-0 bg-[#c56f19]"
+                          : isHomePage
+                          ? "translate-y-2 bg-white/80 group-hover:bg-white"
+                          : "translate-y-2 bg-gray-600 group-hover:bg-gray-900"
+                      }`}
+                    ></span>
                   </button>
+
                 </div>
               </div>
 
@@ -269,7 +304,7 @@ export default function Layout({ children, currentPageName }) {
                       key={item.title}
                       to={item.url}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`relative group flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition-all duration-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent ${
+                      className={`relative group flex items-center gap-3 px-4 py-4 rounded-xl text-base font-medium transition-all duration-400 focus:outline-none focus-visible:ring-2 focus-visible:[#dca359]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent ${
                         location.pathname === item.url
                           ? isHomePage
                             ? 'bg-white/15 text-white shadow-md'
@@ -284,8 +319,8 @@ export default function Layout({ children, currentPageName }) {
                         location.pathname === item.url
                           ? isHomePage
                             ? 'from-white/70 to-white/30'
-                            : 'from-blue-500 to-blue-300'
-                          : 'opacity-0 group-hover:opacity-40 from-blue-400/40 to-blue-300/30'
+                            : 'from-[#dca359] to-[#e0b16a]'
+                          : 'opacity-0 group-hover:opacity-40 from-[#dca359]/40 to-[#e0b16a]/30'
                       } transition-opacity duration-500`}></span>
                       <item.icon className="relative w-5 h-5 flex-shrink-0 opacity-80 group-hover:opacity-100 transition-opacity" />
                       <span className="relative flex-1 text-start">{item.title}</span>

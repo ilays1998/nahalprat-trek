@@ -232,9 +232,12 @@ export default function Gallery() {
     ? galleryImages
     : allImages
         .filter((img) => img.category === selectedCategory)
-        .sort((a, b) =>
-          (getTitle(a.filename) || "").localeCompare(getTitle(b.filename) || "")
-        );
+        .sort((a, b) => {
+          const titleA = getTitle(a.filename) || "";
+          const titleB = getTitle(b.filename) || "";
+          return titleA.localeCompare(titleB, language === "he" ? "he" : "en", { sensitivity: "base" });
+        });
+
 
 
   return (

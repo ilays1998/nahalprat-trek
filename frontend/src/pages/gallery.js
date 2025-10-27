@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { X, ZoomIn, Mountain, Camera, Utensils, Bed } from "lucide-react";
+import { X, ZoomIn, Sun, Camera, Utensils, Bed } from "lucide-react";
 import { Dialog, DialogContent } from "../components/ui/dialog";
 import { useLanguage } from "../layout";
 import { cfImage } from "../utils/image";
@@ -157,7 +157,7 @@ export default function Gallery() {
 
   const categoryConfig = {
     landscape: {
-      icon: Mountain,
+      icon: Sun,
       bgClass: "bg-gradient-to-r from-green-500 to-emerald-600",
       shadowClass: "shadow-green-500/30"
     },
@@ -262,8 +262,8 @@ export default function Gallery() {
             const getButtonStyle = (key, isSelected) => {
               const base = {
                 padding: '12px 24px',
-                borderRadius: '6px',
-                border: '2px solid',
+                borderRadius: '16px',
+                border: '1px solid',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 fontWeight: '500',
@@ -272,40 +272,21 @@ export default function Gallery() {
                 gap: '8px'
               };
 
-              const colorConfigs = {
-                all: {
-                  gradient: 'linear-gradient(to right, rgb(217, 119, 6), rgb(234, 88, 12))',
-                  border: 'rgb(217, 119, 6)',
-                  text: 'rgb(180, 83, 9)'
-                },
-                landscape: {
-                  gradient: 'linear-gradient(to right, rgb(34, 197, 94), rgb(16, 185, 129))',
-                  border: 'rgb(34, 197, 94)',
-                  text: 'rgb(22, 163, 74)'
-                },
-                activities: {
-                  gradient: 'linear-gradient(to right, rgb(59, 130, 246), rgb(6, 182, 212))',
-                  border: 'rgb(59, 130, 246)',
-                  text: 'rgb(37, 99, 235)'
-                },
-                meals: {
-                  gradient: 'linear-gradient(to right, rgb(249, 115, 22), rgb(239, 68, 68))',
-                  border: 'rgb(249, 115, 22)',
-                  text: 'rgb(234, 88, 12)'
-                },
-                accommodation: {
-                  gradient: 'linear-gradient(to right, rgb(168, 85, 247), rgb(236, 72, 153))',
-                  border: 'rgb(168, 85, 247)',
-                  text: 'rgb(147, 51, 234)'
-                }
-              };
-
-              const cfg = colorConfigs[key];
-              if (!cfg) return base;
-
               return isSelected
-                ? { ...base, background: cfg.gradient, borderColor: cfg.border, color: 'white' }
-                : { ...base, borderColor: cfg.border, color: cfg.text, backgroundColor: 'transparent' };
+                ? { 
+                    ...base, 
+                    background: '#c56f19', 
+                    borderColor: 'rgba(220, 163, 89, 0.5)', 
+                    color: 'white',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    transform: 'scale(1.05)'
+                  }
+                : { 
+                    ...base, 
+                    borderColor: '#e3c992', 
+                    color: '#743f1f', 
+                    backgroundColor: 'rgba(247, 233, 205, 0.8)' 
+                  };
             };
 
             return (
@@ -314,10 +295,10 @@ export default function Gallery() {
                 onClick={() => setSelectedCategory(key)}
                 style={getButtonStyle(key, isSelected)}
                 onMouseEnter={(e) => {
-                  if (!isSelected) e.target.style.backgroundColor = 'rgba(0,0,0,0.05)';
+                  if (!isSelected) e.target.style.backgroundColor = 'rgba(241, 221, 184, 1)';
                 }}
                 onMouseLeave={(e) => {
-                  if (!isSelected) e.target.style.backgroundColor = 'transparent';
+                  if (!isSelected) e.target.style.backgroundColor = 'rgba(247, 233, 205, 0.8)';
                 }}
               >
                 {categoryStyle && isSelected && (() => {
@@ -329,6 +310,7 @@ export default function Gallery() {
             );
           })}
         </div>
+
 
         {/* Image Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 gallery-grid">
@@ -347,20 +329,12 @@ export default function Gallery() {
                 {selectedCategory === 'all' && (
                   <div className="absolute top-3 right-3">
                     <div
-                      className={`
-                        ${categoryConfig[image.category]?.bgClass || 'bg-gradient-to-r from-gray-500 to-gray-600'}
-                        ${categoryConfig[image.category]?.shadowClass || 'shadow-gray-500/30'}
-                        flex items-center gap-1.5 px-3 py-1.5 rounded-full 
-                        text-white text-xs font-medium shadow-lg
-                        backdrop-blur-sm border border-white/20
-                        transform transition-all duration-300 hover:scale-105
-                      `}
+                      className="flex items-center justify-center w-8 h-8 rounded-full text-desert-600 shadow-lg backdrop-blur-sm border border-desert-600/50 transform transition-all duration-300 hover:scale-105 hover:bg-desert-400/10"
                     >
                       {categoryConfig[image.category] && (() => {
                         const Icon = categoryConfig[image.category].icon;
-                        return <Icon className="w-3 h-3" />;
+                        return <Icon className="w-4 h-4" />;
                       })()}
-                      <span>{currentContent.categories[image.category]}</span>
                     </div>
                   </div>
                 )}

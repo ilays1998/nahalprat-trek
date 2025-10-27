@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { X, ZoomIn, Sun, Camera, Utensils, Bed } from "lucide-react";
+import { X, ZoomIn, Camera, Footprints, Utensils, Bed } from "lucide-react";
 import { Dialog, DialogContent } from "../components/ui/dialog";
 import { useLanguage } from "../layout";
 import { cfImage } from "../utils/image";
@@ -157,12 +157,12 @@ export default function Gallery() {
 
   const categoryConfig = {
     landscape: {
-      icon: Sun,
+      icon: Camera,
       bgClass: "bg-gradient-to-r from-green-500 to-emerald-600",
       shadowClass: "shadow-green-500/30"
     },
     activities: {
-      icon: Camera,
+      icon: Footprints,
       bgClass: "bg-gradient-to-r from-blue-500 to-cyan-600",
       shadowClass: "shadow-blue-500/30"
     },

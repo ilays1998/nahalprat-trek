@@ -402,7 +402,7 @@ export default function Home() {
                 <Link to={createPageUrl("Packages")}>
                   <Button
                     size="lg"
-                    className="group relative overflow-hidden bg-desert-medium hover:bg-desert-solid text-desert-700 text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                    className="group relative overflow-hidden bg-desert-solid hover:bg-desert-medium text-desert-700 text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {currentContent.hero.viewPricing}
@@ -715,16 +715,16 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-desert-600 mb-6">
+          <h2 className="text-4xl md:text-5xl font-display font-bold text-desert-700 mb-6">
             {currentContent.cta.title}
               </h2>
-          <p className="text-xl text-desert-600 mb-8">
+          <p className="text-xl text-desert-700 mb-8">
             {currentContent.cta.subtitle}
           </p>
           <Link to={createPageUrl("Booking")}>
             <Button 
               size="lg" 
-              className="bg-desert-medium text-desert-700 hover:bg-desert-medium text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+              className="bg-[#c56f19] hover:bg-[#b36317] text-white text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
             >
               <CalendarIcon className="w-5 h-5 mr-2" />
               {currentContent.cta.button}

@@ -176,7 +176,7 @@
   }
 
   /* Background gradients */
-  .bg-desert-gradient {
+  .bg-desert-bold {
     background-color: #c56f19;
   }
   
@@ -203,6 +203,11 @@
   .bg-desert-solid-deep {
     background-color: #dca359; /* slightly deeper accent if needed */
   }
+
+  .bg-desert-medium {
+    background-color: #f1d9a3; /* Soft golden beige — between solid & light */
+  }
+
 
   /* Border desert color */
   .border-desert-soft {

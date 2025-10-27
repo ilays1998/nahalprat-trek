@@ -102,7 +102,7 @@ export const LoginButton = ({ className = '', transparent = false }) => {
               ? 'bg-white/10 border-white/10'
               : 'bg-[#f7e9cd]/80 border-[#e3c992]'
           }`}>
-            <div className="w-7 h-7 bg-desert-gradient rounded-lg flex items-center justify-center">
+            <div className="w-7 h-7 bg-desert-bold rounded-lg flex items-center justify-center">
               <User className="w-3.5 h-3.5 text-white" />
             </div>
             <div className="text-right">

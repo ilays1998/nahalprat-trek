@@ -83,10 +83,10 @@ export default function Home() {
         ]
       },
       stats: {
-        distance: "35 ק״מ",
-        springs: "3 מעיינות",
-        pools: "עלייה 800 מ'",
-        stream: "נחל אחד"
+        distance: { label: "מרחק", value: "35 ק״מ" },
+        time: { label: "זמן", value: "3 ימים" },
+        elevation: { label: "עלייה", value: "800 מ'" },
+        difficulty: { label: "קושי", value: "בינוני" }
       },
       journey: {
         title: "סיפור דרך",
@@ -144,10 +144,10 @@ export default function Home() {
         ]
       },
       stats: {
-        distance: "35 KM",
-        springs: "3 Springs",
-        pools: "800m Elevation",
-        stream: "One Stream"
+        distance: { label: "Distance", value: "35 KM" },
+        time: { label: "Time", value: "3 Days" },
+        elevation: { label: "Elevation", value: "800m" },
+        difficulty: { label: "Difficulty", value: "Medium" }
       },
       journey: {
         title: "Journey Story",
@@ -402,7 +402,7 @@ export default function Home() {
                 <Link to={createPageUrl("Packages")}>
                   <Button
                     size="lg"
-                    className="group relative overflow-hidden bg-desert-light hover:bg-desert-solid text-desert-700 text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                    className="group relative overflow-hidden bg-desert-medium hover:bg-desert-solid text-desert-700 text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {currentContent.hero.viewPricing}
@@ -428,27 +428,36 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-[#c56f19]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {Object.entries(currentContent.stats).map(([key, value], index) => (
+      <section className="relative py-10 bg-gradient-to-b from-desert-100/60 to-desert-200/40 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-md pointer-events-none" />
+        <div className="relative max-w-5xl mx-auto px-6">
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            {Object.entries(currentContent.stats).map(([key, stat]) => (
               <motion.div
                 key={key}
-                className="text-center"
-                initial={{ opacity: 0, scale: 0.5 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
+                className="rounded-3xl bg-white/70 shadow-inner p-5 hover:bg-white/90 transition-all duration-300 border border-desert-100"
+                whileHover={{ scale: 1.03 }}
               >
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2">{value}</div>
+                <div className="text-2xl md:text-3xl font-display font-semibold text-desert-800 mb-1">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-desert-600 tracking-wide">
+                  {stat.label}
+                </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-gradient-to-b from-white to-desert-50">
+      <section className="py-24 bg-gradient-to-b from-desert-50 to-desert-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-16"
@@ -492,7 +501,7 @@ export default function Home() {
       </section>
 
       {/* Journey Story Section */}
-      <section className="py-24 bg-gradient-to-b from-desert-50 to-white">
+      <section className="py-24 bg-gradient-to-b from-desert-100 to-desert-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-16"
@@ -617,7 +626,7 @@ export default function Home() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-desert-300 text-desert-700 hover:bg-desert-50 rounded-xl"
+                className="!bg-desert-50 border-desert-300 text-desert-700 hover:!bg-desert-100 rounded-xl"
               >
                 {currentContent.journey.viewAll}
               </Button>
@@ -628,7 +637,7 @@ export default function Home() {
 
 
       {/* About Us Section */}
-      <section className="py-24 bg-gradient-to-b from-white to-desert-50">
+      <section className="py-24 bg-desert-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-16"
@@ -667,24 +676,24 @@ export default function Home() {
               
               {/* Text Content */}
               <div className="order-1 md:order-2">
-                <Card className="border-none shadow-xl bg-gradient-to-br from-white to-desert-50/50">
+                <Card className="border-none shadow-xl bg-desert-light">
                   <CardContent className="p-8 lg:p-12">
                     <p className="text-lg text-gray-700 leading-relaxed font-medium whitespace-pre-line">
                       {currentContent.about.text}
                     </p>
                     
-                    <div className="mt-8 pt-6 border-t border-desert-200">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-[#c56f19] rounded-full flex items-center justify-center">
-                          <Heart className="w-6 h-6 text-white" />
+                    <div className="mt-10 pt-6 border-t border-desert-soft text-center">
+                      <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/50 rounded-full shadow-sm">
+                        <div className="relative flex items-center justify-center">
+                          <Heart className="w-6 h-6 text-[#c56f19]" />
+                          <div className="absolute inset-0 animate-[gentlePulse_3s_ease-in-out_infinite]" />
                         </div>
-                        <div>
-                          <div className="font-display font-bold text-gray-900 text-lg">
-                            {language === 'he' ? 'משפחת סופר' : 'Sofer Family'}
-                          </div>
-                        </div>
+                        <span className="font-display font-semibold text-gray-800 text-lg tracking-wide">
+                          {language === 'he' ? 'משפחת סופר' : 'Sofer Family'}
+                        </span>
                       </div>
                     </div>
+
                   </CardContent>
                 </Card>
               </div>
@@ -694,7 +703,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-[#c56f19] relative overflow-hidden">
+      <section className="py-24 bg-desert-solid relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full filter blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full filter blur-3xl"></div>
@@ -706,16 +715,16 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-desert-300 mb-6">
+          <h2 className="text-4xl md:text-5xl font-display font-bold text-desert-600 mb-6">
             {currentContent.cta.title}
               </h2>
-          <p className="text-xl text-desert-300 mb-8">
+          <p className="text-xl text-desert-600 mb-8">
             {currentContent.cta.subtitle}
           </p>
           <Link to={createPageUrl("Booking")}>
             <Button 
               size="lg" 
-              className="bg-desert-solid text-desert-700 hover:bg-desert-solid text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+              className="bg-desert-medium text-desert-700 hover:bg-desert-medium text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
             >
               <CalendarIcon className="w-5 h-5 mr-2" />
               {currentContent.cta.button}

@@ -206,8 +206,8 @@ const LoginModal = ({ isOpen, onClose }) => {
             // Login/Register Form
             <>
               <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <LogIn className="w-8 h-8 text-amber-600" />
+                <div className="w-16 h-16 bg-desert-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <LogIn className="w-8 h-8 text-desert-600" />
                 </div>
                 
                 <h2 className="text-2xl font-display font-bold text-gray-900 mb-2">
@@ -261,7 +261,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="הזן את שמך המלא"
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-right"
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-desert-500 focus:border-desert-500 text-right"
                         dir="rtl"
                       />
                     </div>
@@ -280,7 +280,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="הזן את כתובת האימייל"
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-right"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-desert-500 focus:border-desert-500 text-right"
                       dir="rtl"
                     />
                   </div>
@@ -305,7 +305,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                       value={formData.password}
                       onChange={handleInputChange}
                       placeholder="הזן סיסמה"
-                      className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-right"
+                      className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-desert-500 focus:border-desert-500 text-right"
                       dir="rtl"
                     />
                   </div>
@@ -324,7 +324,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         placeholder="הזן את הסיסמה שוב"
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-right"
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-desert-500 focus:border-desert-500 text-right"
                         dir="rtl"
                       />
                     </div>
@@ -352,10 +352,10 @@ const LoginModal = ({ isOpen, onClose }) => {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-amber-600 hover:bg-amber-700"
+                  className="w-full bg-desert-600 hover:bg-desert-700"
                 >
                   {loading ? (
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-amber-200 border-t-white mr-2" />
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-desert-200 border-t-white mr-2" />
                   ) : (
                     <LogIn className="w-4 h-4 mr-2" />
                   )}
@@ -367,7 +367,7 @@ const LoginModal = ({ isOpen, onClose }) => {
               <div className="mt-6 text-center">
                 <button
                   onClick={() => handleModeChange(mode === 'login' ? 'register' : 'login')}
-                  className="text-sm text-amber-600 hover:text-amber-700 font-medium"
+                  className="text-sm text-desert-600 hover:text-desert-700 font-medium"
                 >
                   {mode === 'login' 
                     ? 'אין לך חשבון? הירשם כאן' 

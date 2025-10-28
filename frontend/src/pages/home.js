@@ -356,7 +356,7 @@ export default function Home() {
 
           <motion.div variants={itemVariants}>
             <motion.h1 
-              className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-4 sm:mb-6 text-shadow-lg leading-tight"
+              className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-desert-100 mb-4 sm:mb-6 text-shadow-lg leading-tight"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5 }}
@@ -365,14 +365,14 @@ export default function Home() {
             </motion.h1>
             
             <motion.p 
-              className="text-lg sm:text-2xl md:text-3xl text-desert-100 mb-6 sm:mb-8 font-medium"
+              className="text-lg sm:text-2xl md:text-3xl text-desert-200 mb-6 sm:mb-8 font-medium"
               variants={itemVariants}
             >
               {currentContent.hero.subtitle}
             </motion.p>
             
             <motion.p 
-              className="text-gray-200 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-2"
+              className="text-desert-100 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-2"
               style={{
                 fontSize: "clamp(0.95rem, 0.8vw + 0.9rem, 1.4rem)",
                 textShadow: "0 2px 10px rgba(0, 0, 0, 0.6)"

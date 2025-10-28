@@ -248,14 +248,14 @@ export default function BookingPage() {
               <div className="space-y-3">
                 <Button 
                   onClick={() => setSuccess(false)}
-                  className="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white hover:opacity-90"
+                  className="w-full bg-desert-600 text-white hover:opacity-90"
                 >
                   {language === 'he' ? 'הזמנה נוספת' : 'Book Another'}
                 </Button>
                 <Button 
                   variant="outline"
                   onClick={() => window.location.href = createPageUrl("MyBookings")}
-                  className="w-full border-amber-200 text-amber-700 hover:bg-amber-50"
+                  className="w-full border-desert-200 text-desert-600 hover:bg-desert-50"
                 >
                   {language === 'he' ? 'צפה בהזמנות שלי' : 'View My Bookings'}
                 </Button>
@@ -271,11 +271,11 @@ export default function BookingPage() {
   const today = startOfDay(new Date());
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="min-h-screen py-12 bg-gradient-to-b from-desert-50 to-desert-100">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-desert-800 mb-6">
             {currentContent.title}
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
@@ -291,7 +291,7 @@ export default function BookingPage() {
         )}
 
         {/* Package Information */}
-        <Card className="border-none shadow-lg mb-8 bg-gradient-to-r from-desert-50 to-orange-50">
+        <Card className="border-none shadow-lg mb-8 bg-desert-light">
           <CardContent className="p-8">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">{currentContent.packageName}</h2>
@@ -308,7 +308,7 @@ export default function BookingPage() {
 
         {/* Step 1: Date Selection */}
         {(
-          <Card className="border-none shadow-lg mb-8">
+          <Card className="border-none shadow-lg mb-8 bg-gradient-to-r from-desert-50 to-orange-50">
             <CardHeader>
               <CardTitle className="text-xl font-bold">{currentContent.step2}</CardTitle>
             </CardHeader>
@@ -343,8 +343,8 @@ export default function BookingPage() {
                             key={date.id}
                             className={`p-3 rounded-lg border cursor-pointer transition-all ${
                               selectedDate && format(selectedDate, 'yyyy-MM-dd') === date.start_date
-                                ? 'border-amber-300 bg-amber-50'
-                                : 'border-gray-200 hover:border-amber-200'
+                                ? 'border-desert-300 bg-desert-50'
+                                : 'border-gray-200 hover:border-desert-200'
                             }`}
                             onClick={() => setSelectedDate(startDate)}
                           >
@@ -362,7 +362,7 @@ export default function BookingPage() {
                               </div>
                               <Badge 
                                 variant="outline" 
-                                className={spots > 0 ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}
+                                className={spots > 0 ? "bg-desert-50 text-green-700" : "bg-red-50 text-red-700"}
                               >
                                 {spots} {currentContent.availableSpots}
                               </Badge>
@@ -385,7 +385,7 @@ export default function BookingPage() {
         {/* Step 2: Personal Information Form */}
         {selectedDate && (
           <form onSubmit={handleSubmit} className="space-y-10">
-            <Card className="border-none shadow-lg">
+            <Card className="border-none shadow-lg bg-gradient-to-r from-desert-50 to-orange-50">
               <CardHeader>
                 <CardTitle className="text-xl font-bold">{currentContent.step3}</CardTitle>
               </CardHeader>
@@ -394,7 +394,7 @@ export default function BookingPage() {
                   {/* Personal Information */}
                   <div className="space-y-5 rounded-xl border border-gray-100 bg-white/60 p-5">
                     <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                      <Users className="w-5 h-5 text-amber-600" />
+                      <Users className="w-5 h-5 text-desert-600" />
                       {currentContent.personalInfo}
                     </h3>
                     <p className="text-sm text-gray-500">
@@ -460,7 +460,7 @@ export default function BookingPage() {
                   {/* Trek Details */}
                   <div className="space-y-5 rounded-xl border border-gray-100 bg-white/60 p-5">
                     <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                      <CalendarIcon className="w-5 h-5 text-amber-600" />
+                      <CalendarIcon className="w-5 h-5 text-desert-600" />
                       {currentContent.trekDetails}
                     </h3>
                     <p className="text-sm text-gray-500">
@@ -501,7 +501,7 @@ export default function BookingPage() {
                 {/* Emergency Contact */}
                 <div className="pt-6 border-t border-gray-100">
                   <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
-                    <Phone className="w-5 h-5 text-amber-600" />
+                    <Phone className="w-5 h-5 text-desert-600" />
                     {currentContent.emergencyContact}
                   </h3>
                   <p className="text-sm text-gray-500 mb-4">
@@ -539,7 +539,7 @@ export default function BookingPage() {
             </Card>
 
             {/* Price Summary & Submit */}
-            <Card className="border-none shadow-lg bg-gradient-to-r from-amber-50 to-orange-50">
+            <Card className="border-none shadow-lg bg-gradient-to-r from-desert-50 to-orange-50">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                   <div className="text-center md:text-left">
@@ -550,7 +550,7 @@ export default function BookingPage() {
                       <p className="text-sm text-gray-500">
                         {format(selectedDate, 'MMM d')} - {format(addDays(selectedDate, 2), 'MMM d, yyyy')}
                       </p>
-                      <div className="text-3xl font-bold text-amber-600">
+                      <div className="text-3xl font-bold text-desert-600">
                         {currentContent.totalPrice}: ₪{calculateTotalPrice().toLocaleString()}
                       </div>
                     </div>
@@ -560,7 +560,7 @@ export default function BookingPage() {
                     type="submit"
                     size="lg"
                     disabled={loading}
-                    className="bg-gradient-to-r from-amber-600 to-orange-600 text-white hover:opacity-90 text-lg px-12 py-4"
+                    className="bg-desert-bold text-white hover:opacity-90 text-lg px-12 py-4 rounded-xl shadow-warm hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
                   >
                     {loading ? (
                       <div className="flex items-center gap-2">

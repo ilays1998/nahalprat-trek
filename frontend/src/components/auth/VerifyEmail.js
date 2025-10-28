@@ -45,7 +45,7 @@ const VerifyEmail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-desert-50 via-orange-50 to-yellow-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
           {status === 'verifying' && (
@@ -75,7 +75,7 @@ const VerifyEmail = () => {
               </p>
               <Button
                 onClick={handleNavigateToLogin}
-                className="w-full bg-amber-600 hover:bg-amber-700"
+                className="w-full bg-desert-600 hover:bg-desert-700"
               >
                 <Mail className="w-4 h-4 mr-2" />
                 התחבר לחשבון
@@ -97,7 +97,7 @@ const VerifyEmail = () => {
               <div className="space-y-3">
                 <Button
                   onClick={handleNavigateToLogin}
-                  className="w-full bg-amber-600 hover:bg-amber-700"
+                  className="w-full bg-desert-600 hover:bg-desert-700"
                 >
                   נסה להתחבר
                 </Button>

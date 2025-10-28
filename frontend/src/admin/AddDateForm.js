@@ -86,7 +86,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
 
   const seasonOptions = [
     { key: 'spring', label: currentContent.seasons.spring, Icon: Flower2, color: 'text-emerald-600 bg-emerald-50 border-emerald-200' },
-    { key: 'summer', label: currentContent.seasons.summer, Icon: Sun, color: 'text-amber-600 bg-amber-50 border-amber-200' },
+    { key: 'summer', label: currentContent.seasons.summer, Icon: Sun, color: 'text-desert-600 bg-desert-50 border-desert-200' },
     { key: 'autumn', label: currentContent.seasons.autumn, Icon: Leaf, color: 'text-orange-600 bg-orange-50 border-orange-200' },
     { key: 'winter', label: currentContent.seasons.winter, Icon: Snowflake, color: 'text-sky-600 bg-sky-50 border-sky-200' },
   ];
@@ -160,7 +160,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
     <Card className="border-none shadow-lg">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Plus className="w-5 h-5 text-amber-600" />
+          <Plus className="w-5 h-5 text-desert-600" />
           {currentContent.title}
         </CardTitle>
       </CardHeader>
@@ -246,7 +246,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
           </div>
           <div className="flex items-center justify-between text-sm text-gray-600">
             <div className="flex items-center gap-2">
-              <Info className="w-4 h-4 text-amber-600" />
+              <Info className="w-4 h-4 text-desert-600" />
               <span>{language === 'he' ? 'סה"כ קיבולת' : 'Total capacity'}: <strong className="text-gray-900">{totalCapacity}</strong></span>
             </div>
           </div>
@@ -262,7 +262,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
                       type="button"
                       key={key}
                       onClick={() => handleInputChange('season', key)}
-                      className={`flex items-center gap-2 rounded-md border px-3 py-2 text-left transition ${selected ? 'ring-2 ring-amber-500 bg-white' : 'hover:bg-white/60'} ${color}`}
+                      className={`flex items-center gap-2 rounded-md border px-3 py-2 text-left transition ${selected ? 'ring-2 ring-desert-500 bg-white' : 'hover:bg-white/60'} ${color}`}
                     >
                       <Icon className="w-4 h-4" />
                       <span className="font-medium">{label}</span>
@@ -288,7 +288,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
                       key={i}
                       type="button"
                       onClick={() => handleInputChange('weather_notes', (formData.weather_notes ? formData.weather_notes + (formData.weather_notes.endsWith(' ') ? '' : ' ') : '') + s)}
-                      className="text-xs rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-amber-700 hover:bg-amber-100"
+                      className="text-xs rounded-full border border-desert-200 bg-desert-50 px-3 py-1 text-desert-700 hover:bg-desert-100"
                     >
                       {s}
                     </button>
@@ -302,7 +302,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
           <Button
             type="submit"
             disabled={loading || !startDate}
-            className="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white hover:opacity-90"
+            className="w-full bg-gradient-to-r from-desert-600 to-orange-600 text-white hover:opacity-90"
           >
             {loading ? (
               <div className="flex items-center gap-2">

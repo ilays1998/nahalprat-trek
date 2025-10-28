@@ -4,8 +4,8 @@ const buttonVariants = {
   default: "btn-primary",
   primary: "btn-primary", 
   secondary: "btn-secondary",
-  outline: "px-6 py-3 border-2 border-amber-200 text-amber-700 bg-white hover:bg-amber-50 hover:border-amber-300 transition-all duration-300 rounded-lg font-medium shadow-sm hover:shadow-md",
-  ghost: "px-6 py-3 text-amber-700 hover:bg-amber-50 transition-all duration-300 rounded-lg font-medium",
+  outline: "px-6 py-3 border-2 border-desert-200 text-desert-700 bg-white hover:bg-desert-50 hover:border-desert-300 transition-all duration-300 rounded-lg font-medium shadow-sm hover:shadow-md",
+  ghost: "px-6 py-3 text-desert-700 hover:bg-desert-50 transition-all duration-300 rounded-lg font-medium",
   destructive: "px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-all duration-300 shadow-sm hover:shadow-md"
 };
 
@@ -24,7 +24,7 @@ export function Button({
   disabled = false,
   ...props 
 }) {
-  const baseStyles = "inline-flex items-center justify-center font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+  const baseStyles = "inline-flex items-center justify-center font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-desert-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
   
   const variantStyles = buttonVariants[variant] || buttonVariants.default;
   const sizeStyles = buttonSizes[size] || buttonSizes.default;

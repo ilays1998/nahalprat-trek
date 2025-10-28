@@ -267,7 +267,7 @@ export default function MyBookingsPage() {
       <CardContent className="space-y-4">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="flex items-center gap-3">
-            <CalendarIcon className="w-5 h-5 text-amber-600" />
+            <CalendarIcon className="w-5 h-5 text-desert-600" />
             <div>
               <p className="font-medium">{format(new Date(booking.trek_date), 'MMM d, yyyy')}</p>
               <p className="text-sm text-gray-500">
@@ -277,7 +277,7 @@ export default function MyBookingsPage() {
           </div>
           
           <div className="flex items-center gap-3">
-            <Users className="w-5 h-5 text-amber-600" />
+            <Users className="w-5 h-5 text-desert-600" />
             <div>
               <p className="font-medium">{booking.participants_count} {language === 'he' ? 'אנשים' : 'people'}</p>
               <p className="text-sm text-gray-500">
@@ -405,7 +405,7 @@ export default function MyBookingsPage() {
       <div className="min-h-screen py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-desert-600 mx-auto"></div>
             <p className="mt-4 text-gray-600">{language === 'he' ? 'טוען...' : 'Loading...'}</p>
           </div>
         </div>
@@ -423,7 +423,7 @@ export default function MyBookingsPage() {
             {isAuthError ? (
               <Button 
                 onClick={login}
-                className="bg-amber-600 hover:bg-amber-700 inline-flex items-center gap-2"
+                className="bg-desert-600 hover:bg-desert-700 inline-flex items-center gap-2"
               >
                 <LogIn className="w-4 h-4" />
                 {language === 'he' ? 'התחבר מחדש' : 'Log In Again'}
@@ -431,7 +431,7 @@ export default function MyBookingsPage() {
             ) : (
               <Button 
                 onClick={loadData} 
-                className="mt-4 bg-amber-600 hover:bg-amber-700"
+                className="mt-4 bg-desert-600 hover:bg-desert-700"
               >
                 {language === 'he' ? 'נסה שוב' : 'Try Again'}
               </Button>
@@ -445,14 +445,14 @@ export default function MyBookingsPage() {
   const isAdmin = currentUser?.role === 'admin';
 
   return (
-    <div className="min-h-screen py-12 bg-gradient-to-b from-amber-50 to-orange-50">
+    <div className="min-h-screen py-12 bg-gradient-to-b from-desert-50 to-orange-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-desert-800 mb-6">
             {currentContent.title}
           </h1>
           {isAdmin && (
-            <div className="flex items-center justify-center gap-2 text-amber-700 mb-4">
+            <div className="flex items-center justify-center gap-2 text-desert-700 mb-4">
               <Shield className="w-5 h-5" />
               <span className="font-medium">{currentContent.adminPanel}</span>
             </div>
@@ -498,7 +498,7 @@ export default function MyBookingsPage() {
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 <Card className="border-none shadow-lg">
                   <CardContent className="p-6 text-center">
-                    <div className="text-3xl font-bold text-amber-600 mb-2">
+                    <div className="text-3xl font-bold text-desert-600 mb-2">
                       {allBookings.filter(b => b.status !== 'cancelled').length}
                     </div>
                     <p className="text-gray-600">{currentContent.totalBookings}</p>
@@ -554,7 +554,7 @@ export default function MyBookingsPage() {
                 </h2>
                 <Button
                   onClick={() => setShowAddDate(!showAddDate)}
-                  className="bg-gradient-to-r from-amber-600 to-orange-600 text-white hover:opacity-90"
+                  className="bg-gradient-to-r from-desert-600 to-orange-600 text-white hover:opacity-90"
                 >
                   {showAddDate ? currentContent.hideAddDate : currentContent.addNewDate}
                 </Button>

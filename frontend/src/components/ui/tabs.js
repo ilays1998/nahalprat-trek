@@ -42,7 +42,7 @@ export function TabsTrigger({ children, value, className = "", ...props }) {
     <button
       className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
         isActive
-          ? 'border-amber-500 text-amber-600'
+          ? 'border-desert-500 text-desert-600'
           : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
       } ${className}`}
       onClick={() => setActiveTab(value)}

@@ -64,7 +64,7 @@ export default function ManageDates({ trekDates, onDeleteDate, language = 'he' }
     <Card className="border-none shadow-md bg-white">
       <CardHeader>
         <CardTitle className="text-lg font-bold flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-amber-600" />
+          <Calendar className="w-5 h-5 text-desert-600" />
           {format(parseISO(date.start_date), 'MMM d')} - {format(parseISO(date.end_date), 'MMM d, yyyy')}
         </CardTitle>
       </CardHeader>

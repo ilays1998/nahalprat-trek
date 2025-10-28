@@ -15,7 +15,7 @@ export const ProtectedRoute = ({ children }) => {
       <div className="min-h-screen py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-desert-600 mx-auto"></div>
             <p className="mt-4 text-gray-600">
               {language === 'he' ? 'טוען...' : 'Loading...'}
             </p>
@@ -37,7 +37,7 @@ export const ProtectedRoute = ({ children }) => {
               </p>
               <Button 
                 onClick={() => setShowLoginModal(true)}
-                className="bg-amber-600 hover:bg-amber-700 inline-flex items-center gap-2"
+                className="bg-desert-600 hover:bg-desert-700 inline-flex items-center gap-2"
               >
                 <LogIn className="w-4 h-4" />
                 {language === 'he' ? 'התחבר' : 'Log In'}

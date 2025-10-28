@@ -15,8 +15,8 @@ export function Input({ className = "", ...props }) {
     "shadow-sm",
     "focus:outline-none",
     "focus:ring-2",
-    "focus:ring-amber-500",
-    "focus:border-amber-500",
+    "focus:ring-desert-500",
+    "focus:border-desert-500",
     "transition",
   ].join(" ");
 

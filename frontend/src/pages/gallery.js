@@ -245,7 +245,7 @@ export default function Gallery() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-desert-800 mb-6">
             {currentContent.title}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -372,7 +372,7 @@ export default function Gallery() {
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
                     {getTitle(selectedImage.filename)}
                   </h3>
-                  <Badge className="bg-gradient-to-r from-amber-600 to-orange-600 text-white">
+                  <Badge className="bg-gradient-to-r from-desert-600 to-orange-600 text-white">
                     {currentContent.categories[selectedImage.category]}
                   </Badge>
                 </div>

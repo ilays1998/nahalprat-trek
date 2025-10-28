@@ -27,8 +27,8 @@ const LogoutConfirmModal = ({ isOpen, onClose, onConfirm, t, isRTL }) => {
         </button>
         
         <div className="text-center">
-          <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <LogOut className="w-8 h-8 text-amber-600" />
+          <div className="w-16 h-16 bg-desert-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <LogOut className="w-8 h-8 text-desert-600" />
           </div>
           
           <h3 className="text-xl font-display font-bold text-gray-900 mb-2">
@@ -86,7 +86,7 @@ export const LoginButton = ({ className = '', transparent = false }) => {
         } ${className}`}
       >
         <div className={`animate-spin rounded-full h-4 w-4 border-2 ${
-          transparent ? 'border-white/30 border-t-white' : 'border-amber-200 border-t-amber-600'
+          transparent ? 'border-white/30 border-t-white' : 'border-desert-200 border-t-desert-600'
         }`}></div>
         {t.loading}
       </button>

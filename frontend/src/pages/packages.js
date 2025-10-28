@@ -135,9 +135,9 @@ export default function Packages() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-desert-50 via-white to-desert-50">
+    <div className="min-h-screen bg-desert-50">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-r from-desert-100 to-orange-50">
+      <section className="py-20 bg-gradient-to-b from-desert-100 to-desert-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center"
@@ -178,21 +178,15 @@ export default function Packages() {
           transition={{ duration: 0.6 }}
         >
             <Card className="border-none shadow-2xl bg-desert-light backdrop-blur-sm relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0">
-              <div className="bg-[#c56f19] text-white text-center py-4">
-                <div className="flex items-center justify-center gap-2 text-center">
-                  <Star className="w-5 h-5 fill-current" />
-                  <span
-                    className="font-semibold text-center whitespace-nowrap"
-                    style={{ fontSize: "clamp(0.9rem, 3vw, 1.25rem)" }}
-                  >
+              <div className="absolute top-0 left-0 right-0">
+                <div className="bg-desert-100/70 backdrop-blur-sm border-b border-desert-300/40 text-gray-900 text-center py-3">
+                  <span className="font-semibold tracking-wide" style={{ fontSize: "clamp(1rem, 3vw, 1.2rem)" }}>
                     {currentContent.package.name}
                   </span>
-                  <Star className="w-5 h-5 fill-current" />
                 </div>
               </div>
-            </div>
-            
+
+
             <CardHeader className="text-center pb-8 pt-20">
               <div className="text-7xl font-bold text-desert-600 mb-4">
                 ₪{currentContent.package.price}
@@ -256,7 +250,7 @@ export default function Packages() {
 
         {/* Trust & Transparency Section */}
         <motion.section 
-          className="bg-desert-light rounded-3xl p-12 shadow-warm"
+          className="bg-desert-light rounded-3xl p-12 shadow-warm border border-desert-200/30"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}

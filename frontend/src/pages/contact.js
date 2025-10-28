@@ -1,3 +1,4 @@
+// TODO: Improve as others page to use desert color scheme
 import React, { useState } from 'react';
 import { useLanguage } from '../layout';
 import { Button } from '../components/ui/button';

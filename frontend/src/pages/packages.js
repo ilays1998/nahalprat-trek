@@ -1,11 +1,10 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
-import { Check, Star, Users, Clock, Utensils, Bed, Car, ShieldCheck, Bus, Coffee, Headphones, CheckCircle, Sparkles } from "lucide-react";
+import { Check, Star, Users, Clock, Utensils, Bed, Car, ShieldCheck, Bus, Coffee, Map, CheckCircle, Sparkles } from "lucide-react";
 import { useLanguage } from "../layout";
 import { motion } from "framer-motion";
 
@@ -16,27 +15,28 @@ export default function Packages() {
     he: {
       title: "תמחור שקוף",
       subtitle: "אצלנו אין אותיות קטנות",
-      priceStatement: "1,000 ₪ לאדם - זה הכל!",
-      transparency: "המחיר כולל את כל מה שרשום למטה, ללא עלויות נוספות או הפתעות",
+      priceStatement: "החל מ־1,000 ₪ לאדם",
+      transparency: "המחיר תלוי ברמת הלינה — חבילת הסטנדרט היא 1,000 ₪ לאדם וכוללת את כל מה שרשום למטה",
       bookNow: "הזמן את המקום שלך",
       perPerson: "לאדם",
       included: "מה כלול בחבילה",
       whyChoose: "למה לבחור בנו?",
       professionalExperience: "חוויה מקצועית ומאורגנת",
       package: {
-        name: "חבילת טרק נחל פרת",
+        name: "חבילת סטנדרט טרק נחל פרת",
         price: "1,000",
         description: "חבילה מקיפה ושקופה הכוללת את כל מה שצריך לחוויית טיול בלתי נשכחת במדבר יהודה",
         features: [
           {
+            // TODO: changing to not from jerusalem 
             icon: Bus,
-            title: "העברות מלאות",
-            description: "אל הטרק ובחזרה לירושלים"
+            title: "העברות וציוד",
+            description: "אתם סוחבים רק מה שהכרחי"
           },
           {
             icon: Bed,
-            title: "לינה איכותית",
-            description: "2 לילות בבקתות ברמה גבוהה"
+            title: "לינה בצימר",
+            description: "2 לילות בצימרים ברמת סטנדרט"
           },
           {
             icon: Utensils,
@@ -54,9 +54,9 @@ export default function Packages() {
             description: "שוברים לעגלת קפה מקומית בדרך"
           },
           {
-            icon: Headphones,
-            title: "הדרכה מקצועית",
-            description: "הדרכה מוקלטת ממורי דרך מוסמכים"
+            icon: Map,
+            title: "מפה והסברים",
+            description: "תקבלו מאיתנו מפה והסברים מפורטים על הדרך"
           }
         ]
       }
@@ -64,27 +64,27 @@ export default function Packages() {
     en: {
       title: "Transparent Pricing",
       subtitle: "No fine print here",
-      priceStatement: "1,000 ₪ per person - that's it!",
-      transparency: "The price includes everything listed below, with no additional costs or surprises",
+      priceStatement: "Starting from 1,000 ₪ per person",
+      transparency: "Price depends on the accommodation level — the standard package is 1,000 ₪ per person and includes everything listed below",
       bookNow: "Book Your Spot",
       perPerson: "per person",
       included: "What's Included",
       whyChoose: "Why Choose Us?",
       professionalExperience: "Professional and organized experience",
       package: {
-        name: "Nahal Prat Trek Package",
+        name: "Nahal Prat Trek Standard Package",
         price: "1,000",
         description: "Comprehensive and transparent package including everything you need for an unforgettable Judean Desert experience",
         features: [
           {
             icon: Bus,
-            title: "Full Transportation",
-            description: "To the trail and back from Jerusalem"
+            title: "Transfers & Equipment",
+            description: "You only carry what’s essential"
           },
           {
             icon: Bed,
-            title: "Quality Accommodation",
-            description: "2 nights in high-standard cabins with all amenities"
+            title: "Cabin Accommodation",
+            description: "2 nights in standard cabins"
           },
           {
             icon: Utensils,
@@ -102,9 +102,9 @@ export default function Packages() {
             description: "Vouchers for local coffee cart along the way"
           },
           {
-            icon: Headphones,
-            title: "Professional Guidance",
-            description: "Recorded guidance from certified tour guides"
+            icon: Map,
+            title: "Trail Map & Info",
+            description: "We provide a detailed map and route information for self-guiding"
           }
         ]
       }

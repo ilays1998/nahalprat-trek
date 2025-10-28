@@ -724,7 +724,6 @@ export default function Home() {
           <Link to={createPageUrl("Booking")}>
             <Button 
               size="lg" 
-              // TODO: bug in hebrew icon and subtitle alignment
               className="flex items-center gap-2 bg-[#c56f19] hover:bg-[#b36317] text-white text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
             >
               <CalendarIcon className="w-5 h-5" />

@@ -61,7 +61,7 @@ export default function ManageDates({ trekDates, onDeleteDate, language = 'he' }
   const t = content[language];
   
   const DateCard = ({ date, isPast }) => (
-    <Card className="border-none shadow-md bg-white">
+    <Card className="border-none shadow-md bg-white/60">
       <CardHeader>
         <CardTitle className="text-lg font-bold flex items-center gap-2">
           <Calendar className="w-5 h-5 text-desert-600" />
@@ -70,13 +70,13 @@ export default function ManageDates({ trekDates, onDeleteDate, language = 'he' }
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="flex justify-between items-center text-sm">
-          <Badge variant="outline" className="text-blue-700 bg-blue-50 border-blue-200">
+          <Badge variant="outline" className="text-blue-700 border-blue-200">
             {/* Removed Basic spots display */}
           </Badge>
-          <Badge variant="outline" className="text-green-700 bg-green-50 border-green-200">
+          <Badge variant="outline" className="text-green-700 border-green-200">
             {/* Removed Pro spots display */}
           </Badge>
-          <Badge variant="outline" className="text-purple-700 bg-purple-50 border-purple-200">
+          <Badge variant="outline" className="text-purple-700 border-purple-200">
             {/* Removed Premium spots display */}
             Available Spots: {date.available_spots} {t.spots}
           </Badge>

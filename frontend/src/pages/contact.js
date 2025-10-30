@@ -1,4 +1,3 @@
-// TODO: Improve as others page to use desert color scheme
 import React, { useState } from 'react';
 import { useLanguage } from '../layout';
 import { Button } from '../components/ui/button';
@@ -7,7 +6,7 @@ import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { Alert, AlertDescription } from '../components/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Mail, Phone, MapPin, Send, AlertCircle, CheckCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, AlertCircle, CheckCircle, PhoneCall} from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import config from '../config';
 import { useAuth } from '../contexts/AuthContext';
@@ -175,7 +174,7 @@ export default function Contact() {
 
         <div className="grid md:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <Card className="shadow-lg">
+          <Card className="bg-white/60 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Mail className="w-5 h-5" />
@@ -310,10 +309,10 @@ export default function Contact() {
 
           {/* Contact Information */}
           <div className="space-y-8">
-            <Card className="shadow-lg">
+            <Card className="bg-white/60 shadow-lg">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Phone className="w-5 h-5" />
+                  <PhoneCall className="w-5 h-5" />
                   {t.contactInfo}
                 </CardTitle>
               </CardHeader>
@@ -345,7 +344,7 @@ export default function Contact() {
             </Card>
 
             {/* WhatsApp Contact */}
-            <div className="bg-desert-light rounded-lg p-6">
+            <div className="bg-desert-light rounded-lg p-6 border-2 border-desert-200/30 shadow-sm">
               <h3 className="text-lg font-semibold text-desert-800 mb-3 flex items-center gap-2">
                 <FaWhatsapp className="w-5 h-5 text-green-600" />
                 {language === 'he' ? 'WhatsApp' : 'WhatsApp'}

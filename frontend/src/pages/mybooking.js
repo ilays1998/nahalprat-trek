@@ -1,4 +1,3 @@
-// TODO: Improve as others page to use desert color scheme
 import React, { useState, useEffect } from "react";
 import { Booking, User, TrekDate } from "../entities/all";
 import { Button } from "../components/ui/button";
@@ -229,17 +228,17 @@ export default function MyBookingsPage() {
       pending: {
         label: currentContent.status.pending,
         icon: <Clock className="w-5 h-5 text-yellow-600" />,
-        badgeClass: "bg-yellow-100 text-yellow-800",
+        badgeClass: "text-yellow-800",
       },
       cancelled: {
         label: currentContent.status.cancelled,
         icon: <ShieldClose className="w-5 h-5 text-red-500" />,
-        badgeClass: "bg-red-100 text-red-800",
+        badgeClass: "text-red-800",
       },
       confirmed: {
         label: currentContent.status.confirmed,
         icon: <ShieldCheck className="w-5 h-5 text-green-600" />,
-        badgeClass: "bg-green-100 text-green-800",
+        badgeClass: "text-green-800",
       }
     };
 
@@ -247,7 +246,9 @@ export default function MyBookingsPage() {
     const currentStatus = statusInfo[booking.status] || statusInfo.pending;
 
     return (
-    <Card className={`border-none shadow-lg hover:shadow-xl transition-shadow duration-300 ${isCancelled ? 'bg-gray-50 opacity-70' : ''}`}>
+    <Card className={`bg-white/60 shadow-lg hover:shadow-xl transition-shadow duration-300 ${
+      isCancelled 
+        ? 'bg-desert-50/40 border border-desert-100/40 text-gray-500 opacity-80 shadow-none backdrop-blur-sm' : ''}`}>
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
@@ -496,7 +497,7 @@ export default function MyBookingsPage() {
             <TabsContent value="all-bookings" className="space-y-6">
               {/* Admin Statistics */}
               <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <Card className="border-none shadow-lg">
+                <Card className="border-none bg-white/60 shadow-lg">
                   <CardContent className="p-6 text-center">
                     <div className="text-3xl font-bold text-desert-600 mb-2">
                       {allBookings.filter(b => b.status !== 'cancelled').length}
@@ -504,7 +505,7 @@ export default function MyBookingsPage() {
                     <p className="text-gray-600">{currentContent.totalBookings}</p>
                   </CardContent>
                 </Card>
-                <Card className="border-none shadow-lg">
+                <Card className="border-none bg-white/60 shadow-lg">
                   <CardContent className="p-6 text-center">
                     <div className="text-3xl font-bold text-green-600 mb-2">
                       ₪{allBookings.filter(b => b.status === 'confirmed').reduce((sum, booking) => sum + (booking.total_price || 0), 0).toLocaleString()}
@@ -512,7 +513,7 @@ export default function MyBookingsPage() {
                     <p className="text-gray-600">{currentContent.totalRevenue}</p>
                   </CardContent>
                 </Card>
-                <Card className="border-none shadow-lg">
+                <Card className="border-none bg-white/60 shadow-lg">
                   <CardContent className="p-6 text-center">
                     <div className="text-3xl font-bold text-blue-600 mb-2">
                       {allBookings.filter(b => b.status === 'confirmed').reduce((sum, booking) => sum + (booking.participants_count || 0), 0)}
@@ -554,7 +555,7 @@ export default function MyBookingsPage() {
                 </h2>
                 <Button
                   onClick={() => setShowAddDate(!showAddDate)}
-                  className="bg-gradient-to-r from-desert-600 to-orange-600 text-white hover:opacity-90"
+                  className="text-white hover:opacity-90"
                 >
                   {showAddDate ? currentContent.hideAddDate : currentContent.addNewDate}
                 </Button>

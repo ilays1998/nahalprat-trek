@@ -28,7 +28,6 @@ export default function Packages() {
         description: "חבילה מקיפה ושקופה הכוללת את כל מה שצריך לחוויית טיול בלתי נשכחת במדבר יהודה",
         features: [
           {
-            // TODO: changing to not from jerusalem 
             icon: Bus,
             title: "העברות וציוד",
             description: "אתם סוחבים רק מה שהכרחי"

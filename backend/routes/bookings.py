@@ -139,6 +139,15 @@ def update_booking(booking_id: int):
 
     # Track original status for email notifications
     original_status = booking.status
+
+    # === Enforce 3-day cancellation window for non-admin users ===
+    if 'status' in data and data['status'] == 'cancelled' and user.role != 'admin':
+        today = date.today()
+        days_until = (booking.trek_date - today).days
+        if days_until < 3:
+            return jsonify({
+                "error": "Cancellation window has passed. Cancellations are allowed up to 3 days before the trek date."
+            }), 400
     
     # Allow updating limited fields (status for now)
     if 'status' in data:

@@ -3,7 +3,6 @@ services:
     name: nahalprat-backend
     runtime: python
     rootDir: backend
-    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: FLASK_APP=app:create_app flask db upgrade && gunicorn wsgi:app --bind 0.0.0.0:$PORT
     envVars:
@@ -16,23 +15,23 @@ services:
     # All other environment variables should be set in Render Dashboard
     # See .env_production_backend for required variables
 
-  - type: web
-    name: nahalprat-frontend
-    runtime: static
-    rootDir: frontend
-    buildCommand: npm ci && npm run build
-    staticPublishPath: ./dist
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+  
+  # 🕐 CRON JOB: Update expired orders every 10 minutes
+  - type: cron
+    name: cancel-pending-bookings
+    env: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scripts/update_expired_orders.py
+    schedule: "15 0 * * *"  # every 10 minutes
     envVars:
-      - key: VITE_BACKEND_URL
-        value: https://api.treknahalprat.co.il
-      - key: VITE_GOOGLE_CLIENT_ID
-        value: 361028788793-igfr700b6nd8bq7mr2ed7it7jgcoascb.apps.googleusercontent.com
+      - key: SQLALCHEMY_DATABASE_URI
+        fromDatabase:
+          name: nahalprat-db
+          property: connectionString
+
 
 databases:
   - name: nahalprat-db
-    plan: free
 

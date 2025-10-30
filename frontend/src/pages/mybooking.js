@@ -8,7 +8,7 @@ import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Label } from "../components/ui/label";
 import { CalendarIcon, Users, Phone, Mail, Shield, ShieldCheck, ShieldClose, Ban, Clock, Check, Trash2, LogIn } from "lucide-react";
-import { format, parseISO, isAfter } from "date-fns";
+import { format, parseISO, isAfter, startOfDay, differenceInCalendarDays } from "date-fns";
 import AddDateForm from "../admin/AddDateForm";
 import ManageDates from "../admin/ManageDatesForm";
 import { useLanguage } from "../layout";
@@ -220,8 +220,19 @@ export default function MyBookingsPage() {
   const BookingCard = ({ booking, showUserInfo = false }) => {
     // Check if the booking is cancelled
     const isCancelled = booking.status === 'cancelled';
-    // Check if the trek date is in the future
-    const isFutureBooking = isAfter(parseISO(booking.trek_date), new Date());
+
+    // Calculate days until trek date
+    const trekDate = parseISO(booking.trek_date);
+    const today = startOfDay(new Date());
+    const daysUntilTrek = differenceInCalendarDays(trekDate, today);
+
+    // user can cancel only if at least 3 days before trek
+    const canUserCancel =
+      !showUserInfo && booking.status !== "cancelled" && daysUntilTrek >= 3;
+
+    // admin can manage any future (not yet started) trek
+    const canAdminManage =
+      showUserInfo && booking.status !== "cancelled" && isAfter(trekDate, today);
 
     // Define status display properties
     const statusInfo = {
@@ -248,11 +259,11 @@ export default function MyBookingsPage() {
     return (
     <Card className={`bg-white/60 shadow-lg hover:shadow-xl transition-shadow duration-300 ${
       isCancelled 
-        ? 'bg-desert-50/40 border border-desert-100/40 text-gray-500 opacity-80 shadow-none backdrop-blur-sm' : ''}`}>
+        ? 'bg-desert-50 text-gray-500 opacity-80 shadow-none backdrop-blur-sm' : ''}`}>
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle className={`text-xl font-bold text-gray-900 ${isCancelled ? 'line-through' : ''}`}>
+            <CardTitle className={`text-xl font-bold text-gray-900`}>
               {showUserInfo ? `${booking.first_name} ${booking.last_name}` : currentContent.bookingDetails}
             </CardTitle>
             <p className="text-gray-500 text-sm">
@@ -322,7 +333,7 @@ export default function MyBookingsPage() {
           </div>
         )}
       </CardContent>
-      {showUserInfo && !isCancelled && isFutureBooking && (
+      {showUserInfo && canAdminManage && (
         <CardFooter className="grid grid-cols-2 gap-2">
           {booking.status === 'pending' && (
              <Button variant="default" size="sm" onClick={() => handleApproveBooking(booking)} className="bg-green-600 hover:bg-green-700 text-white">
@@ -341,7 +352,7 @@ export default function MyBookingsPage() {
           </Button>
         </CardFooter>
       )}
-      {!showUserInfo && !isCancelled && isFutureBooking && (
+      {!showUserInfo && canUserCancel && (
         <CardFooter>
           <Button 
             variant="destructive" 

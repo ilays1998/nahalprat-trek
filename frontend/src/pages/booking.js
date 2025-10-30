@@ -61,7 +61,7 @@ export default function BookingPage() {
     const today = startOfDay(new Date());
     const futureDates = dates.filter(date => {
       const startDate = parseISO(date.start_date);
-      return isAfter(startDate, today) || startDate.getTime() === today.getTime();
+      return isAfter(startDate, today);
     });
     setAvailableDates(futureDates);
   };

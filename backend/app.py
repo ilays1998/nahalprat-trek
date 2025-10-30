@@ -5,6 +5,8 @@ from config import Config
 from models import db, migrate
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from apscheduler.schedulers.background import BackgroundScheduler
+
 
 def create_app():
     app = Flask(__name__)
@@ -56,6 +58,29 @@ def create_app():
     app.register_blueprint(bookings_bp, url_prefix='/api/bookings')
     app.register_blueprint(trekdates_bp, url_prefix='/api/trekdates')
     app.register_blueprint(contact_bp, url_prefix='/api')
+
+    
+    # 🕒 Schedule daily job: cancel expired pending bookings
+    from scripts.update_expired_orders import cancel_expired_pending_bookings
+    from datetime import datetime
+
+    scheduler = BackgroundScheduler(daemon=True)
+
+    def run_safely():
+        """Run the cancel task inside app context with proper logging"""
+        with app.app_context():
+            app.logger.info(f"[CRON] Running cancel_expired_pending_bookings at {datetime.now()}")
+            try:
+                cancel_expired_pending_bookings()
+                app.logger.info("[CRON] cancel_expired_pending_bookings completed successfully.")
+            except Exception as e:
+                app.logger.error(f"[CRON] Error running cancel_expired_pending_bookings: {e}")
+
+    # Run once a day at 3:00 AM server time
+    scheduler.add_job(run_safely, 'cron', hour=3, minute=0)
+    scheduler.start()
+    app.logger.info("[CRON] APScheduler started (runs daily at 03:00).")
+
 
     return app
 

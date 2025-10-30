@@ -15,22 +15,6 @@ services:
     # All other environment variables should be set in Render Dashboard
     # See .env_production_backend for required variables
 
-  
-  # 🕐 CRON JOB: Update expired orders every 10 minutes
-  - type: cron
-    name: cancel-pending-bookings
-    env: python
-    plan: free
-    rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: python scripts/update_expired_orders.py
-    schedule: "15 0 * * *"  # every 10 minutes
-    envVars:
-      - key: SQLALCHEMY_DATABASE_URI
-        fromDatabase:
-          name: nahalprat-db
-          property: connectionString
-
 
 databases:
   - name: nahalprat-db

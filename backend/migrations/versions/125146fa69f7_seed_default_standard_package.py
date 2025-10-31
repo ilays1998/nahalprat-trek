@@ -31,9 +31,6 @@ def upgrade():
         sa.UniqueConstraint('name')
     )
 
-    with op.batch_alter_table('visitor', schema=None) as batch_op:
-        batch_op.drop_constraint(batch_op.f('visitor_visitor_id_key'), type_='unique')
-
     # === Seed default package ===
     conn = op.get_bind()
     existing = conn.execute(sa.text("SELECT id FROM package WHERE name = 'standard'")).fetchone()

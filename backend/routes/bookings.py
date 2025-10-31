@@ -90,16 +90,21 @@ def create_booking():
     # Decrement spots
     trekdate.available_spots -= data['participants_count']
 
+    # Get package price dynamically
+    package = Package.query.filter_by(name='standard', active=True).first()
+    if not package:
+        return jsonify({"error": "Package not found"}), 400
+
     booking = Booking(
         user_id=user.id,
         first_name=data['first_name'],
         last_name=data['last_name'],
         email=data['email'],
         phone=data['phone'],
-        package_type='standard',  # Single package system
+        package_type=package.name,
         trek_date=trek_date_value,
         participants_count=data['participants_count'],
-        total_price=1000 * data['participants_count'],  # Fixed price: 1000 NIS per person
+        total_price=package.price_per_person * data['participants_count'],
         special_requests=data.get('special_requests'),
         emergency_contact_name=data.get('emergency_contact_name'),
         emergency_contact_phone=data.get('emergency_contact_phone'),

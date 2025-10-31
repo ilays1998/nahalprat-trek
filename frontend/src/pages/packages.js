@@ -7,16 +7,27 @@ import { Badge } from "../components/ui/badge";
 import { Check, Star, Users, Clock, Utensils, Bed, Car, ShieldCheck, Bus, Coffee, Map, CheckCircle, Sparkles } from "lucide-react";
 import { useLanguage } from "../layout";
 import { motion } from "framer-motion";
+import { useConfig } from "../contexts/ConfigContext";
+
 
 export default function Packages() {
   const { language, isRTL } = useLanguage();
+
+  const { getPackage, loading: configLoading } = useConfig();
+  const standardPackage = getPackage("standard");
+  const packagePrice = standardPackage?.price_per_person || 0;
+  const currency = standardPackage?.currency || "ILS";
+  const symbols = { ILS: "₪", USD: "$", EUR: "€" };
+  const symbol = symbols[currency] || "₪";
+  const formattedPrice = `${symbol}${packagePrice.toLocaleString()}`;
+
 
   const content = {
     he: {
       title: "תמחור שקוף",
       subtitle: "אצלנו אין אותיות קטנות",
-      priceStatement: "החל מ־1,000 ₪ לאדם",
-      transparency: "המחיר תלוי ברמת הלינה — חבילת הסטנדרט היא 1,000 ₪ לאדם וכוללת את כל מה שרשום למטה",
+      priceStatement: "החל מ־{price} לאדם",
+      transparency: "המחיר תלוי ברמת הלינה — חבילת הסטנדרט היא {price} לאדם וכוללת את כל מה שרשום למטה",
       bookNow: "הזמן את המקום שלך",
       perPerson: "לאדם",
       included: "מה כלול בחבילה",
@@ -24,7 +35,6 @@ export default function Packages() {
       professionalExperience: "חוויה מקצועית ומאורגנת",
       package: {
         name: "חבילת סטנדרט טרק נחל פרת",
-        price: "1,000",
         description: "חבילה מקיפה ושקופה הכוללת את כל מה שצריך לחוויית טיול בלתי נשכחת במדבר יהודה",
         features: [
           {
@@ -63,8 +73,8 @@ export default function Packages() {
     en: {
       title: "Transparent Pricing",
       subtitle: "No fine print here",
-      priceStatement: "Starting from 1,000 ₪ per person",
-      transparency: "Price depends on the accommodation level — the standard package is 1,000 ₪ per person and includes everything listed below",
+      priceStatement: "Starting from {price} per person",
+      transparency: "Price depends on the accommodation level — the standard package is {price} per person and includes everything listed below.",
       bookNow: "Book Your Spot",
       perPerson: "per person",
       included: "What's Included",
@@ -72,7 +82,6 @@ export default function Packages() {
       professionalExperience: "Professional and organized experience",
       package: {
         name: "Nahal Prat Trek Standard Package",
-        price: "1,000",
         description: "Comprehensive and transparent package including everything you need for an unforgettable Judean Desert experience",
         features: [
           {
@@ -157,13 +166,24 @@ export default function Packages() {
               {currentContent.subtitle}
             </motion.p>
             
-            <motion.div variants={itemVariants} className="text-4xl font-bold text-desert-600 mb-4">
-              {currentContent.priceStatement}
-            </motion.div>
-            
-            <motion.p variants={itemVariants} className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {currentContent.transparency}
-            </motion.p>
+            {!configLoading && (
+              <>
+                <motion.div
+                  variants={itemVariants}
+                  className="text-4xl font-bold text-desert-600 mb-4"
+                >
+                  {currentContent.priceStatement.replace("{price}", formattedPrice)}
+                </motion.div>
+
+                <motion.p
+                  variants={itemVariants}
+                  className="text-lg text-gray-600 max-w-2xl mx-auto"
+                >
+                  {currentContent.transparency.replace("{price}", formattedPrice)}
+                </motion.p>
+              </>
+            )}
+
           </motion.div>
         </div>
       </section>
@@ -188,7 +208,7 @@ export default function Packages() {
 
             <CardHeader className="text-center pb-8 pt-20">
               <div className="text-7xl font-bold text-desert-600 mb-4">
-                ₪{currentContent.package.price}
+                {symbol}{packagePrice.toLocaleString()}
               </div>
               <p className="text-xl text-gray-500 mb-6">{currentContent.perPerson}</p>
               <p className="text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto">

@@ -368,6 +368,7 @@ export default function MyBookingsPage() {
     </Card>
   )};
 
+  // TODO show loading state when cancel is in progress
   // Cancellation Dialog Component - outside of the mapping loop
   const CancellationDialog = () => (
     <AlertDialog open={!!selectedBookingToCancel} onOpenChange={(open) => {

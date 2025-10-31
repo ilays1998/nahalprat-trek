@@ -64,3 +64,14 @@ class Visitor(db.Model):
     referrer = db.Column(db.String(512))  # Where they came from
     
     user = db.relationship("AppUser", backref="visitor_sessions")
+
+class Package(db.Model):
+    __tablename__ = 'package'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True, nullable=False)  # e.g. "standard"
+    description = db.Column(db.Text)
+    price_per_person = db.Column(db.Integer, nullable=False)
+    currency = db.Column(db.String(8), default='ILS')
+    active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

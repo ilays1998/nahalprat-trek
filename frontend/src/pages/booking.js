@@ -15,10 +15,25 @@ import { CalendarIcon, Users, Phone, AlertCircle, CheckCircle } from "lucide-rea
 import { format, parseISO, isAfter, startOfDay, addDays } from "date-fns";
 import { useLanguage } from "../layout";
 import { useAuth } from "../contexts/AuthContext";
+import { useConfig } from "../contexts/ConfigContext";
+
 
 export default function BookingPage() {
   const { language, isRTL } = useLanguage();
   const { user } = useAuth();
+
+  const { getPackage, loading: configLoading } = useConfig();
+  const standardPackage = getPackage("standard");
+  const packagePrice = standardPackage?.price_per_person || 0;
+
+  const currency = standardPackage?.currency || "ILS";
+
+  const currencySymbols = {
+    ILS: "₪",
+    USD: "$",
+    EUR: "€"
+  };
+
   
   const getDefaultNamesFromUser = (currentUser) => {
     const fullName = (currentUser?.name || "").trim();
@@ -101,7 +116,6 @@ export default function BookingPage() {
       personalInfo: "פרטים אישיים",
       trekDetails: "פרטי הטיול",
       emergencyContact: "איש קשר לחירום",
-      packagePrice: "₪1,000",
       packageName: "טרק נחל פרת",
       fields: {
         firstName: "שם פרטי",
@@ -137,7 +151,6 @@ export default function BookingPage() {
       personalInfo: "Personal Information",
       trekDetails: "Trek Details",
       emergencyContact: "Emergency Contact",
-      packagePrice: "₪1,000",
       packageName: "Nahal Prat Trek",
       fields: {
         firstName: "First Name",
@@ -178,9 +191,8 @@ export default function BookingPage() {
     }));
   };
 
-  // TODO: global var for price per person and use the same in backend
   const calculateTotalPrice = () => {
-    return 1000 * formData.participants_count;  // Fixed price: 1000 NIS per person
+    return packagePrice  * formData.participants_count;  // packagePrice  NIS per person
   };
 
   const handleSubmit = async (e) => {
@@ -231,7 +243,6 @@ export default function BookingPage() {
     
     setLoading(false);
   };
-//TODO: in booking form the calender month is too close to the top edge, add margin or padding
 
   if (success) {
     return (
@@ -299,7 +310,7 @@ export default function BookingPage() {
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">{currentContent.packageName}</h2>
               <div className="text-4xl font-bold text-desert-600 mb-2">
-                {currentContent.packagePrice}
+                {currencySymbols[currency]}{packagePrice.toLocaleString()}
               </div>
               <p className="text-gray-600">{currentContent.perPerson}</p>
               <div className="mt-4 text-sm text-gray-500">

@@ -32,6 +32,7 @@ export default function BookingPage() {
   const defaultNames = getDefaultNamesFromUser(user);
   const [availableDates, setAvailableDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [calendarMonth, setCalendarMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -177,6 +178,7 @@ export default function BookingPage() {
     }));
   };
 
+  // TODO: global var for price per person and use the same in backend
   const calculateTotalPrice = () => {
     return 1000 * formData.participants_count;  // Fixed price: 1000 NIS per person
   };
@@ -229,6 +231,7 @@ export default function BookingPage() {
     
     setLoading(false);
   };
+//TODO: in booking form the calender month is too close to the top edge, add margin or padding
 
   if (success) {
     return (
@@ -305,7 +308,7 @@ export default function BookingPage() {
             </div>
           </CardContent>
         </Card>
-
+        
         {/* Step 1: Date Selection */}
         {(
           <Card className="border-none shadow-lg mb-8 bg-gradient-to-r from-desert-50 to-orange-50">
@@ -316,10 +319,13 @@ export default function BookingPage() {
               {getAvailableDates().length > 0 ? (
                 <div className="grid lg:grid-cols-2 gap-8">
                   <div>
+                    <div className="flex items-center justify-center">
                     <Calendar
                       mode="single"
                       selected={selectedDate}
                       onSelect={setSelectedDate}
+                      month={calendarMonth}
+                      onMonthChange={setCalendarMonth}
                       disabled={(date) => {
                         const dateStr = format(date, 'yyyy-MM-dd');
                         const isPast = date < today;
@@ -328,6 +334,7 @@ export default function BookingPage() {
                       }}
                       className="rounded-md border"
                     />
+                    </div>
                   </div>
                   <div className="space-y-4">
                     <h4 className="font-semibold text-gray-900">
@@ -346,7 +353,11 @@ export default function BookingPage() {
                                 ? 'border-desert-300 bg-desert-50'
                                 : 'border-gray-200 hover:border-desert-200'
                             }`}
-                            onClick={() => setSelectedDate(startDate)}
+                            onClick={() => {
+                              setSelectedDate(startDate);
+                              setCalendarMonth(startDate);
+                            }}
+
                           >
                             <div className="flex justify-between items-center">
                               <div>

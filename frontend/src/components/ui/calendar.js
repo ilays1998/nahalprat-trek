@@ -13,8 +13,9 @@ export function Calendar({ mode = 'single', selected, onSelect, month, onMonthCh
             day: "rounded-full transition hover:bg-desert-400",
           }}
           modifiersClassNames={{
-            selected: "bg-desert-400 rounded-full",
-            disabled: "text-[#bfc4ca]  hover:bg-desert-200",
+            selected: "!bg-desert-400 hover:!bg-desert-400",
+            today: "!text-desert-600",
+            disabled: "!text-[#bfc4ca] hover:!bg-desert-200",
           }}
           mode={mode}
           selected={selected}
@@ -26,12 +27,6 @@ export function Calendar({ mode = 'single', selected, onSelect, month, onMonthCh
           // Improve default visuals
           showOutsideDays={false}
           weekStartsOn={0}
-          styles={{
-            caption: { fontWeight: 600 },
-            head_cell: { color: '#6b7280', fontWeight: 500 },
-            day_selected: { backgroundColor: '#f59e0b', color: 'white' },
-            day_today: { border: '1px solid #f59e0b' },
-          }}
         />
       </div>
     </div>

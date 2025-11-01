@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Booking, User, TrekDate } from "../entities/all";
+import { scrollToError } from "../components/navigation/ScrollToError";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
@@ -77,12 +78,14 @@ export default function MyBookingsPage() {
           } catch (error) {
             console.error('Error loading all bookings:', error);
             setError('Failed to load all bookings. Please try again.');
+            scrollToError();
             setAllBookings([]);
           }
         }
       } catch (error) {
         console.error('Error loading data:', error);
         setError('Failed to load bookings. Please try again.');
+        scrollToError();
         setMyBookings([]);
         setTrekDates([]);
       }
@@ -91,8 +94,10 @@ export default function MyBookingsPage() {
       if (error.name === 'AuthError') {
         setIsAuthError(true);
         setError(language === 'he' ? 'פג תוקף החיבור שלך. אנא התחבר מחדש.' : 'Your session has expired. Please log in again.');
+        scrollToError();
       } else {
         setError('Failed to load user data. Please try again.');
+        scrollToError();
       }
     }
     setLoading(false);
@@ -106,6 +111,7 @@ export default function MyBookingsPage() {
     } catch (error) {
       console.error("Failed to approve booking:", error);
       setError('Failed to approve booking. Please try again.');
+      scrollToError();
     } finally {
       setIsApproving(null);
     }
@@ -148,6 +154,7 @@ export default function MyBookingsPage() {
     } catch (error) {
       console.error("Failed to cancel booking:", error);
       setError('Failed to cancel booking. Please try again.');
+      scrollToError();
     } finally {
       setIsCancelling(false);
     }
@@ -160,6 +167,7 @@ export default function MyBookingsPage() {
     } catch (error) {
       console.error("Failed to delete date:", error);
       setError('Failed to delete date. Please try again.');
+      scrollToError();
     }
   };
 
@@ -496,7 +504,7 @@ export default function MyBookingsPage() {
     return (
       <div className="min-h-screen py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+          <div className="text-center error-message">
             <div className="text-red-600 mb-4">⚠️</div>
             <p className="text-gray-900 font-semibold mb-4">{error}</p>
             {isAuthError ? (

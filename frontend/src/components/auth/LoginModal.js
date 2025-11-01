@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Button } from '../ui/button';
 import { useAuth } from '../../contexts/AuthContext';
+import { scrollToError } from '../navigation/ScrollToError';
 import { LogIn, Mail, Lock, User, X, AlertCircle, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { Alert, AlertDescription } from '../ui/alert';
 
@@ -43,25 +44,30 @@ const LoginModal = ({ isOpen, onClose }) => {
     if (mode === 'register') {
       if (!formData.name.trim()) {
         setError('שם מלא הוא שדה חובה');
+        scrollToError();
         return false;
       }
       if (formData.password !== formData.confirmPassword) {
         setError('הסיסמאות אינן תואמות');
+        scrollToError();
         return false;
       }
       if (formData.password.length < 8) {
         setError('הסיסמה חייבת להכיל לפחות 8 תווים');
+        scrollToError();
         return false;
       }
     }
     
     if (!formData.email.trim()) {
       setError('כתובת אימייל היא שדה חובה');
+      scrollToError();
       return false;
     }
     
     if (!formData.password.trim()) {
       setError('סיסמה היא שדה חובה');
+      scrollToError();
       return false;
     }
 
@@ -163,7 +169,7 @@ const LoginModal = ({ isOpen, onClose }) => {
               </p>
 
               {error && (
-                <Alert className="mb-4 border-red-200 bg-red-50">
+                <Alert className="mb-4 border-red-200 bg-red-50 error-message">
                   <AlertCircle className="h-4 w-4 text-red-600" />
                   <AlertDescription className="text-red-600 text-right">
                     {error}
@@ -332,7 +338,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                 )}
 
                 {error && (
-                  <Alert className="border-red-200 bg-red-50">
+                  <Alert className="border-red-200 bg-red-50 error-message">
                     <AlertCircle className="h-4 w-4 text-red-600" />
                     <AlertDescription className="text-red-600 text-right">
                       {error}

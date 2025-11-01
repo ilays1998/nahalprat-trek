@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../layout';
+import { scrollToError } from '../components/navigation/ScrollToError';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -150,10 +151,12 @@ export default function Contact() {
         });
       } else {
         setSubmitStatus('error');
+        scrollToError('.alert-destructive');
       }
     } catch (error) {
       console.error('Error sending message:', error);
       setSubmitStatus('error');
+      scrollToError('.alert-destructive');
     } finally {
       setIsSubmitting(false);
     }
@@ -183,7 +186,7 @@ export default function Contact() {
             </CardHeader>
             <CardContent>
               {submitStatus && (
-                <Alert className={`mb-6 ${submitStatus === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
+                <Alert className={`mb-6 ${submitStatus === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50 error-message'}`}>
                   {submitStatus === 'success' ? (
                     <CheckCircle className="h-4 w-4 text-green-600" />
                   ) : (

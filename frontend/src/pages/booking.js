@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { TrekDate, Booking } from "../entities/all";
 import { createPageUrl } from "../utils";
+import { scrollToError } from "../components/navigation/ScrollToError";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -220,6 +221,18 @@ export default function BookingPage() {
 
       setSuccess(true);
       
+      // Scroll to center the success message in viewport
+      setTimeout(() => {
+        const successElement = document.querySelector('.success-message-container');
+        if (successElement) {
+          successElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center',
+            inline: 'center'
+          });
+        }
+      }, 100);
+      
       // Reset form
       setFormData({
         first_name: getDefaultNamesFromUser(user).firstName,
@@ -239,6 +252,7 @@ export default function BookingPage() {
 
     } catch (err) {
       setError(currentContent.errorMessage);
+      scrollToError();
     }
     
     setLoading(false);
@@ -246,7 +260,7 @@ export default function BookingPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center py-12">
+      <div className="min-h-screen flex items-center justify-center py-12 success-message-container">
         <div className="max-w-md mx-auto px-4">
           <Card className="text-center border-none shadow-xl">
             <CardContent className="p-12">
@@ -298,7 +312,7 @@ export default function BookingPage() {
         </div>
 
         {error && (
-          <Alert variant="destructive" className="mb-8">
+          <Alert variant="destructive" className="mb-8 error-message">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
           </Alert>

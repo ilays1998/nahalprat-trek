@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { TrekDate } from "../entities/all";
+import { scrollToError } from "../components/navigation/ScrollToError";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -112,6 +113,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
     e.preventDefault();
     if (!startDate) {
       setError(language === 'he' ? 'אנא בחר תאריך התחלה' : 'Please select a start date');
+      scrollToError();
       return;
     }
 
@@ -148,6 +150,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
 
     } catch (err) {
       setError(currentContent.error);
+      scrollToError();
     }
     
     setLoading(false);
@@ -175,7 +178,7 @@ export default function AddDateForm({ onDateAdded, language = 'he' }) {
         )}
 
         {error && (
-          <Alert variant="destructive" className="mb-6">
+          <Alert variant="destructive" className="mb-6 error-message">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
           </Alert>

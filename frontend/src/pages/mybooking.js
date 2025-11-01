@@ -38,6 +38,8 @@ export default function MyBookingsPage() {
   const [isAuthError, setIsAuthError] = useState(false);
   const [selectedBookingToCancel, setSelectedBookingToCancel] = useState(null);
   const [cancellationReason, setCancellationReason] = useState('');
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [isApproving, setIsApproving] = useState(null); // Store booking ID being approved
 
   useEffect(() => {
     loadData();
@@ -96,16 +98,20 @@ export default function MyBookingsPage() {
   };
 
   const handleApproveBooking = async (bookingToApprove) => {
+    setIsApproving(bookingToApprove.id);
     try {
       await Booking.update(bookingToApprove.id, { status: 'confirmed' });
       await loadData(); // Reload all data after update
     } catch (error) {
       console.error("Failed to approve booking:", error);
       setError('Failed to approve booking. Please try again.');
+    } finally {
+      setIsApproving(null);
     }
   };
 
   const handleCancelBooking = async (bookingToCancel, cancellationReason = '') => {
+    setIsCancelling(true);
     try {
       // 1. Update booking status to 'cancelled' with optional reason
       const updateData = { 
@@ -130,9 +136,15 @@ export default function MyBookingsPage() {
 
       // 4. Refresh data
       await loadData();
+      
+      // 5. Close dialog and reset state after successful cancellation
+      setSelectedBookingToCancel(null);
+      setCancellationReason('');
     } catch (error) {
       console.error("Failed to cancel booking:", error);
       setError('Failed to cancel booking. Please try again.');
+    } finally {
+      setIsCancelling(false);
     }
   };
 
@@ -172,12 +184,14 @@ export default function MyBookingsPage() {
       addNewDate: "הוסף תאריך חדש",
       hideAddDate: "סגור טופס",
       approveBooking: "אשר הזמנה",
+      approvingBooking: "מאשר...",
       cancelBooking: "בטל הזמנה",
       cancelConfirmTitle: "האם לבטל את ההזמנה?",
       cancelConfirmDesc: "פעולה זו תבטל את הזמנתך באופן סופי. המקומות שהזמנת ישוחררו. האם להמשיך?",
       cancellationReason: "סיבת הביטול (אופציונלי)",
       cancellationReasonPlaceholder: "הסבר את הסיבה לביטול ההזמנה...",
       confirm: "אשר",
+      confirming: "מבטל...",
       back: "חזור",
     },
     en: {
@@ -205,12 +219,14 @@ export default function MyBookingsPage() {
       addNewDate: "Add New Date",
       hideAddDate: "Close Form",
       approveBooking: "Approve Booking",
+      approvingBooking: "Approving...",
       cancelBooking: "Cancel Booking",
       cancelConfirmTitle: "Are you sure you want to cancel?",
       cancelConfirmDesc: "This will permanently cancel your booking and release your spots. This action cannot be undone.",
       cancellationReason: "Cancellation Reason (Optional)",
       cancellationReasonPlaceholder: "Please explain the reason for cancelling this booking...",
       confirm: "Confirm",
+      confirming: "Cancelling...",
       back: "Back",
     }
   };
@@ -336,9 +352,24 @@ export default function MyBookingsPage() {
       {showUserInfo && canAdminManage && (
         <CardFooter className="grid grid-cols-2 gap-2">
           {booking.status === 'pending' && (
-             <Button variant="default" size="sm" onClick={() => handleApproveBooking(booking)} className="bg-green-600 hover:bg-green-700 text-white">
-                <Check className="w-4 h-4 mr-2" />
-                {currentContent.approveBooking}
+             <Button 
+               variant="default" 
+               size="sm" 
+               onClick={() => handleApproveBooking(booking)} 
+               className="bg-green-600 hover:bg-green-700 text-white min-w-[120px]"
+               disabled={isApproving === booking.id}
+             >
+               {isApproving === booking.id ? (
+                 <div className="flex items-center gap-2">
+                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                   {currentContent.approvingBooking}
+                 </div>
+               ) : (
+                 <div className="flex items-center gap-2">
+                   <Check className="w-4 h-4" />
+                   {currentContent.approveBooking}
+                 </div>
+               )}
               </Button>
           )}
           <Button 
@@ -347,8 +378,10 @@ export default function MyBookingsPage() {
             className={booking.status === 'pending' ? '' : 'col-span-2'}
             onClick={() => setSelectedBookingToCancel(booking)}
           >
-            <Ban className="w-4 h-4 mr-2" />
-            {currentContent.cancelBooking}
+            <div className="flex items-center gap-2">
+              <Ban className="w-4 h-4" />
+              {currentContent.cancelBooking}
+            </div>
           </Button>
         </CardFooter>
       )}
@@ -360,23 +393,28 @@ export default function MyBookingsPage() {
             className="w-full"
             onClick={() => setSelectedBookingToCancel(booking)}
           >
-            <Ban className="w-4 h-4 mr-2" />
-            {currentContent.cancelBooking}
+            <div className="flex items-center gap-2">
+              <Ban className="w-4 h-4" />
+              {currentContent.cancelBooking}
+            </div>
           </Button>
         </CardFooter>
       )}
     </Card>
   )};
 
-  // TODO show loading state when cancel is in progress
   // Cancellation Dialog Component - outside of the mapping loop
   const CancellationDialog = () => (
-    <AlertDialog open={!!selectedBookingToCancel} onOpenChange={(open) => {
-      if (!open) {
-        setSelectedBookingToCancel(null);
-        setCancellationReason('');
-      }
-    }}>
+    <AlertDialog 
+      open={!!selectedBookingToCancel} 
+      onOpenChange={(open) => {
+        // Only allow closing if not currently cancelling
+        if (!open && !isCancelling) {
+          setSelectedBookingToCancel(null);
+          setCancellationReason('');
+        }
+      }}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{currentContent.cancelConfirmTitle}</AlertDialogTitle>
@@ -386,28 +424,46 @@ export default function MyBookingsPage() {
           <Label htmlFor="cancellationReasonDialog">{currentContent.cancellationReason}</Label>
           <Textarea
             id="cancellationReasonDialog"
+            dir="auto"
             value={cancellationReason}
             onChange={(e) => setCancellationReason(e.target.value)}
             placeholder={currentContent.cancellationReasonPlaceholder}
             className="mt-2"
             rows={3}
             autoFocus
+            disabled={isCancelling}
           />
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => {
-            setSelectedBookingToCancel(null);
-            setCancellationReason('');
-          }}>{currentContent.back}</AlertDialogCancel>
-          <AlertDialogAction onClick={() => {
-            if (selectedBookingToCancel) {
-              handleCancelBooking(selectedBookingToCancel, cancellationReason);
-              setSelectedBookingToCancel(null);
-              setCancellationReason('');
-            }
-          }}>
-            {currentContent.confirm}
-          </AlertDialogAction>
+          <AlertDialogCancel 
+            onClick={() => {
+              if (!isCancelling) {
+                setSelectedBookingToCancel(null);
+                setCancellationReason('');
+              }
+            }}
+            disabled={isCancelling}
+          >
+            {currentContent.back}
+          </AlertDialogCancel>
+          <Button
+            onClick={() => {
+              if (selectedBookingToCancel && !isCancelling) {
+                handleCancelBooking(selectedBookingToCancel, cancellationReason);
+              }
+            }}
+            disabled={isCancelling}
+            className="min-w-[100px] bg-red-600 hover:bg-red-700 text-white"
+          >
+            {isCancelling ? (
+              <div className="flex items-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                {currentContent.confirming}
+              </div>
+            ) : (
+              currentContent.confirm
+            )}
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

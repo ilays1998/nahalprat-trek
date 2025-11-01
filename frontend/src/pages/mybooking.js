@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Booking, User, TrekDate } from "../entities/all";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "../components/ui/card";
@@ -26,7 +26,7 @@ import {
 } from "../components/ui/alert-dialog";
 
 export default function MyBookingsPage() {
-  const { language } = useLanguage();
+  const { language, isRTL } = useLanguage();
   const { login } = useAuth();
   const [myBookings, setMyBookings] = useState([]);
   const [allBookings, setAllBookings] = useState([]);
@@ -40,6 +40,7 @@ export default function MyBookingsPage() {
   const [cancellationReason, setCancellationReason] = useState('');
   const [isCancelling, setIsCancelling] = useState(false);
   const [isApproving, setIsApproving] = useState(null); // Store booking ID being approved
+  const cancellationTextareaRef = useRef(null);
 
   useEffect(() => {
     loadData();
@@ -140,6 +141,10 @@ export default function MyBookingsPage() {
       // 5. Close dialog and reset state after successful cancellation
       setSelectedBookingToCancel(null);
       setCancellationReason('');
+      // Clear textarea ref
+      if (cancellationTextareaRef.current) {
+        cancellationTextareaRef.current.value = '';
+      }
     } catch (error) {
       console.error("Failed to cancel booking:", error);
       setError('Failed to cancel booking. Please try again.');
@@ -412,6 +417,10 @@ export default function MyBookingsPage() {
         if (!open && !isCancelling) {
           setSelectedBookingToCancel(null);
           setCancellationReason('');
+          // Clear textarea when dialog closes
+          if (cancellationTextareaRef.current) {
+            cancellationTextareaRef.current.value = '';
+          }
         }
       }}
     >
@@ -423,12 +432,12 @@ export default function MyBookingsPage() {
         <div className="my-4">
           <Label htmlFor="cancellationReasonDialog">{currentContent.cancellationReason}</Label>
           <Textarea
+            ref={cancellationTextareaRef}
             id="cancellationReasonDialog"
-            dir="auto"
-            value={cancellationReason}
-            onChange={(e) => setCancellationReason(e.target.value)}
+            dir={isRTL ? "rtl" : "ltr"}
+            defaultValue={cancellationReason}
             placeholder={currentContent.cancellationReasonPlaceholder}
-            className="mt-2"
+            className={`mt-2 ${isRTL ? "text-right" : "text-left"}`}
             rows={3}
             autoFocus
             disabled={isCancelling}
@@ -449,7 +458,8 @@ export default function MyBookingsPage() {
           <Button
             onClick={() => {
               if (selectedBookingToCancel && !isCancelling) {
-                handleCancelBooking(selectedBookingToCancel, cancellationReason);
+                const reason = cancellationTextareaRef.current?.value?.trim() || '';
+                handleCancelBooking(selectedBookingToCancel, reason);
               }
             }}
             disabled={isCancelling}

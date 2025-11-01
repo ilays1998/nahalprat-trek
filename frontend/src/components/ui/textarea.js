@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function Textarea({ children, className = "", ...props }) {
+export const Textarea = React.forwardRef(({ children, className = "", ...props }, ref) => {
   const baseClasses = [
     "block",
     "w-full",
@@ -22,8 +22,10 @@ export function Textarea({ children, className = "", ...props }) {
   ].join(" ");
 
   return (
-    <textarea className={`${baseClasses} ${className}`} {...props}>
+    <textarea ref={ref} className={`${baseClasses} ${className}`} {...props}>
       {children}
     </textarea>
   );
-}
+});
+
+Textarea.displayName = 'Textarea';

@@ -19,7 +19,7 @@ class EmailService:
         self.smtp_password = os.getenv('SMTP_PASSWORD')
         self.contact_email = os.getenv('CONTACT_EMAIL', 'treknahalprat@gmail.com')
         self.timeout = 10  # 10 second timeout for SMTP connections
-        self.max_retries = 2  # Maximum retry attempts
+        self.max_retries = 1  # Maximum retry attempts
         
         if not self.smtp_username or not self.smtp_password:
             logger.error("SMTP credentials not configured")

@@ -5,6 +5,7 @@ import { ConfigProvider } from './contexts/ConfigContext';
 import { AuthCallback } from './components/auth/AuthCallback';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import VerifyEmail from './components/auth/VerifyEmail';
+import ScrollToTop from './components/navigation/ScrollToTop';
 import Layout from './layout';
 import Home from './pages/home';
 import Packages from './pages/packages';
@@ -18,6 +19,7 @@ export default function App() {
     <AuthProvider>
       <ConfigProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             {/* Public pages */}
             <Route 

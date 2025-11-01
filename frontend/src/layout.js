@@ -7,7 +7,7 @@ import { Button } from "./components/ui/button";
 import { LoginButton } from "./components/auth/LoginButton";
 import { useAuth } from "./contexts/AuthContext";
 import config from "./config";
-import { LanguageToggle } from "./components/navigation/LanguageToggle";
+import { LanguageToggle } from "./components/ui/LanguageToggle";
 import { cfImage } from "./utils/image";
 
 const LanguageContext = createContext();

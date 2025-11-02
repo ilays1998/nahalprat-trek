@@ -32,7 +32,10 @@ const translations = {
     logoutConfirm: "האם אתה בטוח?",
     logoutMessage: "האם אתה בטוח שברצונך להתנתק מהמערכת?",
     cancel: "ביטול",
-    loading: "טוען..."
+    loading: "טוען...",
+    terms: "תקנון ותנאי שימוש",
+    privacy: "מדיניות פרטיות",
+    accessibility: "הצהרת נגישות"
   },
   en: {
     home: "Home",
@@ -51,7 +54,10 @@ const translations = {
     logoutConfirm: "Are you sure?",
     logoutMessage: "Are you sure you want to log out of the system?",
     cancel: "Cancel",
-    loading: "Loading..."
+    loading: "Loading...",
+    terms: "Terms & Conditions",
+    privacy: "Privacy Policy",
+    accessibility: "Accessibility Statement"
   }
 };
 
@@ -432,6 +438,30 @@ export default function Layout({ children, currentPageName }) {
             </div>
             
             <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+              <div className="mb-4">
+                <div className="flex flex-wrap justify-center items-center gap-2 text-sm text-gray-500">
+                  <Link 
+                    to="/terms" 
+                    className="hover:text-desert-300 transition-colors duration-200"
+                  >
+                    {t.terms}
+                  </Link>
+                  <span className="text-gray-600">|</span>
+                  <Link 
+                    to="/privacy" 
+                    className="hover:text-desert-300 transition-colors duration-200"
+                  >
+                    {t.privacy}
+                  </Link>
+                  <span className="text-gray-600">|</span>
+                  <Link 
+                    to="/accessibility" 
+                    className="hover:text-desert-300 transition-colors duration-200"
+                  >
+                    {t.accessibility}
+                  </Link>
+                </div>
+              </div>
               <p className="text-sm text-gray-500">
                 © 2024 {t.title}. {t.allRights}
               </p>

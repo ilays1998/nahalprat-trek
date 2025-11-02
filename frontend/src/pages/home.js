@@ -57,7 +57,7 @@ export default function Home() {
         viewPricing: "צפה במחיר"
       },
       features: {
-        title: "אתם הולכים אנחנו דואגים לכל השאר",
+        title: "אתם הולכים, אנחנו דואגים לכל השאר",
         subtitle: "חוויה מקצועית ומאורגנת עד הפרט האחרון",
         items: [
           {
@@ -68,7 +68,7 @@ export default function Home() {
           {
             icon: Bed,
             title: "לינה",
-            description: "בקתה מעץ הכוללת שירותים, מקלחת, מיטה מפנקת ואווירה קסומה"
+            description: "בקתה מעץ הכוללת שירותים, מקלחת, מיזוג אוויר ואווירה קסומה"
           },
           {
             icon: Utensils,
@@ -129,7 +129,7 @@ export default function Home() {
           {
             icon: Bed,
             title: "Accommodation",
-            description: "Wooden cabin with restrooms, shower, comfortable bed and magical atmosphere"
+            description: "Wooden cabin with restrooms, shower, air conditioning and magical atmosphere"
           },
           {
             icon: Utensils,

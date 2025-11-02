@@ -49,7 +49,7 @@ export default function Packages() {
           },
           {
             icon: Utensils,
-            title: "אוכל מלא",
+            title: "ארוחות כשרות",
             description: "ארוחות בוקר וערב + צידה לדרך למהלך כל היום"
           },
           {
@@ -96,7 +96,7 @@ export default function Packages() {
           },
           {
             icon: Utensils,
-            title: "Complete Meals",
+            title: "Kosher Meals",
             description: "Breakfast and dinner + trail snacks throughout the day"
           },
           {

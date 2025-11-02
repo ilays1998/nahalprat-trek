@@ -13,6 +13,9 @@ import Gallery from './pages/gallery';
 import BookingPage from './pages/booking';
 import MyBookingsPage from './pages/mybooking';
 import Contact from './pages/contact';
+import Terms from './pages/terms';
+import Privacy from './pages/privacy';
+import Accessibility from './pages/accessibility';
 
 export default function App() {
   return (
@@ -51,6 +54,30 @@ export default function App() {
               element={
                 <Layout>
                   <Contact />
+                </Layout>
+              } 
+            />
+            <Route 
+              path="/terms" 
+              element={
+                <Layout>
+                  <Terms />
+                </Layout>
+              } 
+            />
+            <Route 
+              path="/privacy" 
+              element={
+                <Layout>
+                  <Privacy />
+                </Layout>
+              } 
+            />
+            <Route 
+              path="/accessibility" 
+              element={
+                <Layout>
+                  <Accessibility />
                 </Layout>
               } 
             />

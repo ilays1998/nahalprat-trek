@@ -457,7 +457,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-gradient-to-b from-desert-50 to-desert-100">
+      <section className="py-8 bg-gradient-to-b from-desert-50 to-desert-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-16"
@@ -501,7 +501,7 @@ export default function Home() {
       </section>
 
       {/* Journey Story Section */}
-      <section className="py-24 bg-gradient-to-b from-desert-100 to-desert-50">
+      <section className="py-8 bg-gradient-to-b from-desert-100 to-desert-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-16"
@@ -637,7 +637,7 @@ export default function Home() {
 
 
       {/* About Us Section */}
-      <section className="py-24 bg-desert-50">
+      <section className="py-8 bg-desert-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-16"
@@ -703,33 +703,39 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-desert-solid relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full filter blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full filter blur-3xl"></div>
+      <section className="py-10 bg-gradient-to-b from-desert-50 to-desert-100 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-15">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full filter blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
         
         <motion.div 
-          className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
-          initial={{ opacity: 0, y: 30 }}
+          className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-desert-700 mb-6">
-            {currentContent.cta.title}
-              </h2>
-          <p className="text-xl text-desert-700 mb-8">
-            {currentContent.cta.subtitle}
-          </p>
-          <Link to={createPageUrl("Booking")}>
-            <Button 
-              size="lg" 
-              className="flex items-center gap-2 bg-[#c56f19] hover:bg-[#b36317] text-white text-lg px-10 py-6 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
-            >
-              <CalendarIcon className="w-5 h-5" />
-              {currentContent.cta.button}
-                </Button>
-              </Link>
+          {/* Floating Card */}
+          <div className="bg-desert-100/90 backdrop-blur-lg rounded-3xl shadow-2xl p-8 sm:p-12 text-center border border-white/20 hover:shadow-3xl hover:-translate-y-2 transition-all duration-500">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-desert-800 mb-6">
+              {currentContent.cta.title}
+            </h2>
+            <p className="text-xl text-desert-800 mb-10 max-w-2xl mx-auto">
+              {currentContent.cta.subtitle}
+            </p>
+            <Link to={createPageUrl("Booking")}>
+              <Button 
+                size="lg" 
+                className="group relative overflow-hidden bg-[#c56f19] hover:bg-[#b36317] text-white text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <CalendarIcon className="w-5 h-5" />
+                  {currentContent.cta.button}
+                </span>
+              </Button>
+            </Link>
+          </div>
         </motion.div>
       </section>
     </div>

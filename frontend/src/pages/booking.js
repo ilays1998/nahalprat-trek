@@ -18,7 +18,6 @@ import { useLanguage } from "../layout";
 import { useAuth } from "../contexts/AuthContext";
 import { useConfig } from "../contexts/ConfigContext";
 
-
 export default function BookingPage() {
   const { language, isRTL } = useLanguage();
   const { user } = useAuth();
@@ -52,6 +51,7 @@ export default function BookingPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
     first_name: defaultNames.firstName,
@@ -116,7 +116,7 @@ export default function BookingPage() {
       subtitle: "מלא את הפרטים והזמן את מקומך בטרק נחל פרת",
       personalInfo: "פרטים אישיים",
       trekDetails: "פרטי הטיול",
-      emergencyContact: "איש קשר לחירום",
+      emergencyContact: "איש קשר נוסף",
       packageName: "טרק נחל פרת",
       fields: {
         firstName: "שם פרטי",
@@ -131,7 +131,7 @@ export default function BookingPage() {
       },
       placeholders: {
         specialRequests: "דיאטה מיוחדת, אלרגיות, או בקשות אחרות...",
-        emergencyName: "שם מלא של איש הקשר לחירום",
+        emergencyName: "שם מלא של איש הקשר",
         emergencyPhone: "מספר טלפון של איש הקשר"
       },
       bookNow: "הזמן עכשיו",
@@ -144,14 +144,17 @@ export default function BookingPage() {
       step1: "שלב 1: בחירת תאריך",
       step2: "שלב 2: פרטים אישיים",
       trekDuration: "טיול של 3 ימים, 2 לילות",
-      selectDateFirst: "אנא בחר תאריך כדי להמשיך"
+      selectDateFirst: "אנא בחר תאריך כדי להמשיך",
+      required: "שדה חובה",
+      invalidEmail: "כתובת אימייל לא תקינה",
+      invalidPhone: "מספר טלפון לא תקין (נדרש פורמט ישראלי או בינלאומי)"
     },
     en: {
       title: "Book Your Trek",
       subtitle: "Fill in your details and reserve your spot on the Nahal Prat trek",
       personalInfo: "Personal Information",
       trekDetails: "Trek Details",
-      emergencyContact: "Emergency Contact",
+      emergencyContact: "Contact Person",
       packageName: "Nahal Prat Trek",
       fields: {
         firstName: "First Name",
@@ -161,13 +164,13 @@ export default function BookingPage() {
         date: "Select Date",
         participants: "Number of Participants",
         specialRequests: "Special Requests",
-        emergencyName: "Emergency Contact Name",
-        emergencyPhone: "Emergency Contact Phone"
+        emergencyName: "Contact Name",
+        emergencyPhone: "Contact Phone"
       },
       placeholders: {
         specialRequests: "Special diet, allergies, or other requests...",
-        emergencyName: "Full name of emergency contact",
-        emergencyPhone: "Emergency contact phone number"
+        emergencyName: "Full name of contact person",
+        emergencyPhone: "Contact phone number"
       },
       bookNow: "Book Now",
       totalPrice: "Total Price",
@@ -179,17 +182,85 @@ export default function BookingPage() {
       step1: "Step 1: Select Date",
       step2: "Step 2: Personal Details",
       trekDuration: "3-day trek, 2 nights",
-      selectDateFirst: "Please select a date to continue"
+      selectDateFirst: "Please select a date to continue",
+      required: "Required field",
+      invalidEmail: "Invalid email address",
+      invalidPhone: "Invalid phone number (Israeli or international format required)"
     }
   };
 
   const currentContent = content[language];
+
+  const validateEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const validatePhone = (phone) => {
+    // Remove all spaces, dashes, and parentheses for validation
+    const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+    
+    // Israeli mobile: 05X-XXX-XXXX (10 digits starting with 05)
+    const israeliMobile = /^05[0-9]\d{7}$/;
+    
+    // Israeli landline: 0X-XXX-XXXX (9 digits starting with 0, not 05)
+    const israeliLandline = /^0[2-4,8-9]\d{7}$/;
+    
+    // International: +XX-XXX-XXX-XXXX (starts with +, 7-15 digits total)
+    const international = /^\+\d{7,15}$/;
+    
+    return israeliMobile.test(cleanPhone) || israeliLandline.test(cleanPhone) || international.test(cleanPhone);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.first_name.trim()) {
+      newErrors.first_name = currentContent.required;
+    }
+    
+    if (!formData.last_name.trim()) {
+      newErrors.last_name = currentContent.required;
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = currentContent.required;
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = currentContent.invalidEmail;
+    }
+    
+    if (!formData.phone.trim()) {
+      newErrors.phone = currentContent.required;
+    } else if (!validatePhone(formData.phone)) {
+      newErrors.phone = currentContent.invalidPhone;
+    }
+    
+    if (!formData.emergency_contact_name.trim()) {
+      newErrors.emergency_contact_name = currentContent.required;
+    }
+    
+    if (!formData.emergency_contact_phone.trim()) {
+      newErrors.emergency_contact_phone = currentContent.required;
+    } else if (!validatePhone(formData.emergency_contact_phone)) {
+      newErrors.emergency_contact_phone = currentContent.invalidPhone;
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
+    
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({
+        ...prev,
+        [field]: ''
+      }));
+    }
   };
 
   const calculateTotalPrice = () => {
@@ -198,6 +269,12 @@ export default function BookingPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      scrollToError();
+      return;
+    }
+    
     setLoading(true);
     setError('');
 
@@ -439,57 +516,73 @@ export default function BookingPage() {
                     
                     <div className="grid grid-cols-2 gap-5">
                       <div>
-                        <Label htmlFor="firstName">{currentContent.fields.firstName}</Label>
+                        <Label htmlFor="firstName">
+                          {currentContent.fields.firstName} <span className="text-red-500">*</span>
+                        </Label>
                         <Input
                           id="firstName"
-                          required
                           value={formData.first_name}
                           onChange={(e) => handleInputChange('first_name', e.target.value)}
-                          className="mt-2"
+                          className={`mt-2 ${errors.first_name ? 'border-red-300' : ''}`}
                           placeholder={language === 'he' ? 'יוסי' : 'John'}
                           autoComplete="given-name"
                         />
+                        {errors.first_name && (
+                          <p className="mt-1 text-sm text-red-600">{errors.first_name}</p>
+                        )}
                       </div>
                       <div>
-                        <Label htmlFor="lastName">{currentContent.fields.lastName}</Label>
+                        <Label htmlFor="lastName">
+                          {currentContent.fields.lastName} <span className="text-red-500">*</span>
+                        </Label>
                         <Input
                           id="lastName" 
-                          required
                           value={formData.last_name}
                           onChange={(e) => handleInputChange('last_name', e.target.value)}
-                          className="mt-2"
+                          className={`mt-2 ${errors.last_name ? 'border-red-300' : ''}`}
                           placeholder={language === 'he' ? 'כהן' : 'Doe'}
                           autoComplete="family-name"
                         />
+                        {errors.last_name && (
+                          <p className="mt-1 text-sm text-red-600">{errors.last_name}</p>
+                        )}
                       </div>
                     </div>
                     
                     <div>
-                      <Label htmlFor="email">{currentContent.fields.email}</Label>
+                      <Label htmlFor="email">
+                        {currentContent.fields.email} <span className="text-red-500">*</span>
+                      </Label>
                       <Input
                         id="email"
-                        type="email"
-                        required
+                        type="text"
                         value={formData.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
-                        className="mt-2"
+                        className={`mt-2 ${errors.email ? 'border-red-300' : ''}`}
                         placeholder="name@example.com"
                         autoComplete="email"
                       />
+                      {errors.email && (
+                        <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                      )}
                     </div>
                     
                     <div>
-                      <Label htmlFor="phone">{currentContent.fields.phone}</Label>
+                      <Label htmlFor="phone">
+                        {currentContent.fields.phone} <span className="text-red-500">*</span>
+                      </Label>
                       <Input
                         id="phone"
                         type="tel"
-                        required
                         value={formData.phone}
                         onChange={(e) => handleInputChange('phone', e.target.value)}
-                        className="mt-2"
+                        className={`mt-2 ${errors.phone ? 'border-red-300' : ''}`}
                         placeholder={language === 'he' ? '050-123-4567' : '+1 (555) 123-4567'}
                         autoComplete="tel"
                       />
+                      {errors.phone && (
+                        <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                      )}
                     </div>
                   </div>
 
@@ -541,33 +634,41 @@ export default function BookingPage() {
                     {currentContent.emergencyContact}
                   </h3>
                   <p className="text-sm text-gray-500 mb-4">
-                    {language === 'he' ? 'ניצור קשר רק במקרה חירום.' : 'We will contact this person only in case of emergency.'}
+                    {language === 'he' ? 'ניצור קשר רק במקרה הצורך.' : 'We will contact this person only in case of need.'}
                   </p>
                   <div className="grid md:grid-cols-2 gap-5">
                     <div>
-                      <Label htmlFor="emergencyName">{currentContent.fields.emergencyName}</Label>
+                      <Label htmlFor="emergencyName">
+                        {currentContent.fields.emergencyName} <span className="text-red-500">*</span>
+                      </Label>
                       <Input
                         id="emergencyName"
-                        required
                         value={formData.emergency_contact_name}
                         onChange={(e) => handleInputChange('emergency_contact_name', e.target.value)}
                         placeholder={currentContent.placeholders.emergencyName}
-                        className="mt-2"
+                        className={`mt-2 ${errors.emergency_contact_name ? 'border-red-300' : ''}`}
                         autoComplete="name"
                       />
+                      {errors.emergency_contact_name && (
+                        <p className="mt-1 text-sm text-red-600">{errors.emergency_contact_name}</p>
+                      )}
                     </div>
                     <div>
-                      <Label htmlFor="emergencyPhone">{currentContent.fields.emergencyPhone}</Label>
+                      <Label htmlFor="emergencyPhone">
+                        {currentContent.fields.emergencyPhone} <span className="text-red-500">*</span>
+                      </Label>
                       <Input
                         id="emergencyPhone"
                         type="tel"
-                        required
                         value={formData.emergency_contact_phone}
                         onChange={(e) => handleInputChange('emergency_contact_phone', e.target.value)}
                         placeholder={currentContent.placeholders.emergencyPhone}
-                        className="mt-2"
+                        className={`mt-2 ${errors.emergency_contact_phone ? 'border-red-300' : ''}`}
                         autoComplete="tel"
                       />
+                      {errors.emergency_contact_phone && (
+                        <p className="mt-1 text-sm text-red-600">{errors.emergency_contact_phone}</p>
+                      )}
                     </div>
                   </div>
                 </div>

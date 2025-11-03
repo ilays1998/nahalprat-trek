@@ -363,9 +363,9 @@ export default function Layout({ children, currentPageName }) {
         {/* Scroll to Top Button */}
         <button
           onClick={scrollToTop}
-          className={`fixed bottom-8 right-8 p-3 bg-[#c56f19] hover:bg-[#b36317] rounded-full shadow-warm-lg text-white transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${
+          className={`fixed bottom-8 right-8 z-5 p-3 bg-desert-solid-deep hover:bg-desert-bold rounded-full shadow-warm-lg text-white transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${
             showScrollTop 
-              ? 'opacity-100 translate-y-0' 
+              ? 'opacity-50 translate-y-0 hover:opacity-100' 
               : 'opacity-0 translate-y-10 pointer-events-none'
           }`}
           aria-label="Scroll to top"

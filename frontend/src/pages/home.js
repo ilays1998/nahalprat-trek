@@ -555,11 +555,11 @@ export default function Home() {
                           </div>
                         </div>
 
-                        <div className="text-gray-600 leading-relaxed mb-6 whitespace-pre-line 
-                            max-h-[250px] sm:max-h-[300px] md:max-h-[400px] 
-                            overflow-y-auto pr-2 
-                            scrollbar-thin scrollbar-thumb-desert-300 scrollbar-track-desert-100 
-                            rounded-md">
+                        <div className="text-gray-700 leading-relaxed mb-6 whitespace-pre-line
+                            max-h-[400px] overflow-y-auto rounded-2xl
+                            p-5 sm:p-6 bg-white/70 border border-desert-100 shadow-inner
+                            scrollbar-thin scrollbar-thumb-desert-300 scrollbar-track-transparent
+                            hover:shadow-md transition-all duration-300">
                           {day.description}
                         </div>
                       </div>
@@ -567,7 +567,7 @@ export default function Home() {
                       {/* Right column: Map + Stats */}
                       <div className="flex flex-col items-center">
                         {/* Map Title */}
-                        <div className="flex items-center gap-2 text-desert-600 font-medium mb-3">
+                        <div className="flex items-center gap-2 text-desert-600 font-medium mb-3  ">
                           <MapPin className="w-5 h-5" />
                           <span className="text-base">{currentContent.journey.mapTitle}</span>
                         </div>
@@ -715,7 +715,7 @@ export default function Home() {
         </div>
         
         <motion.div 
-          className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
+          className="relative z-4 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}

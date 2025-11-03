@@ -9,7 +9,6 @@ import { useLanguage } from "../layout";
 import { motion } from "framer-motion";
 import { useConfig } from "../contexts/ConfigContext";
 
-
 export default function Packages() {
   const { language, isRTL } = useLanguage();
 
@@ -269,35 +268,35 @@ export default function Packages() {
 
         {/* Trust & Transparency Section */}
         <motion.section 
-          className="bg-desert-light rounded-3xl p-12 shadow-warm border border-desert-200/30"
+          className="bg-desert-light rounded-3xl p-6 md:p-12 shadow-warm border border-desert-200/30"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
           <div className="text-center max-w-3xl mx-auto">
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-[#c56f19] rounded-2xl flex items-center justify-center">
-                <ShieldCheck className="w-8 h-8 text-white" />
+            <div className="flex justify-center mb-4 md:mb-6">
+              <div className="w-12 h-12 md:w-16 md:h-16 bg-[#c56f19] rounded-2xl flex items-center justify-center">
+                <ShieldCheck className="w-6 h-6 md:w-8 md:h-8 text-white" />
               </div>
             </div>
             
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 md:mb-4">
               {currentContent.whyChoose}
             </h2>
             
-            <p className="text-xl text-gray-700 mb-8 leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-700 mb-6 md:mb-8 leading-relaxed px-2 md:px-0">
               {language === 'he' 
                 ? 'שקיפות מלאה, שירות מקצועי, וחוויה בלתי נשכחת. אנחנו מאמינים בכנות מלאה ובמתן ערך אמיתי לכל שקל שאתם משלמים.'
                 : 'Complete transparency, professional service, and an unforgettable experience. We believe in full honesty and providing real value for every shekel you pay.'
               }
             </p>
             
-            <div className="grid md:grid-cols-3 gap-6 text-center">
-              <div className="p-4">
-                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 text-center">
+              <div className="p-3 md:p-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3">
+                  <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">
+                <h3 className="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">
                   {language === 'he' ? 'ללא עלויות נסתרות' : 'No Hidden Costs'}
                 </h3>
                 <p className="text-gray-600 text-sm">
@@ -305,11 +304,11 @@ export default function Packages() {
                 </p>
               </div>
               
-              <div className="p-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Star className="w-6 h-6 text-blue-600 fill-current" />
+              <div className="p-3 md:p-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3">
+                  <Star className="w-5 h-5 md:w-6 md:h-6 text-blue-600 fill-current" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">
+                <h3 className="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">
                   {language === 'he' ? 'איכות מובטחת' : 'Guaranteed Quality'}
                 </h3>
                 <p className="text-gray-600 text-sm">
@@ -317,11 +316,11 @@ export default function Packages() {
                 </p>
               </div>
               
-              <div className="p-4">
-                <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Users className="w-6 h-6 text-orange-600" />
+              <div className="p-3 md:p-4 col-span-2 md:col-span-1">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3">
+                  <Users className="w-5 h-5 md:w-6 md:h-6 text-orange-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">
+                <h3 className="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">
                   {language === 'he' ? 'תמיכה בקהילה המקומית' : 'Supporting Local Community'}
                 </h3>
                 <p className="text-gray-600 text-sm">

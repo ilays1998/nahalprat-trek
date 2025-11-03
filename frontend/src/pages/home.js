@@ -52,7 +52,7 @@ export default function Home() {
       hero: {
         title: "טרק נחל פרת",
         subtitle: "חוויית טיול בת 3 ימים במדבר יהודה",
-        description: "גלה את יופיו של מדבר יהודה בטרק מאורגן בהשראת הליכה אירופאית בין בקתות הרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה בבקתה במדבר.",
+        description: "גלה את יופיו של מדבר יהודה בטרק בהשראת הליכה אירופאית בין בקתות בהרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה בׂבקתות במדבר.",
         cta: "התחל את ההרפתקה",
         viewPricing: "צפה במחיר"
       },
@@ -63,7 +63,7 @@ export default function Home() {
           {
             icon: Bus,
             title: "העברות",
-            description: "מירושלים עד לתחילת הטרק ובחזרה"
+              description: "פשוט מגיעים ליישוב עלמון (ענתות) – ואנחנו דואגים לשאר"
           },
           {
             icon: Bed,
@@ -91,6 +91,7 @@ export default function Home() {
       journey: {
         title: "סיפור דרך",
         subtitle: "מסע של שלושה ימים במדבר יהודה",
+        description: `שלושה ימים של הליכה רציפה בלב מדבר יהודה – מסע שבו כל יום הוא המשך טבעי של הקודם. נלך לאורכו של נחל פרת ונגלה את שלושת מעיינותיו המרכזיים – עין פארה, עין פואר ועין קלט – ואת המנזרים העתיקים פארן וסנט ג׳ורג׳ החצובים בסלע.`,
         viewAll: "צפה במחיר המלא",
         day: "יום",
         mapTitle: "מפת הטרק"
@@ -113,7 +114,7 @@ export default function Home() {
       hero: {
         title: "Nahal Prat Trek",
         subtitle: "3-Day Desert Adventure",
-        description: "Discover the beauty of the Judean Desert through an organized trek inspired by European hut-to-hut hiking. Three days of hiking, breathtaking landscapes, and unique desert accommodation.",
+        description: "Discover the beauty of the Judean Desert through a trek inspired by European hut-to-hut hiking. Three days of hiking, breathtaking landscapes, and staying in desert cabins.",
         cta: "Start Your Adventure",
         viewPricing: "View Pricing"
       },
@@ -124,7 +125,7 @@ export default function Home() {
           {
             icon: Bus,
             title: "Transportation",
-            description: "From Jerusalem to the trail start and back"
+            description: "Just arrive at the Almon (Anatot) settlement – and we'll take care of the rest"
           },
           {
             icon: Bed,
@@ -152,6 +153,7 @@ export default function Home() {
       journey: {
         title: "Journey Story",
         subtitle: "A three-day adventure through the Judean Desert",
+        description: `Three continuous days of hiking through the heart of the Judean Desert – a journey where each day naturally continues from the last. We'll follow the course of Nahal Prat and discover its three main springs – Ein Parah, Ein Fuar, and Ein Qelt – along with the ancient monasteries of Faran and St. George carved into the desert cliffs.`,
         viewAll: "View Full Pricing",
         day: "Day",
         mapTitle: "Trail Map"
@@ -504,7 +506,7 @@ export default function Home() {
       <section className="py-8 bg-gradient-to-b from-desert-100 to-desert-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -512,7 +514,10 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
               {currentContent.journey.title}
             </h2>
-            <p className="text-xl text-gray-600">{currentContent.journey.subtitle}</p>
+            <p className="text-xl text-gray-600 mb-3">{currentContent.journey.subtitle}</p>
+            <p className="text-lg text-gray-700 leading-relaxed max-w-4xl mx-auto whitespace-pre-line">
+              {currentContent.journey.description}
+            </p>
           </motion.div>
             
           <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-12 max-w-6xl mx-auto items-stretch">

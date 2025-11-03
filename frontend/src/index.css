@@ -390,6 +390,8 @@
 html, body {
   overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch;
+  background-color: #faf0d7; /* your theme color (e.g., desert-100 or desert-200) */
+  padding-top: env(safe-area-inset-top);
 }
 
 /* This class is added dynamically when the mobile menu opens */

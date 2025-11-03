@@ -91,7 +91,7 @@ export default function Home() {
       journey: {
         title: "סיפור דרך",
         subtitle: "מסע של שלושה ימים במדבר יהודה",
-        description: `שלושה ימים של הליכה רציפה בלב מדבר יהודה – מסע שבו כל יום הוא המשך טבעי של הקודם. נלך לאורכו של נחל פרת ונגלה את שלושת מעיינותיו המרכזיים – עין פארה, עין פואר ועין קלט – ואת המנזרים העתיקים פארן וסנט ג׳ורג׳ החצובים בסלע.`,
+        description: `שלושה ימים של הליכה רציפה בלב מדבר יהודה – מסע שבו כל יום הוא המשך טבעי של הקודם. תצעדו לאורך נחל פרת, בין שלושת מעיינותיו המרכזיים – עין פארה, עין פואר ועין קלט – כשלצידם ניצבים המנזרים העתיקים פארן וסנט ג׳ורג׳ החצובים בסלע.`,
         viewAll: "צפה במחיר המלא",
         day: "יום",
         mapTitle: "מפת הטרק"
@@ -153,7 +153,7 @@ export default function Home() {
       journey: {
         title: "Journey Story",
         subtitle: "A three-day adventure through the Judean Desert",
-        description: `Three continuous days of hiking through the heart of the Judean Desert – a journey where each day naturally continues from the last. We'll follow the course of Nahal Prat and discover its three main springs – Ein Parah, Ein Fuar, and Ein Qelt – along with the ancient monasteries of Faran and St. George carved into the desert cliffs.`,
+        description: `Three continuous days of hiking through the heart of the Judean Desert – a journey where each day naturally continues from the last. Walk along Nahal Prat, passing its three main springs – Ein Parah, Ein Fuar, and Ein Qelt – with the ancient monasteries of Faran and St. George standing beside them, carved into the desert cliffs.`,
         viewAll: "View Full Pricing",
         day: "Day",
         mapTitle: "Trail Map"
@@ -515,7 +515,7 @@ export default function Home() {
               {currentContent.journey.title}
             </h2>
             <p className="text-xl text-gray-600 mb-3">{currentContent.journey.subtitle}</p>
-            <p className="text-lg text-gray-700 leading-relaxed max-w-4xl mx-auto whitespace-pre-line">
+            <p className="text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto whitespace-pre-line">
               {currentContent.journey.description}
             </p>
           </motion.div>

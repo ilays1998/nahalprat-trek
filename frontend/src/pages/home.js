@@ -52,7 +52,7 @@ export default function Home() {
       hero: {
         title: "טרק נחל פרת",
         subtitle: "חוויית טיול בת 3 ימים במדבר יהודה",
-        description: "גלה את יופיו של מדבר יהודה בטרק בהשראת הליכה אירופאית בין בקתות בהרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה בׂבקתות במדבר.",
+        description: "גלה את יופיו של מדבר יהודה בטרק בהשראת הליכה אירופאית בין בקתות בהרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה בבקתות במדבר.",
         cta: "התחל את ההרפתקה",
         viewPricing: "צפה במחיר"
       },
@@ -84,9 +84,9 @@ export default function Home() {
       },
       stats: {
         distance: { label: "מרחק", value: "35 ק״מ" },
-        time: { label: "זמן", value: "3 ימים" },
+        time: { label: "משך המסלול", value: "3 ימים" },
         elevation: { label: "עלייה", value: "800 מ'" },
-        difficulty: { label: "קושי", value: "בינוני" }
+        difficulty: { label: "דרגת קושי", value: "בינוני" }
       },
       journey: {
         title: "סיפור דרך",
@@ -146,7 +146,7 @@ export default function Home() {
       },
       stats: {
         distance: { label: "Distance", value: "35 KM" },
-        time: { label: "Time", value: "3 Days" },
+        time: { label: "Duration", value: "3 Days" },
         elevation: { label: "Elevation", value: "800m" },
         difficulty: { label: "Difficulty", value: "Medium" }
       },

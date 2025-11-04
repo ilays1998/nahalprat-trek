@@ -31,7 +31,7 @@ export const ProtectedRoute = ({ children }) => {
         <div className="min-h-screen py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <div className="text-red-600 mb-4">⚠️</div>
+              <div className="text-red-600 mb-4"><LogIn className="text-desert-700 w-8 h-8 mx-auto" /></div>
               <p className="text-gray-900 font-semibold mb-4">
                 {authError || (language === 'he' ? 'אנא התחבר כדי להמשיך' : 'Please log in to continue')}
               </p>

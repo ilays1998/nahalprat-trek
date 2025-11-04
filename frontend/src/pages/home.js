@@ -391,7 +391,7 @@ export default function Home() {
               <Link to={createPageUrl("Booking")}>
                 <Button 
                   size="lg" 
-                  className="group relative overflow-hidden bg-[#c56f19] hover:bg-[#b36317] text-white text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                  className="group relative opacity-80 overflow-hidden bg-[#c56f19] hover:bg-[#b36317] hover:opacity-100 text-opacity-100 text-white text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     <CalendarIcon className="w-5 h-5" />
@@ -404,7 +404,7 @@ export default function Home() {
                 <Link to={createPageUrl("Packages")}>
                   <Button
                     size="lg"
-                    className="group relative overflow-hidden bg-desert-solid hover:bg-desert-medium text-desert-700 text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                    className="group relative opacity-80 overflow-hidden bg-desert-solid hover:bg-desert-medium hover:opacity-100 text-opacity-100 text-desert-700 text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {currentContent.hero.viewPricing}
@@ -460,7 +460,7 @@ export default function Home() {
 
       {/* Features Section */}
       <section className="py-8 bg-gradient-to-b from-desert-50 to-desert-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8"> {/* px-4 to px-2 on mobile */}
           <motion.div 
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
@@ -473,7 +473,7 @@ export default function Home() {
             <p className="text-xl text-gray-600">{currentContent.features.subtitle}</p>
           </motion.div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"> {/* Responsive gap, ensure grid-cols-1 always explicit for clarity */}
             {currentContent.features.items.map((feature, index) => (
               <motion.div
                 key={index}
@@ -482,20 +482,20 @@ export default function Home() {
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="h-full border-none shadow-warm hover:shadow-warm-lg card-hover group">
-                <CardContent className="p-8 text-center">
+                <Card className="h-full border-none shadow-warm hover:shadow-warm-lg card-hover group rounded-2xl">
+                  <CardContent className="p-4 md:p-8 text-center"> {/* Less padding for mobile */}
                     <div className="relative mb-6">
                       <div className="absolute inset-0 bg-[#c56f19] rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
-                      <div className="relative w-20 h-20 bg-[#c56f19] hover:bg-[#b36317] rounded-2xl flex items-center justify-center mx-auto transform group-hover:scale-110 transition-all duration-300">
-                        <feature.icon className="w-10 h-10 text-white" />
+                      <div className="relative w-14 h-14 md:w-20 md:h-20 bg-[#c56f19] hover:bg-[#b36317] rounded-2xl flex items-center justify-center mx-auto transform group-hover:scale-110 transition-all duration-300"> {/* Icon smaller on mobile */}
+                        <feature.icon className="w-8 h-8 md:w-10 md:h-10 text-white" /> {/* Icon smaller on mobile */}
                       </div>
-                  </div>
+                    </div>
                     <h3 className="text-xl font-display font-bold text-gray-900 mb-4">
                       {feature.title}
                     </h3>
-                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-                </CardContent>
-              </Card>
+                    <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </div>
@@ -504,7 +504,7 @@ export default function Home() {
 
       {/* Journey Story Section */}
       <section className="py-8 bg-gradient-to-b from-desert-100 to-desert-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8"> {/* px-4 to px-2 on mobile */}
           <motion.div 
             className="text-center mb-8"
             initial={{ opacity: 0, y: 20 }}
@@ -520,8 +520,7 @@ export default function Home() {
             </p>
           </motion.div>
             
-          <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-12 max-w-6xl mx-auto items-stretch">
-
+          <div className="grid grid-cols-1 gap-8 max-w-6xl mx-auto items-stretch"> {/* Remove md:grid-cols-1 as grid-cols-1 covers mobile; lower gap-12 -> gap-8*/}
             {journeyDays.map((day, index) => (
               <motion.div
                 key={day.id}
@@ -530,15 +529,13 @@ export default function Home() {
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="border-none shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                  <CardContent className="p-8">
-                    <div className="grid md:grid-cols-2 gap-8 items-center">
-
-                      
+                <Card className="border-none shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden rounded-2xl">
+                  <CardContent className="p-4 md:p-8"> {/* Less padding for mobile */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center"> {/* Stack columns on mobile, smaller gap, md:gap-8 desktop */}
                       {/* Left column: Day Info & Description */}
                       <div className="flex flex-col justify-start">
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-12 h-14 flex items-center justify-center">
+                        <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4"> {/* Lower gap and margin for mobile */}
+                          <div className="w-10 h-10 md:w-12 md:h-14 flex items-center justify-center"> {/* Shrink logo on mobile */}
                             <img 
                               src={day.logo} 
                               alt="TNP Logo" 
@@ -554,37 +551,33 @@ export default function Home() {
                             </h4>
                           </div>
                         </div>
-
-                        <div className="text-gray-700 leading-relaxed mb-6 whitespace-pre-line
-                            max-h-[400px] overflow-y-auto rounded-2xl
-                            p-5 sm:p-6 bg-white/70 border border-desert-100 shadow-inner
+                        <div className="text-gray-700 leading-relaxed mb-4 md:mb-6 whitespace-pre-line
+                            max-h-[220px] md:max-h-[400px] overflow-y-auto rounded-2xl
+                            p-3 md:p-5 sm:p-6 bg-white/70 border border-desert-100 shadow-inner
                             scrollbar-thin scrollbar-thumb-desert-300 scrollbar-track-transparent
-                            hover:shadow-md transition-all duration-300">
+                            hover:shadow-md transition-all duration-300"> {/* Reduce description box max-h and padding for mobile */}
                           {day.description}
                         </div>
                       </div>
-
                       {/* Right column: Map + Stats */}
-                      <div className="flex flex-col items-center">
+                      <div className="flex flex-col items-center mt-4 md:mt-0"> {/* add margin on mobile stack */}
                         {/* Map Title */}
-                        <div className="flex items-center gap-2 text-desert-600 font-medium mb-3  ">
+                        <div className="flex items-center gap-2 text-desert-600 font-medium mb-2 md:mb-3  ">
                           <MapPin className="w-5 h-5" />
                           <span className="text-base">{currentContent.journey.mapTitle}</span>
                         </div>
-
                         {/* Garmin Map */}
                         <div className="w-full bg-gray-100 rounded-xl overflow-hidden shadow-inner 
                                       aspect-[4/3] sm:aspect-[16/9] md:aspect-video">
-                         <GoogleMapsGPX 
+                          <GoogleMapsGPX 
                             gpxUrl={day.gpxFile} 
                             height="100%" 
                           />
                         </div>
-
                         {/* Trek Stats Section */}
-                        <div className="mt-6 grid grid-cols-3 gap-4 w-full text-center">
-                          <div className="flex flex-col items-center justify-center bg-desert-50 p-4 rounded-xl shadow-inner">
-                            <Ruler className="w-6 h-6 text-desert-600 mb-2" />
+                        <div className="mt-4 md:mt-6 grid grid-cols-3 gap-2 md:gap-4 w-full text-center"> {/* Less gap, less margin for mobile */}
+                          <div className="flex flex-col items-center justify-center bg-desert-50 p-2 md:p-4 rounded-xl shadow-inner">
+                            <Ruler className="w-6 h-6 text-desert-600 mb-1 md:mb-2" />
                             <span className="text-lg font-semibold text-gray-800">
                               {day.stats.distance}
                             </span>
@@ -592,9 +585,8 @@ export default function Home() {
                               {language === 'he' ? 'מרחק (ק"מ)' : 'Distance (km)'}
                             </span>
                           </div>
-
-                          <div className="flex flex-col items-center justify-center bg-desert-50 p-4 rounded-xl shadow-inner">
-                            <TrendingUp className="w-6 h-6 text-desert-600 mb-2" />
+                          <div className="flex flex-col items-center justify-center bg-desert-50 p-2 md:p-4 rounded-xl shadow-inner">
+                            <TrendingUp className="w-6 h-6 text-desert-600 mb-1 md:mb-2" />
                             <span className="text-lg font-semibold text-gray-800">
                               {day.stats.ascent}
                             </span>
@@ -602,9 +594,8 @@ export default function Home() {
                               {language === 'he' ? 'עלייה (מ)' : 'Ascent (m)'}
                             </span>
                           </div>
-
-                          <div className="flex flex-col items-center justify-center bg-desert-50 p-4 rounded-xl shadow-inner">
-                            <TrendingDown className="w-6 h-6 text-desert-600 mb-2" />
+                          <div className="flex flex-col items-center justify-center bg-desert-50 p-2 md:p-4 rounded-xl shadow-inner">
+                            <TrendingDown className="w-6 h-6 text-desert-600 mb-1 md:mb-2" />
                             <span className="text-lg font-semibold text-gray-800">
                               {day.stats.descent}
                             </span>

@@ -328,14 +328,17 @@ export default function Home() {
       {/* Hero Section with Parallax */}
       <section
         className="relative flex items-center justify-center overflow-hidden z-0"
-        style={{ height: heroHeight }}
+        style={{ 
+          height: heroHeight,
+          minHeight: '100vh'
+        }}
       >
         {/* Animated Background Images */}
         <div className="absolute inset-0">
           {heroImages.map((image, index) => (
             <motion.div
               key={index}
-              className={`hero-slide absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out`}
+              className="hero-slide absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
               style={{
                 backgroundImage: `url(${image})`,
                 opacity: currentImageIndex === index ? 1 : 0,
@@ -349,16 +352,15 @@ export default function Home() {
         
         {/* Hero Content */}
         <motion.div 
-          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 text-center
-                    pt-[4rem] sm:pt-[6rem] md:pt-[7rem]"
+          className="relative z-10 w-full h-full flex flex-col justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12"
           initial="hidden"
           animate="visible"
           variants={containerVariants}
         >
-
-          <motion.div variants={itemVariants}>
+          {/* Text Content - Top Section */}
+          <motion.div variants={itemVariants} className="text-center pt-[6rem] sm:pt-[5rem] md:pt-[4rem] lg:pt-[5rem]">
             <motion.h1 
-              className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-desert-100 mb-4 sm:mb-6 text-shadow-lg leading-tight"
+              className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-desert-100 mb-4 sm:mb-6 text-shadow-lg leading-tight px-2"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5 }}
@@ -367,14 +369,14 @@ export default function Home() {
             </motion.h1>
             
             <motion.p 
-              className="text-lg sm:text-2xl md:text-3xl text-desert-200 mb-6 sm:mb-8 font-medium"
+              className="text-xl sm:text-2xl md:text-3xl text-desert-200 mb-6 sm:mb-8 font-medium px-2"
               variants={itemVariants}
             >
               {currentContent.hero.subtitle}
             </motion.p>
             
             <motion.p 
-              className="text-desert-100 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-2"
+              className="text-desert-100 mb-8 max-w-3xl mx-auto leading-relaxed px-2"
               style={{
                 fontSize: "clamp(0.95rem, 0.8vw + 0.9rem, 1.4rem)",
                 textShadow: "0 2px 10px rgba(0, 0, 0, 0.6)"
@@ -383,49 +385,50 @@ export default function Home() {
             >
               {currentContent.hero.description}
             </motion.p>
+          </motion.div>
 
+          {/* Bottom Section - Buttons and Scroll Indicator */}
+          <div className="flex flex-col items-center gap-6">
+            {/* Buttons */}
             <motion.div 
-              className="flex flex-col sm:flex-row gap-4 justify-center"
+              className="flex flex-col sm:flex-row gap-4 justify-center w-full px-4"
               variants={itemVariants}
             >
-              <Link to={createPageUrl("Booking")}>
+              <Link to={createPageUrl("Booking")} className="flex-1 sm:flex-initial">
                 <Button 
                   size="lg" 
-                  className="group relative opacity-80 overflow-hidden bg-[#c56f19] hover:bg-[#b36317] hover:opacity-100 text-opacity-100 text-white text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                  className="group relative opacity-80 overflow-hidden bg-[#c56f19] hover:bg-[#b36317] hover:opacity-100 text-opacity-100 text-white text-base sm:text-lg px-6 py-5 sm:px-8 sm:py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 w-full whitespace-nowrap"
                 >
-                  <span className="relative z-10 flex items-center gap-2">
-                    <CalendarIcon className="w-5 h-5" />
-                  {currentContent.hero.cta}
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    <CalendarIcon className="w-5 h-5 flex-shrink-0" />
+                    {currentContent.hero.cta}
                   </span>
                 </Button>
               </Link>
               
-              <Link to={createPageUrl("Packages")}>
-                <Link to={createPageUrl("Packages")}>
-                  <Button
-                    size="lg"
-                    className="group relative opacity-80 overflow-hidden bg-desert-solid hover:bg-desert-medium hover:opacity-100 text-opacity-100 text-desert-700 text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      {currentContent.hero.viewPricing}
-                    </span>
-                  </Button>
-                </Link>
-
+              <Link to={createPageUrl("Packages")} className="flex-1 sm:flex-initial">
+                <Button
+                  size="lg"
+                  className="group relative opacity-80 overflow-hidden bg-desert-solid hover:bg-desert-medium hover:opacity-100 text-opacity-100 text-desert-700 text-base sm:text-lg px-6 py-5 sm:px-8 sm:py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 w-full whitespace-nowrap"
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    {currentContent.hero.viewPricing}
+                  </span>
+                </Button>
               </Link>
             </motion.div>
-          </motion.div>
-          
-          {/* Scroll Indicator */}
-          <motion.div 
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          >
-            <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce" />
-            </div>
-          </motion.div>
+
+            {/* Scroll Indicator - Visible on all devices */}
+            <motion.div 
+              className="pb-4"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            >
+              <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
+                <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce" />
+              </div>
+            </motion.div>
+          </div>
         </motion.div>
       </section>
 

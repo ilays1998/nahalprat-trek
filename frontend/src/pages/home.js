@@ -35,14 +35,13 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const [heroHeight, setHeroHeight] = useState('100svh');
+  const [heroHeight, setHeroHeight] = useState('auto');
 
   useEffect(() => {
-    // ✅ Fix Safari jumping: lock hero height on mount
-    if (typeof window !== 'undefined') {
-      const h = window.innerHeight;
-      setHeroHeight(`${h}px`);
-    }
+    // Lock hero to a fixed pixel height from initial viewport, no updates on scroll/resize
+    if (typeof window === 'undefined') return;
+    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    setHeroHeight(`${Math.round(viewportHeight)}px`);
   }, []);
 
   
@@ -330,7 +329,7 @@ export default function Home() {
         className="relative flex items-center justify-center overflow-hidden z-0"
         style={{ 
           height: heroHeight,
-          minHeight: '100svh'
+          minHeight: heroHeight
         }}
       >
         {/* Animated Background Images */}

@@ -35,7 +35,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const [heroHeight, setHeroHeight] = useState('100vh');
+  const [heroHeight, setHeroHeight] = useState('100svh');
 
   useEffect(() => {
     // ✅ Fix Safari jumping: lock hero height on mount
@@ -330,7 +330,7 @@ export default function Home() {
         className="relative flex items-center justify-center overflow-hidden z-0"
         style={{ 
           height: heroHeight,
-          minHeight: '100vh'
+          minHeight: '100svh'
         }}
       >
         {/* Animated Background Images */}

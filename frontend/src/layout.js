@@ -27,7 +27,7 @@ const translations = {
     contact: "צור קשר",
     followUs: "עקוב אחרינו",
     allRights: "כל הזכויות שמורות.",
-    footerDesc: "חווה את מדבר יהודה בטרק מאורגן בהשראת הליכה אירופאית בין בקתות הרים.",
+    footerDesc: "חווה את מדבר יהודה בטרק בהשראת הליכה אירופאית בין בקתות הרים.",
     logout: "התנתק",
     logoutConfirm: "האם אתה בטוח?",
     logoutMessage: "האם אתה בטוח שברצונך להתנתק מהמערכת?",
@@ -49,7 +49,7 @@ const translations = {
     contact: "Contact",
     followUs: "Follow Us",
     allRights: "All rights reserved.",
-    footerDesc: "Experience the Judean Desert through an organized trek inspired by European hut-to-hut hiking.",
+    footerDesc: "Experience the Judean Desert through a trek inspired by European hut-to-hut hiking.",
     logout: "Log Out",
     logoutConfirm: "Are you sure?",
     logoutMessage: "Are you sure you want to log out of the system?",
@@ -385,10 +385,10 @@ export default function Layout({ children, currentPageName }) {
             <div className="grid md:grid-cols-3 gap-12">
               <div>
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-12 flex items-center justify-center">
+                  <div className="w-10 h-12 flex-shrink-0 flex items-center justify-center">
                     <img src={cfImage("/images/logo.png")} alt="TNP Logo" className="w-full h-full object-contain drop-shadow-lg" />
                   </div>
-                  <h3 className="text-xl font-display font-bold">{t.title}</h3>
+                  <h3 className="text-xl font-display font-bold whitespace-nowrap min-w-0 flex-1">{t.title}</h3>
                 </div>
                 <p className="text-gray-400 leading-relaxed">
                   {t.footerDesc}
@@ -416,13 +416,28 @@ export default function Layout({ children, currentPageName }) {
                   {t.followUs}
                 </h4>
                 <div className="flex gap-4">
-                  <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-all duration-300 group">
+                  <a 
+                    href={config.SOCIAL.FACEBOOK} 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-all duration-300 group"
+                  >
                     <FaFacebook className="w-5 h-5 group-hover:scale-110 transition-transform" />
                   </a>
-                  <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-pink-500 transition-all duration-300 group">
+                  <a 
+                    href={config.SOCIAL.INSTAGRAM} 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-pink-500 transition-all duration-300 group"
+                  >
                     <FaInstagram className="w-5 h-5 group-hover:scale-110 transition-transform" />
                   </a>
-                  <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-red-600 transition-all duration-300 group">
+                  <a 
+                    href={config.SOCIAL.YOUTUBE} 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-red-600 transition-all duration-300 group"
+                  >
                     <FaYoutube className="w-5 h-5 group-hover:scale-110 transition-transform" />
                   </a>
                   <a 

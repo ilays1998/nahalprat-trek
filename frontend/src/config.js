@@ -33,6 +33,13 @@ const config = {
       he: '054-5901376',           // Hebrew - local format
       en: '+972-54-590-1376'      // English - international format
     }
+  },
+
+  // Social Media Links
+  SOCIAL: {
+    INSTAGRAM: 'https://www.instagram.com/treknahalprat/',
+    FACEBOOK: '#',
+    YOUTUBE: '#'
   }
 };
 

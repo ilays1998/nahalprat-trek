@@ -21,7 +21,7 @@ export default function Privacy() {
 - פרטי הזמנה: תאריכי לינה, שירותים שנרכשו, בקשות מיוחדות.
 - פרטי תשלום: מידע הנדרש לצורך ביצוע התשלום (באמצעות ספקי סליקה חיצוניים בלבד, ואינו נשמר בשרתי החברה).
 - נתוני גלישה: כתובת IP, סוג דפדפן, מערכת הפעלה ונתוני שימוש בסיסיים הנאספים אוטומטית לצורכי תחזוקה, אבטחה ושיפור השירות.
-2.2 אנו איננו אוספים מידע רגיש כגון מספרי זהות, פרטי אשראי מלאים או מידע רפואי.`
+2.2 אנו איננו אוספים מידע רגיש כגון מספרי זהות, פרטי אשראי מלאים או מידע רפואי. עם זאת, ייתכן שנבקש מהמשתמש לציין אלרגיות או רגישויות למזון, וזאת אך ורק לצורך התאמת הארוחות והשירותים הנלווים במהלך הטרק. מידע זה נשמר באופן מאובטח ואינו משמש לכל מטרה אחרת.`
         },
         {
           title: "3. שימוש במידע",
@@ -29,6 +29,7 @@ export default function Privacy() {
 - ניהול הזמנות, שירותי לינה והובלת ציוד.
 - יצירת קשר עם המשתמש בנוגע להזמנה, ביטול או עדכון שירות.
 - שליחת הודעות שירות (אישור הזמנה, תזכורות, ביטולים וכד').
+- התאמת הארוחות והשירותים הנלווים בהתאם לרגישויות או אלרגיות שדווחו.
 - ניתוח נתונים אנונימיים לשם תחזוקה ושיפור השירותים.
 אנו איננו משתמשים במידע לצורכי פרסום, שיווק או מכירת נתונים לצדדים שלישיים.`
         },
@@ -105,7 +106,7 @@ export default function Privacy() {
 - Booking information: dates, services purchased, preferences.
 - Payment information: processed securely via third-party providers and not stored on our servers.
 - Technical data: IP address, browser type, session identifiers – used solely for maintenance and security.
-We do not collect sensitive data such as ID numbers or full credit card details.`
+We do not collect sensitive data such as ID numbers or full credit card details. However, we may request information about food allergies or sensitivities solely for the purpose of adapting meals and related services during the trek. This information is stored securely and is not used for any other purpose.`
         },
         {
           title: "3. How We Use Your Information",
@@ -113,6 +114,7 @@ We do not collect sensitive data such as ID numbers or full credit card details.
 - Managing bookings and accommodation services.
 - Communicating with you about confirmations, changes, or cancellations.
 - Sending operational (non-marketing) notifications.
+- Adapting meals and related services according to reported allergies or sensitivities.
 - Improving website stability and user experience.
 We do not use your data for marketing, advertising, or data resale.`
         },
@@ -190,7 +192,7 @@ We are committed to transparency, data protection, and respect for your privacy.
             </h1>
             <p className="text-xl text-desert-900 text-center mt-2">
               {pageContent.lastUpdate}{" "}
-              {new Date().toLocaleDateString(language === "he" ? "he-IL" : "en-US")}
+              {language === "he" ? "5.11.2025" : "November 5, 2025"}
             </p>
           </div>
 

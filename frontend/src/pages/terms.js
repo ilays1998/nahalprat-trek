@@ -325,7 +325,7 @@ Phone / WhatsApp: ${phone}`
               {pageContent.title}
             </h1>
             <p className="text-xl text-desert-900 text-center mt-2">
-              {pageContent.lastUpdate} {new Date().toLocaleDateString(language === 'he' ? 'he-IL' : 'en-US')}
+              {pageContent.lastUpdate} {language === 'he' ? '5.11.2025' : 'November 5, 2025'}
             </p>
           </div>
 

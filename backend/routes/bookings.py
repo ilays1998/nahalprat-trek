@@ -166,16 +166,20 @@ def update_booking(booking_id: int):
         booking_dict = serialize_booking(booking)
         try:
             if data['status'] == 'confirmed':
-                # Send approval email
+                # Send approval email to customer
                 email_service.send_booking_approval(booking_dict, booking.id)
-                logging.info(f"Booking approval email sent for booking {booking.id}")
+                # Send notification to admin
+                email_service.send_admin_booking_approval_notification(booking_dict, booking.id)
+                logging.info(f"Booking approval emails sent for booking {booking.id}")
             elif data['status'] == 'cancelled':
-                # Send cancellation email
+                # Send cancellation email to customer
                 cancellation_reason = data.get('cancellation_reason', '')
                 email_service.send_booking_cancellation(booking_dict, booking.id, cancellation_reason)
-                logging.info(f"Booking cancellation email sent for booking {booking.id}")
+                # Send notification to admin
+                email_service.send_admin_booking_cancellation_notification(booking_dict, booking.id, cancellation_reason)
+                logging.info(f"Booking cancellation emails sent for booking {booking.id}")
         except Exception as e:
-            logging.error(f"Failed to send status change email for booking {booking.id}: {str(e)}")
+            logging.error(f"Failed to send status change emails for booking {booking.id}: {str(e)}")
 
     return jsonify(serialize_booking(booking))
 
@@ -192,14 +196,35 @@ def delete_booking(booking_id: int):
     if not user or (user.role != 'admin' and booking.user_id != user.id):
         return jsonify({"error": "Forbidden"}), 403
 
-    # Send cancellation email before deleting
+    # Send cancellation emails before deleting
     booking_dict = serialize_booking(booking)
+    cancellation_reason = request.json.get('cancellation_reason', 'Booking cancelled') if request.json else 'Booking cancelled'
+    
+    # Try to send customer cancellation email first
+    customer_email_success = False
+    customer_email_error = None
+    
     try:
-        cancellation_reason = request.json.get('cancellation_reason', 'Booking cancelled') if request.json else 'Booking cancelled'
-        email_service.send_booking_cancellation(booking_dict, booking.id, cancellation_reason)
-        logging.info(f"Booking cancellation email sent for deleted booking {booking.id}")
+        customer_email_success = email_service.send_booking_cancellation(booking_dict, booking.id, cancellation_reason)
+        if customer_email_success:
+            logging.info(f"Customer booking cancellation email sent successfully for deleted booking {booking.id}")
+        else:
+            customer_email_error = "Email service returned False - unknown error"
+            logging.warning(f"Customer cancellation email failed for deleted booking {booking.id}: {customer_email_error}")
     except Exception as e:
-        logging.error(f"Failed to send cancellation email for deleted booking {booking.id}: {str(e)}")
+        customer_email_error = str(e)
+        logging.error(f"Customer cancellation email failed for deleted booking {booking.id}: {customer_email_error}")
+    
+    # Send admin notification (always send, but include customer email failure if applicable)
+    try:
+        if customer_email_success:
+            email_service.send_admin_booking_cancellation_notification(booking_dict, booking.id, cancellation_reason)
+            logging.info(f"Admin booking cancellation notification sent successfully for deleted booking {booking.id}")
+        else:
+            email_service.send_admin_booking_cancellation_notification_with_customer_error(booking_dict, booking.id, cancellation_reason, customer_email_error)
+            logging.info(f"Admin booking cancellation notification sent with customer email error for deleted booking {booking.id}")
+    except Exception as e:
+        logging.error(f"Admin cancellation email also failed for deleted booking {booking.id}: {str(e)}")
 
     db.session.delete(booking)
     db.session.commit()

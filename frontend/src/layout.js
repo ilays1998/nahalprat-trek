@@ -416,14 +416,14 @@ export default function Layout({ children, currentPageName }) {
                   {t.followUs}
                 </h4>
                 <div className="flex gap-4">
-                  <a 
+                  {/* <a 
                     href={config.SOCIAL.FACEBOOK} 
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-all duration-300 group"
                   >
                     <FaFacebook className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                  </a>
+                  </a> */}
                   <a 
                     href={config.SOCIAL.INSTAGRAM} 
                     target="_blank"
@@ -432,14 +432,14 @@ export default function Layout({ children, currentPageName }) {
                   >
                     <FaInstagram className="w-5 h-5 group-hover:scale-110 transition-transform" />
                   </a>
-                  <a 
+                  {/* <a 
                     href={config.SOCIAL.YOUTUBE} 
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-red-600 transition-all duration-300 group"
                   >
                     <FaYoutube className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                  </a>
+                  </a> */}
                   <a 
                     href={`https://wa.me/${config.CONTACT.PHONE.en.replace(/[^0-9]/g, '')}`}
                     target="_blank"

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { X, ZoomIn, Camera, Footprints, Utensils, Bed } from "lucide-react";
+import { X, ZoomIn, Camera, Footprints, Utensils, Bed, ChevronLeft, ChevronRight } from "lucide-react";
 import { Dialog, DialogContent } from "../components/ui/dialog";
 import { useLanguage } from "../layout";
 import { cfImage } from "../utils/image";
@@ -238,6 +238,49 @@ export default function Gallery() {
           return titleA.localeCompare(titleB, language === "he" ? "he" : "en", { sensitivity: "base" });
         });
 
+  // Navigation functions for modal
+  const currentImageIndex = useMemo(() => {
+    if (!selectedImage) return -1;
+    return filteredImages.findIndex(img => img.id === selectedImage.id);
+  }, [selectedImage, filteredImages]);
+
+  const canGoNext = currentImageIndex < filteredImages.length - 1;
+  const canGoPrev = currentImageIndex > 0;
+
+  const goToNext = useCallback(() => {
+    if (canGoNext && currentImageIndex >= 0) {
+      setSelectedImage(filteredImages[currentImageIndex + 1]);
+    }
+  }, [canGoNext, currentImageIndex, filteredImages]);
+
+  const goToPrev = useCallback(() => {
+    if (canGoPrev && currentImageIndex >= 0) {
+      setSelectedImage(filteredImages[currentImageIndex - 1]);
+    }
+  }, [canGoPrev, currentImageIndex, filteredImages]);
+
+
+
+  // Keyboard navigation for modal
+  useEffect(() => {
+    if (!selectedImage) return;
+
+    const handleKeyPress = (e) => {
+      if (e.key === 'ArrowRight') {
+        if (isRTL) goToPrev();
+        else goToNext();
+      }
+      if (e.key === 'ArrowLeft') {
+        if (isRTL) goToNext();
+        else goToPrev();
+      }
+      if (e.key === 'Escape') setSelectedImage(null);
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, [selectedImage, goToNext, goToPrev, isRTL]);
+
 
 
   return (
@@ -317,7 +360,7 @@ export default function Gallery() {
           {filteredImages.map((image, index) => (
             <Card
               key={image.id}
-              className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer group gallery-card"
+              className="bg-desert-solid border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer group gallery-card"
             >
               <div className="relative">
                 <GalleryImage
@@ -348,33 +391,106 @@ export default function Gallery() {
           ))}
         </div>
 
-        {/* Modal */}
+        {/* Enhanced Modal */}
         <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-          <DialogContent className="max-w-4xl max-h-[90vh] p-0 gallery-modal">
+          <DialogContent className="max-w-5xl max-h-[95vh] p-0 gallery-modal bg-black/95 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-white/10">
             {selectedImage && (
-              <div className="relative">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-4 right-4 bg-black/50 text-white hover:bg-black/70 z-10"
-                  onClick={() => setSelectedImage(null)}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-                <img
-                  src={selectedImage.url}
-                  alt={selectedImage.title}
-                  className="w-full h-auto max-h-[80vh] object-contain"
-                  loading="eager"
-                  decoding="async"
-                />
-                <div className="p-6 bg-white">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+              <div className="relative flex flex-col h-full">
+                {/* Top Controls */}
+                <div className="absolute top-0 left-0 right-0 z-20 p-4 bg-gradient-to-b from-black/60 to-transparent">
+                  <div className="flex justify-between items-center">
+                    <div className="text-white/80 text-sm font-medium">
+                      {currentImageIndex + 1} / {filteredImages.length}
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="bg-white/10 text-white hover:bg-white/20 rounded-full backdrop-blur-sm transition-all duration-200 hover:scale-105"
+                      onClick={() => setSelectedImage(null)}
+                    >
+                      <X className="w-5 h-5" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Main Image Container */}
+                <div className="relative flex-1 flex items-center justify-center bg-black min-h-[400px]">
+                  {/* Navigation Arrows */}
+                  {canGoPrev && (
+                    <button
+                      className={`absolute ${isRTL ? 'right-4' : 'left-4'} top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white rounded-full backdrop-blur-sm transition-all duration-200 hover:scale-110 w-12 h-12 flex items-center justify-center border border-white/20`}
+                      onClick={goToPrev}
+                      aria-label="Previous image"
+                    >
+                      {isRTL ? <ChevronRight className="w-6 h-6 text-white" /> : <ChevronLeft className="w-6 h-6 text-white" />}
+                    </button>
+                  )}
+                  
+                  {canGoNext && (
+                    <button
+                      className={`absolute ${isRTL ? 'left-4' : 'right-4'} top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white rounded-full backdrop-blur-sm transition-all duration-200 hover:scale-110 w-12 h-12 flex items-center justify-center border border-white/20`}
+                      onClick={goToNext}
+                      aria-label="Next image"
+                    >
+                      {isRTL ? <ChevronLeft className="w-6 h-6 text-white" /> : <ChevronRight className="w-6 h-6 text-white" />}
+                    </button>
+                  )}
+
+                  {/* Main Image */}
+                  <img
+                    src={selectedImage.url}
+                    alt={getTitle(selectedImage.filename)}
+                    className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl transition-opacity duration-300"
+                    loading="eager"
+                    decoding="async"
+                    style={{ 
+                      filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.5))',
+                    }}
+                  />
+                </div>
+
+                {/* Thumbnail Navigation (for larger screens) - positioned above text */}
+                <div className="hidden md:block absolute bottom-32 left-1/2 -translate-x-1/2 z-20">
+                  <div className="flex gap-2 bg-black/60 backdrop-blur-sm rounded-full p-2 border border-white/10">
+                    {filteredImages.slice(Math.max(0, currentImageIndex - 2), currentImageIndex + 3).map((img, idx) => {
+                      const actualIndex = Math.max(0, currentImageIndex - 2) + idx;
+                      const isCurrentImage = actualIndex === currentImageIndex;
+                      
+                      return (
+                        <button
+                          key={img.id}
+                          onClick={() => setSelectedImage(img)}
+                          className={`w-10 h-10 rounded-lg overflow-hidden transition-all duration-200 border-2 ${
+                            isCurrentImage 
+                              ? 'border-white scale-110 shadow-lg' 
+                              : 'border-white/30 hover:border-white/60 hover:scale-105'
+                          }`}
+                        >
+                          <img
+                            src={img.url}
+                            alt=""
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Bottom Info Panel */}
+                <div className="bg-gradient-to-t from-black/90 to-transparent pt-8 pb-6 px-6 text-center">
+                  <h3 className="text-xl font-bold text-white mb-2">
                     {getTitle(selectedImage.filename)}
                   </h3>
-                  <Badge className="bg-gradient-to-r from-desert-600 to-orange-600 text-white">
-                    {currentContent.categories[selectedImage.category]}
-                  </Badge>
+                  <div className="flex items-center justify-center gap-4">
+                    <Badge className="bg-desert-600 text-white border-desert-400 px-3 py-1 rounded-full">
+                      {currentContent.categories[selectedImage.category]}
+                    </Badge>
+                    <div className="text-white/60 text-sm">
+                      {selectedCategory === 'all' ? 'All Categories' : currentContent.categories[selectedCategory]}
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

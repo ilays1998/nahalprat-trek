@@ -2,14 +2,39 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛰️</text></svg>" />
+    <link rel="icon" href="/images/logo.png" />
+    <link rel="apple-touch-icon" href="/images/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#faf0d7" />
-    <meta name="description" content="Experience the Judean Desert through a 3-day trek inspired by European hut-to-hut hiking. Nahal Prat Trek offers breathtaking landscapes and unique desert accommodation." />
-    <meta property="og:title" content="Nahal Prat Trek - 3-Day Desert Adventure" />
-    <meta property="og:description" content="Experience the Judean Desert through an organized trek with breathtaking landscapes and unique accommodation." />
+    <meta name="description" content="טרק נחל פרת - חווה את מדבר יהודה בטרק בהשראת הליכה אירופאית בין בקתות בהרים." />
+    <meta name="description" lang="en" content="Experience the Judean Desert through a 3-day trek inspired by European hut-to-hut hiking. Nahal Prat Trek offers breathtaking landscapes and unique desert accommodation." />
+    
+    <!-- Hebrew Open Graph tags -->
+    <meta property="og:title" content="טרק נחל פרת - טיול במדבר יהודה" />
+    <meta property="og:description" content="טרק נחל פרת - חווה את מדבר יהודה בטרק בהשראת הליכה אירופאית בין בקתות בהרים." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/images/nahal-prat-1.jpg" />
+    <meta property="og:image" content="https://www.treknahalprat.co.il/images/landscapes/DSC_0431.JPG" />
+    <meta property="og:image:alt" content="טרק נחל פרת - נוף מדבר יהודה" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="he_IL" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:site_name" content="טרק נחל פרת" />
+    
+    <!-- English Open Graph tags for international audience -->
+    <meta property="og:title" lang="en" content="Nahal Prat Trek - 3-Day Desert Adventure" />
+    <meta property="og:description" lang="en" content="Experience the Judean Desert through an organized trek with breathtaking landscapes and unique accommodation." />
+    
+    <!-- Additional Hebrew meta tags -->
+    <meta name="keywords" content="טרק נחל פרת, מדבר יהודה, טיולים מאורגנים, נחל פרת, עין פרת, מסלול טרקים, לינה במדבר, טיול במדבר" />
+    <meta name="keywords" lang="en" content="Nahal Prat Trek, Judean Desert, organized hikes, desert accommodation, Israel hiking, Prat Stream" />
+    
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="טרק נחל פרת - טיול במדבר יהודה" />
+    <meta name="twitter:description" content="טרק נחל פרת - חווה את מדבר יהודה בטרק בן בקתות בהרים." />
+    <meta name="twitter:image" content="https://www.treknahalprat.co.il/images/landscapes/DSC_0431.JPG" />
+    <meta name="twitter:image:alt" content="טרק נחל פרת - נוף מדבר יהודה" />
 
     <link rel="canonical" href="https://www.treknahalprat.co.il/" />
     
@@ -17,7 +42,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <title>Nahal Prat Trek - Experience the Judean Desert</title>
+    <title>טרק נחל פרת - Nahal Prat Trek | חווית מדבר יהודה</title>
     
     <!-- Animate on Scroll CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -64,6 +89,53 @@
         transition: opacity 0.3s ease-in;
       }
     </style>
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TouristAttraction",
+      "name": [
+        {
+          "@language": "he",
+          "@value": "טרק נחל פרת"
+        },
+        {
+          "@language": "en", 
+          "@value": "Nahal Prat Trek"
+        }
+      ],
+      "description": [
+        {
+          "@language": "he",
+          "@value": "טרק נחל פרת - חווה את מדבר יהודה בטרק בהשראת הליכה אירופאית בין בקתות בהרים."
+        },
+        {
+          "@language": "en",
+          "@value": "Experience the Judean Desert through a 3-day trek inspired by European hut-to-hut hiking."
+        }
+      ],
+      "url": "https://www.treknahalprat.co.il/",
+      "image": [
+        "https://www.treknahalprat.co.il/images/landscapes/DSC_0431.JPG",
+        "https://www.treknahalprat.co.il/images/logo.png"
+      ],
+      "logo": "https://www.treknahalprat.co.il/images/logo.png",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IL",
+        "addressRegion": "West Bank",
+        "addressLocality": "Judean Desert"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "31.8",
+        "longitude": "35.4"
+      },
+      "touristType": "Adventure Tourism",
+      "availableLanguage": ["he", "en"]
+    }
+    </script>
   </head>
   <body class="scrollbar-desert">
     <!-- Loading Screen -->

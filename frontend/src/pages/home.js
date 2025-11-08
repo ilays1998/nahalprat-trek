@@ -241,7 +241,7 @@ export default function Home() {
 
     The ascent is about 1 km long and ends at Yonatan Lookout at the entrance to the community, offering breathtaking views of the canyon below.
     From there, walk through the village to the cozy desert cabin where we'll stay for the night.`,
-      logo: cfImage("/images/logo.png"),
+      logo: cfImage("/images/logo/logo.png"),
       gpxFile: '/routes/COURSE_411278476.gpx',
       stats: { distance: "8", ascent: "296", descent: "477" }
 
@@ -305,7 +305,7 @@ export default function Home() {
     From Ein Qelt we ascend toward Mitzpe Yericho along a comfortable 4×4 dirt road marked in black.
     The climb is 2 km (40–60 minutes).
     At the top lookout parking area, transportation can be arranged back to our lodge for the night.`,
-      logo: cfImage("/images/logo.png"),
+      logo: cfImage("/images/logo/logo.png"),
       gpxFile: '/routes/COURSE_411300434.gpx',
       stats: { distance: "13", ascent: "321", descent: "623" }
     },
@@ -316,7 +316,7 @@ export default function Home() {
       description: language === 'he'
         ? 'תיאור של היום השלישי'
         : 'Description of the third and final day - completing the journey with deep emotions and memories that will last forever',
-      logo: cfImage("/images/logo.png"),
+      logo: cfImage("/images/logo/logo.png"),
       gpxFile: '/routes/COURSE_409828775.gpx',
       stats: { distance: "15", ascent: "250", descent: "250" }
     }

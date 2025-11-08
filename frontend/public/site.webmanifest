@@ -1,0 +1,23 @@
+{
+  "name": "טרק נחל פרת - Nahal Prat Trek",
+  "short_name": "נחל פרת Trek",
+  "icons": [
+    {
+      "src": "/images/logo/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/logo/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#faf0d7",
+  "background_color": "#fdf8ef",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/"
+}

@@ -388,35 +388,7 @@ export default function Home() {
 
           {/* Bottom Section - Buttons and Scroll Indicator */}
           <div className="flex flex-col items-center gap-6">
-            {/* Buttons */}
-            <motion.div 
-              className="flex flex-col sm:flex-row gap-4 justify-center w-full px-4"
-              variants={itemVariants}
-            >
-              <Link to={createPageUrl("Booking")} className="flex-1 sm:flex-initial">
-                <Button 
-                  size="lg" 
-                  className="group relative opacity-80 overflow-hidden bg-[#c56f19] hover:bg-[#b36317] hover:opacity-100 text-opacity-100 text-white text-base sm:text-lg px-6 py-5 sm:px-8 sm:py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 w-full whitespace-nowrap"
-                >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    <CalendarIcon className="w-5 h-5 flex-shrink-0" />
-                    {currentContent.hero.cta}
-                  </span>
-                </Button>
-              </Link>
-              
-              <Link to={createPageUrl("Packages")} className="flex-1 sm:flex-initial">
-                <Button
-                  size="lg"
-                  className="group relative opacity-80 overflow-hidden bg-desert-solid hover:bg-desert-medium hover:opacity-100 text-opacity-100 text-desert-700 text-base sm:text-lg px-6 py-5 sm:px-8 sm:py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 w-full whitespace-nowrap"
-                >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    {currentContent.hero.viewPricing}
-                  </span>
-                </Button>
-              </Link>
-            </motion.div>
-
+            
             {/* Scroll Indicator - Visible on all devices */}
             <motion.div 
               className="pb-4"

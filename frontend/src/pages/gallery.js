@@ -5,7 +5,7 @@ import { Button } from "../components/ui/button";
 import { X, ZoomIn, Camera, Footprints, Utensils, Bed, ChevronLeft, ChevronRight } from "lucide-react";
 import { Dialog, DialogContent } from "../components/ui/dialog";
 import { useLanguage } from "../layout";
-import { cfImage } from "../utils/image";
+import { loadAllGalleryImages, categoryConfig as galleryCategoryConfig } from "../utils/galleryLoader";
 import { filenameTitleMap } from "../utils";
 
 // Image cache to prevent reloading
@@ -155,7 +155,7 @@ export default function Gallery() {
 
   const currentContent = content[language];
 
-  const categoryConfig = {
+  const categoryStyleConfig = {
     landscape: {
       icon: Camera,
       bgClass: "bg-gradient-to-r from-green-500 to-emerald-600",
@@ -178,10 +178,7 @@ export default function Gallery() {
     }
   };
 
-  const landscapeImages = import.meta.glob('/public/images/landscapes/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
-  const activitiesImages = import.meta.glob('/public/images/activities/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
-  const mealsImages = import.meta.glob('/public/images/meals/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
-  const accommodationImages = import.meta.glob('/public/images/accommodation/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true, as: 'url' });
+  
 
   const generateTitle = (filename, language) => {
     const entry = filenameTitleMap[filename];
@@ -192,23 +189,9 @@ export default function Gallery() {
   };
 
     // ✅ Keep the title dynamic — only store filename once
-  const createImageObjects = (imageMap, category) =>
-    Object.entries(imageMap).map(([path, url], index) => ({
-      id: `${category}-${index + 1}`,
-      url: cfImage(url.replace("/public", "")),
-      filename: path.split("/").pop(),
-      category,
-    }));
+  
 
-  const allImages = useMemo(
-    () => [
-      ...createImageObjects(landscapeImages, "landscape"),
-      ...createImageObjects(activitiesImages, "activities"),
-      ...createImageObjects(mealsImages, "meals"),
-      ...createImageObjects(accommodationImages, "accommodation"),
-    ],
-    []
-  );
+  const allImages = useMemo(() => loadAllGalleryImages(), []);
 
 
   const shuffleArray = (array) => {
@@ -299,7 +282,7 @@ export default function Gallery() {
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {categories.map(([key, label]) => {
-            const categoryStyle = categoryConfig[key];
+            const categoryStyle = categoryStyleConfig[key];
             const isSelected = selectedCategory === key;
 
             const getButtonStyle = (key, isSelected) => {
@@ -374,8 +357,8 @@ export default function Gallery() {
                     <div
                       className="flex items-center justify-center w-8 h-8 rounded-full text-desert-600 shadow-lg backdrop-blur-sm border border-desert-600/50 transform transition-all duration-300 hover:scale-105 hover:bg-desert-400/10"
                     >
-                      {categoryConfig[image.category] && (() => {
-                        const Icon = categoryConfig[image.category].icon;
+                      {categoryStyleConfig[image.category] && (() => {
+                        const Icon = categoryStyleConfig[image.category].icon;
                         return <Icon className="w-4 h-4" />;
                       })()}
                     </div>

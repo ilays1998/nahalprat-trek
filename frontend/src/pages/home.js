@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { TrendingUp, TrendingDown, Ruler } from "lucide-react";
 
 import { Link } from "react-router-dom";
@@ -10,10 +10,12 @@ import GoogleMapsGPX from "../components/GoogleMapsGPX";
 import { motion } from "framer-motion";
 import { useLanguage } from "../layout";
 import { cfImage } from "../utils/image";
+import { getGalleryPreview } from "../utils/galleryLoader";
 
 export default function Home() {
   const { language, t, isRTL } = useLanguage();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const galleryPreview = useMemo(() => getGalleryPreview(8), []);
 
   const heroImages = [
     cfImage("/images/landscapes/DSC_0346.JPG"),
@@ -605,12 +607,81 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Gallery Preview Section */}
+      <section className="py-8 bg-gradient-to-b from-desert-50 to-desert-100 relative overflow-visible z-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <motion.div 
+            className="text-center mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
+              {language === 'he' ? 'גלריה מהשטח' : 'Gallery Preview'}
+            </h2>
+            <p className="text-xl text-gray-600">
+              {language === 'he'
+                ? 'הצצה קצרה לנופים מטרק נחל פרת'
+                : 'A glimpse of the beauty from the Nahal Prat Trek'}
+            </p>
+          </motion.div>
+
+          {/* Image Grid */}
+          <motion.div 
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {galleryPreview
+              .slice(0, window.innerWidth < 640 ? 4 : galleryPreview.length)
+              .map((img, i) => (
+              <motion.div
+                key={i}
+                className="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer"
+                whileHover={{ scale: 1.03 }}
+              >
+                <img
+                  src={img.url}
+                  alt={img.filename || `Gallery ${i + 1}`}
+                  className="w-full h-48 sm:h-56 md:h-72 lg:h-80 object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300" />
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* CTA Button */}
+          <motion.div 
+            className="mt-12 text-center"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <Link to="/gallery">
+              <Button 
+                size="lg"
+                className="group relative overflow-hidden bg-[#c56f19] hover:bg-[#b36317] text-white text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <Camera className="w-5 h-5" />
+                  {language === 'he' ? 'לגלריה המלאה' : 'View Full Gallery'}
+                </span>
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+
 
       {/* About Us Section */}
-      <section className="py-8 bg-desert-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-8 bg-gradient-to-b from-desert-100 to-desert-50 relative overflow-visible z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-10"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -646,7 +717,7 @@ export default function Home() {
               
               {/* Text Content */}
               <div className="order-1 md:order-2">
-                <Card className="border-none shadow-xl bg-desert-light">
+                <Card className="border-2 border-desert-light shadow-xl bg-desert-light hover:shadow-2xl transition-all duration-300 overflow-hidden rounded-3xl">
                   <CardContent className="p-8 lg:p-12">
                     <p className="text-lg text-gray-700 leading-relaxed font-medium whitespace-pre-line">
                       {currentContent.about.text}

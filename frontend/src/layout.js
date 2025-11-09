@@ -187,10 +187,10 @@ export default function Layout({ children, currentPageName }) {
                         className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                           location.pathname === item.url
                             ? isHomePage
-                              ? 'bg-white/20 text-white shadow-xl backdrop-blur-lg border border-white/20 transform scale-105'
+                              ? 'bg-white/20 text-white shadow-xl backdrop-blur-lg border border-white/20 text-shadow-xl transform scale-105'
                               : 'bg-[#c56f19] text-white shadow-xl transform scale-105 border border-[#dca359]/50'
                             : isHomePage
-                              ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 hover:border-white/20 hover:transform hover:scale-105'
+                              ? 'text-white shadow-xl bg-black/15 hover:bg-black/25 backdrop-blur-md border border-white/20 hover:border-white/40 hover:scale-105 transition-all duration-300'
                               : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359] hover:transform hover:scale-105'
                         }`}
                         style={{ animation: location.pathname === item.url ? 'gentlePulse 3s infinite' : 'none' }}
@@ -242,7 +242,7 @@ export default function Layout({ children, currentPageName }) {
                         isHomePage
                           ? mobileMenuOpen
                             ? "bg-white/20 text-white shadow-xl backdrop-blur-lg border border-white/20 transform scale-105 hover:scale-110 hover:shadow-2xl hover:bg-white/25"
-                            : "bg-white/10 hover:bg-white/20 border border-white/15 hover:border-white/30"
+                            : "bg-black/15 hover:bg-black/25 border border-white/20 hover:border-white/40"
                           : "bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992]"
                       }`}
                   >

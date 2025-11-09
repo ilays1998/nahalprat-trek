@@ -18,9 +18,10 @@ export default function Home() {
   const galleryPreview = useMemo(() => getGalleryPreview(8), []);
 
   const heroImages = [
-    cfImage("/images/landscapes/DSC_0346.JPG"),
-    cfImage("/images/landscapes/DSC_0379.JPG"),
-    cfImage("/images/landscapes/DSC_0431.JPG")
+    cfImage("/images/landscapes/DSC_0431.JPG"),
+    cfImage("/images/landscapes/30_הנחל.jpg"),
+    cfImage("/images/landscapes/32_מנזר_חריטון.jpg"),
+    cfImage("/images/landscapes/DSC_0413.JPG"),
   ];
 
     useEffect(() => {
@@ -40,11 +41,19 @@ export default function Home() {
   const [heroHeight, setHeroHeight] = useState('auto');
 
   useEffect(() => {
-    // Lock hero to a fixed pixel height from initial viewport, no updates on scroll/resize
     if (typeof window === 'undefined') return;
-    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    setHeroHeight(`${Math.round(viewportHeight)}px`);
+
+    const viewportHeight = window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
+
+    // ✅ If on small screen (mobile), use half height
+    const isMobile = window.innerWidth < 640; // Tailwind "sm" breakpoint
+    const height = isMobile ? viewportHeight / 1.5 : viewportHeight;
+
+    setHeroHeight(`${Math.round(height)}px`);
   }, []);
+
 
   
   
@@ -347,21 +356,22 @@ export default function Home() {
               }}
             />
           ))}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/0 to-black/0" />
         </div>
 
         
         {/* Hero Content */}
-        <motion.div 
-          className="relative z-10 w-full h-full flex flex-col justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12"
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-        >
-          {/* Text Content - Top Section */}
-          <motion.div variants={itemVariants} className="text-center pt-[6rem] sm:pt-[5rem] md:pt-[4rem] lg:pt-[5rem]">
+          <motion.div 
+            className="relative z-10 w-full h-full flex items-center justify-center text-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 translate-y-6 sm:translate-y-6"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+          >
+
+          {/* Text Content - Centered Vertically */}
+          <motion.div variants={itemVariants}>
             <motion.h1 
-              className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-desert-100 mb-4 sm:mb-6 text-shadow-lg leading-tight px-2"
+              className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-desert-100 mb-4 sm:mb-6 text-shadow-xl leading-tight px-2"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5 }}
@@ -370,39 +380,33 @@ export default function Home() {
             </motion.h1>
             
             <motion.p 
-              className="text-xl sm:text-2xl md:text-3xl text-desert-200 mb-6 sm:mb-8 font-medium px-2"
+              className="text-xl sm:text-2xl md:text-3xl text-desert-200 mb-6 sm:mb-8 font-medium px-2 text-shadow-xl text-outline"
               variants={itemVariants}
             >
               {currentContent.hero.subtitle}
             </motion.p>
             
             <motion.p 
-              className="text-desert-100 mb-8 max-w-3xl mx-auto leading-relaxed px-2"
+              className="text-white/95 drop-shadow-[0_3px_8px_rgba(0,0,0,0.8)] mb-8 max-w-3xl mx-auto leading-relaxed px-2 text-outline"
               style={{
-                fontSize: "clamp(0.95rem, 0.8vw + 0.9rem, 1.4rem)",
-                textShadow: "0 2px 10px rgba(0, 0, 0, 0.6)"
+                fontSize: "clamp(0.95rem, 0.8vw + 0.9rem, 1.4rem)"
               }}
               variants={itemVariants}
             >
               {currentContent.hero.description}
             </motion.p>
           </motion.div>
-
-          {/* Bottom Section - Buttons and Scroll Indicator */}
-          <div className="flex flex-col items-center gap-6">
-            
-            {/* Scroll Indicator - Visible on all devices */}
-            <motion.div 
-              className="pb-4"
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-            >
-              <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-                <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce" />
-              </div>
-            </motion.div>
-          </div>
         </motion.div>
+        {/* Scroll Indicator - Fixed to bottom */}
+          <motion.div 
+            className="absolute bottom-6 left-1/2 transform -translate-x-1/2"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+          >
+            <div className="w-6 h-10 border-2 border-white/60 rounded-full flex justify-center items-start">
+              <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-bounce" />
+            </div>
+          </motion.div>
       </section>
 
       {/* Stats Section */}

@@ -18,7 +18,7 @@ export function LanguageToggle({ language = 'he', onToggle, variant = 'desktop',
     ? 'px-4 py-3 rounded-2xl text-sm'
     : 'p-2.5 rounded-xl text-sm';
 
-  const glassHome = 'bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/15 hover:border-white/30 backdrop-blur-md';
+  const glassHome = 'bg-black/15 hover:bg-black/25 text-white hover:text-white border border-white/20 hover:border-white/40 backdrop-blur-md shadow-xl hover:scale-105 transition-all duration-300';
   const solidPage = 'bg-white/90 hover:bg-white text-gray-700 hover:text-gray-900 border border-gray-300/60 hover:border-gray-400 backdrop-blur-md';
 
   const accentRing = transparent

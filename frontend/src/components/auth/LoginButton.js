@@ -81,7 +81,7 @@ export const LoginButton = ({ className = '', transparent = false }) => {
         disabled
         className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
           transparent
-            ? 'text-white/90 bg-white/10 backdrop-blur-md border border-white/10'
+            ? 'text-white bg-black/15 backdrop-blur-md border border-white/20 shadow-xl'
             : 'text-[#743f1f] bg-[#f7e9cd]/80 border border-[#e3c992]'
         } ${className}`}
       >
@@ -99,7 +99,7 @@ export const LoginButton = ({ className = '', transparent = false }) => {
         <div className="flex items-center gap-3">
           <div className={`flex items-center gap-2 px-3 py-2 rounded-2xl backdrop-blur-md border ${
             transparent
-              ? 'bg-white/10 border-white/10'
+              ? 'bg-black/15 border-white/20 shadow-xl'
               : 'bg-[#f7e9cd]/80 border-[#e3c992]'
           }`}>
             <div className="w-7 h-7 bg-desert-bold rounded-lg flex items-center justify-center">
@@ -107,7 +107,7 @@ export const LoginButton = ({ className = '', transparent = false }) => {
             </div>
             <div className="text-right">
               <p className={`text-xs font-medium ${
-                transparent ? 'text-white/90' : 'text-[#743f1f]'
+                transparent ? 'text-white/90 text-shadow-xl' : 'text-[#743f1f]'
               }`}>
                 {user.name || user.email}
               </p>
@@ -115,7 +115,7 @@ export const LoginButton = ({ className = '', transparent = false }) => {
                 <div className="flex items-center gap-1">
                   <Shield className={`w-2.5 h-2.5 ${transparent ? 'text-blue-300' : 'text-blue-600'}`} />
                   <span className={`text-xs font-medium ${
-                    transparent ? 'text-blue-300' : 'text-blue-600'
+                    transparent ? 'text-blue-300 text-shadow-xl' : 'text-blue-600'
                   }`}>
                     {language === 'he' ? 'מנהל' : 'Admin'}
                   </span>
@@ -127,7 +127,7 @@ export const LoginButton = ({ className = '', transparent = false }) => {
             onClick={() => setShowLogoutModal(true)}
             className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 whitespace-nowrap hover:transform hover:scale-105 ${
               transparent
-                ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 hover:border-white/20'
+                ? 'text-white hover:text-white bg-black/15 hover:bg-black/25 backdrop-blur-md border border-white/20 hover:border-white/40 shadow-xl'
                 : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359]'
             } ${className}`}
           >
@@ -156,7 +156,7 @@ export const LoginButton = ({ className = '', transparent = false }) => {
         onClick={() => setShowLoginModal(true)}
         className={`group relative overflow-hidden flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 whitespace-nowrap hover:transform hover:scale-105 ${
           transparent
-            ? 'text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 hover:border-white/20'
+            ? 'text-white hover:text-white bg-black/15 hover:bg-black/25 backdrop-blur-md border border-white/20 hover:border-white/40 shadow-xl'
             : 'text-[#743f1f] hover:text-[#3e2211] bg-[#f7e9cd]/80 hover:bg-[#f1ddb8] border border-[#e3c992] hover:border-[#dca359]'
         } ${className}`}
       >

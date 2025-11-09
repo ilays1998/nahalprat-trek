@@ -33,4 +33,13 @@ export const filenameTitleMap = {
   "DSC_0358.JPG": { en: "Faran Monastery", he: "מנזר פארן" },
   "DSC_0413.JPG": { en: "Prat Stream", he: "נחל פרת" },
   "DSC_0406.JPG": { en: "Haruv Pool", he: "בריכת החרוב" },
+  "30_הנחל.jpg": { en: "The Stream in Winter", he: "הנחל בחורף" },
+  "31_מנזר חריטון.JPG": { en: "Chariton Monastery", he: "מנזר חריטון" },
+  "32_מנזר_חריטון.jpg": { en: "Chariton Monastery", he: "מנזר חריטון" },
+  "34_ברכת התמר.jpg": { en: "Tamar Pool", he: "בריכת התמר" },
+  "35_ברכת התמר.JPG": { en: "Tamar Pool", he: "בריכת התמר" },
+  "36_נחזור לנחל.jpg": { en: "The Stream in Winter", he: "הנחל בחורף" },
+  "37_עין מבוע.JPG": { en: "Ein Mabua Spring", he: "עין מבוע" },
+  "39_עין מבוע.jpg": { en: "Ein Mabua Spring", he: "עין מבוע" },
+  "42_עין מבוע.jpg": { en: "Ein Mabua Spring", he: "עין מבוע" },
 };

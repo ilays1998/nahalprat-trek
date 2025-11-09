@@ -142,12 +142,12 @@ export default function Packages() {
   };
 
   return (
-    <div className="min-h-screen bg-desert-50">
+    <div className="min-h-screen bg-desert-50 overflow-x-hidden">
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-b from-desert-100 to-desert-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
           <motion.div 
-            className="text-center"
+            className="text-center min-w-0"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
@@ -187,10 +187,10 @@ export default function Packages() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 min-w-0">
         {/* Main Package Card */}
         <motion.div 
-          className="max-w-4xl mx-auto mb-20"
+          className="max-w-4xl mx-auto mb-20 min-w-0"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -228,14 +228,14 @@ export default function Packages() {
                     initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1, duration: 0.5 }}
-                    className="flex items-center gap-4 p-4 bg-desert-solid rounded-xl border border-desert-200/30"
+                    className="flex items-center gap-4 p-4 bg-desert-solid rounded-xl border border-desert-200/30 min-w-0"
                   >
                     <div className="w-12 h-12 bg-[#c56f19] rounded-xl flex items-center justify-center flex-shrink-0">
                       <feature.icon className="w-6 h-6 text-white" />
                     </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">{feature.title}</h4>
-                      <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-bold text-gray-900 mb-1 w-full">{feature.title}</h4>
+                      <p className="text-gray-600 text-sm leading-relaxed w-full">{feature.description}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -292,38 +292,38 @@ export default function Packages() {
             </p>
             
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 text-center">
-              <div className="p-3 md:p-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3">
+              <div className="p-3 md:p-4 min-w-0">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3 min-w-0">
                   <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">
+                <h3 className="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base w-full">
                   {language === 'he' ? 'ללא עלויות נסתרות' : 'No Hidden Costs'}
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 text-sm w-full">
                   {language === 'he' ? 'מה שרואים זה מה שמשלמים' : 'What you see is what you pay'}
                 </p>
               </div>
               
-              <div className="p-3 md:p-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3">
+              <div className="p-3 md:p-4 min-w-0">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3 min-w-0">
                   <Star className="w-5 h-5 md:w-6 md:h-6 text-blue-600 fill-current" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">
+                <h3 className="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base w-full">
                   {language === 'he' ? 'איכות מובטחת' : 'Guaranteed Quality'}
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 text-sm w-full">
                   {language === 'he' ? 'רמת שירות גבוהה בכל שלב' : 'High service level at every stage'}
                 </p>
               </div>
               
-              <div className="p-3 md:p-4 col-span-2 md:col-span-1">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3">
+              <div className="p-3 md:p-4 col-span-2 md:col-span-1 min-w-0">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3 min-w-0">
                   <Users className="w-5 h-5 md:w-6 md:h-6 text-orange-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">
+                <h3 className="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base w-full">
                   {language === 'he' ? 'תמיכה בקהילה המקומית' : 'Supporting Local Community'}
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 text-sm w-full">
                   {language === 'he' ? 'תמיכה בעסקים המקומיים' : 'Supporting local businesses'}
                 </p>
               </div>

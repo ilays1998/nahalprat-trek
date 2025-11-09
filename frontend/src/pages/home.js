@@ -522,11 +522,14 @@ export default function Home() {
                               className="w-full h-full object-contain drop-shadow-lg" 
                             />
                           </div>
-                          <div>
+                          <div className="flex flex-col justify-start min-w-0 flex-1">
                             <h3 className="text-2xl font-display font-bold text-gray-900">
                               {currentContent.journey.day} {day.dayNumber}
                             </h3>
-                            <h4 className="text-lg font-medium text-desert-600">
+                            <h4
+                              title={day.title}
+                              className="text-lg font-medium text-desert-600 truncate"
+                            >
                               {day.title}
                             </h4>
                           </div>
@@ -540,19 +543,11 @@ export default function Home() {
                         </div>
                       </div>
                       {/* Right column: Map + Stats */}
-                      <div className="flex flex-col items-center mt-4 md:mt-0"> {/* add margin on mobile stack */}
-                        {/* Map Title */}
-                        <div className="flex items-center gap-2 text-desert-600 font-medium mb-2 md:mb-3  ">
-                          <MapPin className="w-5 h-5" />
-                          <span className="text-base">{currentContent.journey.mapTitle}</span>
-                        </div>
+                      <div className="flex flex-col items-center mt-0 md:mt-0"> {/* add margin on mobile stack */}
                         {/* Garmin Map */}
-                        <div className="w-full bg-gray-100 rounded-xl overflow-hidden shadow-inner 
-                                      aspect-[4/3] sm:aspect-[16/9] md:aspect-video">
-                          <GoogleMapsGPX 
-                            gpxUrl={day.gpxFile} 
-                            height="100%" 
-                          />
+                        <div className="w-full bg-gray-100 rounded-xl overflow-hidden shadow-inner
+                                        aspect-[4/3] sm:aspect-[14/9] md:aspect-[3/2]">
+                          <GoogleMapsGPX gpxUrl={day.gpxFile} height="100%" />
                         </div>
                         {/* Trek Stats Section */}
                         <div className="mt-4 md:mt-6 grid grid-cols-3 gap-2 md:gap-4 w-full text-center"> {/* Less gap, less margin for mobile */}

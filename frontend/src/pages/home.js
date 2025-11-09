@@ -18,7 +18,7 @@ export default function Home() {
   const galleryPreview = useMemo(() => getGalleryPreview(8), []);
 
   const heroImages = [
-    cfImage("/images/landscapes/DSC_0431.JPG"),
+    // TODO: add picture off the journew start here darker
     cfImage("/images/landscapes/30_הנחל.jpg"),
     cfImage("/images/landscapes/32_מנזר_חריטון.jpg"),
     cfImage("/images/landscapes/DSC_0413.JPG"),

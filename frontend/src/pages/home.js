@@ -716,7 +716,7 @@ export default function Home() {
               
               {/* Text Content */}
               <div className="order-1 md:order-2">
-                <Card className="border-2 border-desert-light shadow-xl bg-desert-light hover:shadow-2xl transition-all duration-300 overflow-hidden rounded-3xl">
+                <Card className="shadow-xl border-none bg-desert-50/60 hover:shadow-2xl transition-all duration-300 overflow-hidden rounded-3xl">
                   <CardContent className="p-8 lg:p-12">
                     <p className="text-lg text-gray-700 leading-relaxed font-medium whitespace-pre-line">
                       {currentContent.about.text}

@@ -19,9 +19,10 @@ export default function Home() {
 
   const heroImages = [
     // TODO: add picture off the journew start here darker
+    // cfImage("/images/landscapes/DSC_0431.JPG"),
     cfImage("/images/landscapes/30_הנחל.jpg"),
-    cfImage("/images/landscapes/32_מנזר_חריטון.jpg"),
     cfImage("/images/landscapes/DSC_0413.JPG"),
+    cfImage("/images/landscapes/32_מנזר_חריטון.jpg"),
   ];
 
     useEffect(() => {
@@ -380,21 +381,13 @@ export default function Home() {
             </motion.h1>
             
             <motion.p 
-              className="text-xl sm:text-2xl md:text-3xl text-desert-200 mb-6 sm:mb-8 font-medium px-2 text-shadow-xl text-outline"
+              className="text-xl sm:text-2xl md:text-3xl text-desert-200 mb-6 sm:mb-8 font-medium px-2 text-shadow-xl text-outline whitespace-nowrap"
               variants={itemVariants}
             >
               {currentContent.hero.subtitle}
             </motion.p>
             
-            <motion.p 
-              className="text-white/95 drop-shadow-[0_3px_8px_rgba(0,0,0,0.8)] mb-8 max-w-3xl mx-auto leading-relaxed px-2 text-outline"
-              style={{
-                fontSize: "clamp(0.95rem, 0.8vw + 0.9rem, 1.4rem)"
-              }}
-              variants={itemVariants}
-            >
-              {currentContent.hero.description}
-            </motion.p>
+
           </motion.div>
         </motion.div>
         {/* Scroll Indicator - Fixed to bottom */}
@@ -410,30 +403,51 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="relative py-10 bg-gradient-to-b from-desert-100/60 to-desert-200/40 backdrop-blur-sm">
+      <section className="relative py-8 bg-gradient-to-b from-desert-100 to-desert-50 backdrop-blur-sm">
         <div className="absolute inset-0 bg-white/30 backdrop-blur-md pointer-events-none" />
-        <div className="relative max-w-5xl mx-auto px-6">
+        <div className="relative max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+          {/* Description moved from hero section */}
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
+            className="text-center mb-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            {Object.entries(currentContent.stats).map(([key, stat]) => (
-              <motion.div
-                key={key}
-                className="rounded-3xl bg-white/70 shadow-inner p-5 hover:bg-white/90 transition-all duration-300 border border-desert-100"
-                whileHover={{ scale: 1.03 }}
-              >
-                <div className="text-2xl md:text-3xl font-display font-semibold text-desert-800 mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-desert-600 tracking-wide">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
+            <p 
+              className="text-gray-700 mb-8 max-w-3xl mx-auto leading-relaxed px-2 font-medium"
+              style={{
+                fontSize: "clamp(1rem, 0.8vw + 0.9rem, 1.4rem)"
+              }}
+            >
+              {currentContent.hero.description}
+            </p>
+          </motion.div>
+
+          {/* Centered stats grid */}
+          <motion.div 
+            className="flex justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center max-w-6xl">
+              {Object.entries(currentContent.stats).map(([key, stat]) => (
+                <motion.div
+                  key={key}
+                  className="rounded-3xl bg-white/70 shadow-inner p-6 hover:bg-white/90 transition-all duration-300 border border-desert-100"
+                  whileHover={{ scale: 1.03 }}
+                >
+                  <div className="text-3xl md:text-4xl font-display font-semibold text-desert-800 mb-1">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-desert-600 tracking-wide">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>

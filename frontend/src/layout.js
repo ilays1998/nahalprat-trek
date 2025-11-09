@@ -89,20 +89,28 @@ export default function Layout({ children, currentPageName }) {
       const viewportHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
 
-      // Detect footer position dynamically
+      // ----- ScrollTop Button Visibility -----
       const footer = document.querySelector("footer");
       let hideZoneStart = documentHeight - viewportHeight;
 
       if (footer) {
-        const footerRect = footer.getBoundingClientRect();
-        const footerHeight = footerRect.height;
-        // Hide button when we're within 1.2 × footer height of bottom
-        hideZoneStart = documentHeight - (footerHeight);
+        const footerHeight = footer.getBoundingClientRect().height;
+        hideZoneStart = documentHeight - (footerHeight * 1.2);
       }
 
-      const shouldShow = scrollY > 300 && scrollY + viewportHeight < hideZoneStart;
-      setShowScrollTop(shouldShow);
+      const shouldShowScrollTop = scrollY > 300 && scrollY + viewportHeight < hideZoneStart;
+      setShowScrollTop(shouldShowScrollTop);
+
+      // ----- Navbar Scroll Behavior -----
       setScrolled(scrollY > 50);
+
+      if (scrollY > 150) {
+        setShowNav(false);
+      } else {
+        setShowNav(true);
+      }
+
+      setLastScrollY(scrollY);
     };
 
     window.addEventListener("scroll", handleScroll);

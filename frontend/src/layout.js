@@ -85,25 +85,31 @@ export default function Layout({ children, currentPageName }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      setShowScrollTop(currentScrollY > 300);
-      setScrolled(currentScrollY > 50);
-      
-      // Hide navbar when scrolling down past 150px
-      if (currentScrollY > 150) {
-        setShowNav(false);
-      } else {
-        // Only show when near the top (within 150px)
-        setShowNav(true);
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // Detect footer position dynamically
+      const footer = document.querySelector("footer");
+      let hideZoneStart = documentHeight - viewportHeight;
+
+      if (footer) {
+        const footerRect = footer.getBoundingClientRect();
+        const footerHeight = footerRect.height;
+        // Hide button when we're within 1.2 × footer height of bottom
+        hideZoneStart = documentHeight - (footerHeight);
       }
-      
-      setLastScrollY(currentScrollY);
+
+      const shouldShow = scrollY > 300 && scrollY + viewportHeight < hideZoneStart;
+      setShowScrollTop(shouldShow);
+      setScrolled(scrollY > 50);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -363,7 +369,7 @@ export default function Layout({ children, currentPageName }) {
         {/* Scroll to Top Button */}
         <button
           onClick={scrollToTop}
-          className={`fixed bottom-8 right-8 z-5 p-3 bg-desert-solid-deep hover:bg-desert-bold rounded-full shadow-warm-lg text-white transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${
+          className={`fixed bottom-8 right-8 z-[999] p-3 bg-desert-solid-deep hover:bg-desert-bold rounded-full shadow-warm-lg text-white transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${
             showScrollTop 
               ? 'opacity-50 translate-y-0 hover:opacity-100' 
               : 'opacity-0 translate-y-10 pointer-events-none'

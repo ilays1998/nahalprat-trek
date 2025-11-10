@@ -22,7 +22,7 @@ export default function Home() {
     // cfImage("/images/landscapes/DSC_0431.JPG"),
     cfImage("/images/landscapes/30_הנחל.jpg"),
     cfImage("/images/landscapes/DSC_0413.JPG"),
-    cfImage("/images/landscapes/32_מנזר_חריטון.jpg"),
+    cfImage("/images/landscapes/DSC_0431.JPG"),
   ];
 
     useEffect(() => {
@@ -372,7 +372,7 @@ export default function Home() {
           {/* Text Content - Centered Vertically */}
           <motion.div variants={itemVariants}>
             <motion.h1 
-              className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-desert-100 mb-4 sm:mb-6 text-shadow-xl leading-tight px-2"
+              className="text-5xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-desert-100 mb-4 sm:mb-6 text-shadow-xl leading-tight px-2"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5 }}
@@ -426,29 +426,46 @@ export default function Home() {
 
           {/* Centered stats grid */}
           <motion.div 
-            className="flex justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center max-w-6xl">
-              {Object.entries(currentContent.stats).map(([key, stat]) => (
-                <motion.div
-                  key={key}
-                  className="rounded-3xl bg-white/70 shadow-inner p-6 hover:bg-white/90 transition-all duration-300 border border-desert-100"
-                  whileHover={{ scale: 1.03 }}
-                >
-                  <div className="text-3xl md:text-4xl font-display font-semibold text-desert-800 mb-1">
+          className="flex justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center w-full max-w-7xl scale-100 md:scale-110 px-4 sm:px-6">
+            {Object.entries(currentContent.stats).map(([key, stat], index) => {
+            // cycle through your 4 background images
+            const bgImages = [
+              "/images/pencil/start_river.png",
+              "/images/pencil/tamar_pool.png",
+              "/images/pencil/hanakik.png",
+              "/images/pencil/nahal_prat_2.png",
+
+            ];
+            const bgImage = bgImages[index % bgImages.length];
+
+            return (
+              <motion.div
+                key={key}
+                className="relative border-none rounded-3xl bg-cover bg-center bg-no-repeat shadow-xl border border-desert-100 p-8 md:p-10 hover:scale-105 transition-all duration-300 overflow-hidden"
+                style={{
+                  backgroundImage: `url('${bgImage}')`,
+                }}
+                whileHover={{ scale: 1.03 }}
+              >
+                <div className="relative z-10 flex flex-col items-center justify-center text-center">
+                  <div className="text-3xl md:text-4xl font-display font-semibold text-desert-800 mb-1 whitespace-nowrap">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-desert-600 tracking-wide">
+                  <div className="inline-block px-2 py-0.5 rounded-full bg-desert-50/60 text-desert-800 text-sm font-medium tracking-wide whitespace-nowrap">
                     {stat.label}
                   </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+                </div>
+              </motion.div>
+            );
+          })}
+          </div>
+        </motion.div>
         </div>
       </section>
 

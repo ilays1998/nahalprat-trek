@@ -18,6 +18,7 @@ import { useLanguage } from "../layout";
 import { useAuth } from "../contexts/AuthContext";
 import { useConfig } from "../contexts/ConfigContext";
 
+// TODO: add consent checkbox for terms and conditions / privacy policy
 export default function BookingPage() {
   const { language, isRTL } = useLanguage();
   const { user } = useAuth();

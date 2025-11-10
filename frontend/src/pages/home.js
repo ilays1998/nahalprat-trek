@@ -18,7 +18,6 @@ export default function Home() {
   const galleryPreview = useMemo(() => getGalleryPreview(8), []);
 
   const heroImages = [
-    // TODO: add picture off the journew start here darker
     // cfImage("/images/landscapes/DSC_0431.JPG"),
     cfImage("/images/landscapes/30_הנחל.jpg"),
     cfImage("/images/landscapes/DSC_0413.JPG"),
@@ -436,7 +435,7 @@ export default function Home() {
             {Object.entries(currentContent.stats).map(([key, stat], index) => {
             // cycle through your 4 background images
             const bgImages = [
-              "/images/pencil/start_river.png",
+              "/images/pencil/nofei_prat_2.png",
               "/images/pencil/tamar_pool.png",
               "/images/pencil/hanakik.png",
               "/images/pencil/nahal_prat_2.png",

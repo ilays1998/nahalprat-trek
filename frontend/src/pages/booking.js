@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { TrekDate, Booking } from "../entities/all";
 import { createPageUrl } from "../utils";
 import { scrollToError } from "../components/navigation/ScrollToError";
@@ -12,13 +13,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Calendar } from "../components/ui/calendar";
 import { Badge } from "../components/ui/badge";
 import { Alert, AlertDescription } from "../components/ui/alert";
+import { Checkbox } from "../components/ui/checkbox";
 import { CalendarIcon, Users, Phone, AlertCircle, CheckCircle } from "lucide-react";
 import { format, parseISO, isAfter, startOfDay, addDays } from "date-fns";
 import { useLanguage } from "../layout";
 import { useAuth } from "../contexts/AuthContext";
 import { useConfig } from "../contexts/ConfigContext";
 
-// TODO: add consent checkbox for terms and conditions / privacy policy
 export default function BookingPage() {
   const { language, isRTL } = useLanguage();
   const { user } = useAuth();
@@ -64,6 +65,7 @@ export default function BookingPage() {
     special_requests: '',
     emergency_contact_name: '',
     emergency_contact_phone: '',
+    terms_consent: false,
     language: language
   });
 
@@ -148,7 +150,14 @@ export default function BookingPage() {
       selectDateFirst: "אנא בחר תאריך כדי להמשיך",
       required: "שדה חובה",
       invalidEmail: "כתובת אימייל לא תקינה",
-      invalidPhone: "מספר טלפון לא תקין (נדרש פורמט ישראלי או בינלאומי)"
+      invalidPhone: "מספר טלפון לא תקין (נדרש פורמט ישראלי או בינלאומי)",
+      termsConsent: {
+        prefix: "אני מסכים/ה ל",
+        terms: "תנאי השימוש",
+        and: " ול",
+        privacy: "מדיניות הפרטיות"
+      },
+      termsRequired: "יש לאשר את תנאי השימוש"
     },
     en: {
       title: "Book Your Trek",
@@ -186,7 +195,14 @@ export default function BookingPage() {
       selectDateFirst: "Please select a date to continue",
       required: "Required field",
       invalidEmail: "Invalid email address",
-      invalidPhone: "Invalid phone number (Israeli or international format required)"
+      invalidPhone: "Invalid phone number (Israeli or international format required)",
+      termsConsent: {
+        prefix: "I agree to the ",
+        terms: "terms and conditions",
+        and: " and ",
+        privacy: "privacy policy"
+      },
+      termsRequired: "You must agree to the terms and conditions"
     }
   };
 
@@ -243,6 +259,10 @@ export default function BookingPage() {
       newErrors.emergency_contact_phone = currentContent.required;
     } else if (!validatePhone(formData.emergency_contact_phone)) {
       newErrors.emergency_contact_phone = currentContent.invalidPhone;
+    }
+    
+    if (!formData.terms_consent) {
+      newErrors.terms_consent = currentContent.termsRequired;
     }
     
     setErrors(newErrors);
@@ -322,6 +342,7 @@ export default function BookingPage() {
         special_requests: '',
         emergency_contact_name: '',
         emergency_contact_phone: '',
+        terms_consent: false,
         language: language
       });
       setSelectedDate(null);
@@ -669,6 +690,47 @@ export default function BookingPage() {
                       />
                       {errors.emergency_contact_phone && (
                         <p className="mt-1 text-sm text-red-600">{errors.emergency_contact_phone}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Terms and Conditions Consent */}
+                <div className="pt-6 border-t border-gray-100">
+                  <div className="flex items-start space-x-3 rtl:space-x-reverse">
+                    <Checkbox
+                      id="terms-consent"
+                      checked={formData.terms_consent}
+                      onCheckedChange={(checked) => handleInputChange('terms_consent', checked)}
+                      className={`mt-1 ${errors.terms_consent ? 'border-red-300' : ''}`}
+                    />
+                    <div className="flex-1">
+                      <Label 
+                        htmlFor="terms-consent" 
+                        className="text-sm font-medium cursor-pointer"
+                      >
+                        {currentContent.termsConsent.prefix}
+                        <Link 
+                          to="/terms" 
+                          className="text-desert-600 hover:text-desert-700 underline"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {currentContent.termsConsent.terms}
+                        </Link>
+                        {currentContent.termsConsent.and}
+                        <Link 
+                          to="/privacy" 
+                          className="text-desert-600 hover:text-desert-700 underline"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {currentContent.termsConsent.privacy}
+                        </Link>
+                        <span className="text-red-500 ml-1">*</span>
+                      </Label>
+                      {errors.terms_consent && (
+                        <p className="mt-1 text-sm text-red-600">{errors.terms_consent}</p>
                       )}
                     </div>
                   </div>

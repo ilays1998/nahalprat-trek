@@ -435,6 +435,7 @@ export default function Home() {
             {Object.entries(currentContent.stats).map(([key, stat], index) => {
             // cycle through your 4 background images
             const bgImages = [
+              // TODO: replace third image
               "/images/pencil/nofei_prat_2.png",
               "/images/pencil/tamar_pool.png",
               "/images/pencil/hanakik.png",

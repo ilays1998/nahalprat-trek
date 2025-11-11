@@ -760,7 +760,7 @@ export default function BookingPage() {
                     type="submit"
                     size="lg"
                     disabled={loading}
-                    className="bg-desert-bold text-white hover:opacity-90 text-lg px-12 py-4 rounded-xl shadow-warm hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                    className="bg-desert-bold text-white hover:opacity-90 text-lg px-12 py-4 rounded-xl shadow-warm hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 whitespace-nowrap"
                   >
                     {loading ? (
                       <div className="flex items-center gap-2">

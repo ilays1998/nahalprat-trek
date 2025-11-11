@@ -248,7 +248,7 @@ export default function Packages() {
                 className="text-center"
               >
                 <Link to={createPageUrl("Booking")}>
-                  <Button className="group relative overflow-hidden bg-[#c56f19] text-white text-xl px-12 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                  <Button className="group relative overflow-hidden bg-[#c56f19] text-white text-xl px-12 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 whitespace-nowrap">
                     <span className="relative z-10 flex items-center gap-3">
                       <CheckCircle className="w-6 h-6" />
                       {currentContent.bookNow}
@@ -331,7 +331,7 @@ export default function Packages() {
 
             <div className="mt-10">
               <Link to={createPageUrl("Booking")}>
-                <Button size="lg" className="bg-[#c56f19] text-white hover:opacity-90 text-lg px-12 py-4 rounded-xl shadow-warm hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                <Button size="lg" className="bg-[#c56f19] text-white hover:opacity-90 text-lg px-12 py-4 rounded-xl shadow-warm hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 whitespace-nowrap">
                   {language === 'he' ? 'בואו נתחיל!' : "Let's Get Started!"}
                 </Button>
               </Link>

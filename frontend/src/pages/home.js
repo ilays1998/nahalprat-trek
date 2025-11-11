@@ -628,7 +628,7 @@ export default function Home() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="!bg-desert-50 border-desert-300 text-desert-700 hover:!bg-desert-100 rounded-xl"
+                className="!bg-desert-50 border-desert-300 text-desert-700 hover:!bg-desert-100 rounded-xl whitespace-nowrap"
               >
                 {currentContent.journey.viewAll}
               </Button>
@@ -693,7 +693,7 @@ export default function Home() {
             <Link to="/gallery">
               <Button 
                 size="lg"
-                className="group relative overflow-hidden bg-[#c56f19] hover:bg-[#b36317] text-white text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                className="group relative overflow-hidden bg-[#c56f19] hover:bg-[#b36317] text-white text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 whitespace-nowrap"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   <Camera className="w-5 h-5" />
@@ -798,7 +798,7 @@ export default function Home() {
             <Link to={createPageUrl("Booking")}>
               <Button 
                 size="lg" 
-                className="group relative overflow-hidden bg-[#c56f19] hover:bg-[#b36317] text-white text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                className="group relative overflow-hidden bg-[#c56f19] hover:bg-[#b36317] text-white text-lg px-8 py-6 rounded-2xl shadow-warm-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 whitespace-nowrap"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   <CalendarIcon className="w-5 h-5" />

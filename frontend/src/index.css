@@ -413,3 +413,22 @@ html, body {
   overflow: hidden;
   height: 100%;
 }
+
+/* Calendar navigation colors override - must be at end for specificity */
+.rdp-nav button {
+  color: #c56f19 !important;
+  border-color: #c56f19 !important;
+}
+
+.rdp-nav button:hover {
+  background-color: #faf0d7 !important;
+  color: #a45417 !important;
+}
+
+.rdp-nav button svg {
+  fill: #c56f19 !important;
+}
+
+.rdp-nav button:hover svg {
+  fill: #a45417 !important;
+}

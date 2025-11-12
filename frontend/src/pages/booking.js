@@ -441,24 +441,12 @@ export default function BookingPage() {
         {(
           <Card className="border-none shadow-lg mb-8 bg-gradient-to-r from-desert-50 to-orange-50">
             <CardHeader>
-              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
-                <CardTitle className="text-xl font-bold">
-                  {currentContent.step1}
-                  <div className="text-sm font-normal text-gray-600 mt-2">
-                    {currentContent.step1Subtitle}
-                  </div>
-                </CardTitle>
-                {selectedDate && (
-                  <div className="lg:text-right bg-desert-100 p-3 rounded-lg border border-desert-300 shadow-sm -mt-3">
-                    <div className="text-xs text-desert-600 font-medium mb-1 uppercase tracking-wide">
-                      {language === 'he' ? 'תאריך נבחר' : 'Selected Date'}
-                    </div>
-                    <div className="text-lg font-bold text-desert-800">
-                      {format(selectedDate, 'MMM d')} - {format(addDays(selectedDate, 2), 'MMM d, yyyy')}
-                    </div>
-                  </div>
-                )}
-              </div>
+              <CardTitle className="text-xl font-bold">
+                {currentContent.step1}
+                <div className="text-sm font-normal text-gray-600 mt-2">
+                  {currentContent.step1Subtitle}
+                </div>
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {getAvailableDates().length > 0 ? (
@@ -485,22 +473,34 @@ export default function BookingPage() {
                     <h4 className="font-semibold text-gray-900">
                       {language === 'he' ? 'תאריכים זמינים:' : 'Available Dates:'}
                     </h4>
-                    <div className="space-y-2 max-h-64 overflow-y-auto">
+                    <div className="space-y-2 max-h-64 overflow-y-auto" id="available-dates-container">
                       {getAvailableDates().map((date) => {
                         const spots = getAvailableSpots(date);
                         const startDate = parseISO(date.start_date);
                         const endDate = parseISO(date.end_date);
+                        const isSelected = selectedDate && format(selectedDate, 'yyyy-MM-dd') === date.start_date;
                         return (
                           <div 
                             key={date.id}
-                            className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                              selectedDate && format(selectedDate, 'yyyy-MM-dd') === date.start_date
-                                ? 'border-desert-300 bg-desert-50'
-                                : 'border-gray-200 hover:border-desert-200'
+                            id={`date-${date.id}`}
+                            className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                              isSelected
+                                ? 'border-desert-500 bg-desert-200 shadow-lg'
+                                : 'border-gray-200 hover:border-desert-300 hover:bg-desert-50'
                             }`}
                             onClick={() => {
                               setSelectedDate(startDate);
                               setCalendarMonth(startDate);
+                              // Auto-scroll to selected date
+                              setTimeout(() => {
+                                const element = document.getElementById(`date-${date.id}`);
+                                if (element) {
+                                  element.scrollIntoView({ 
+                                    behavior: 'smooth', 
+                                    block: 'center' 
+                                  });
+                                }
+                              }, 100);
                             }}
 
                           >
@@ -518,7 +518,13 @@ export default function BookingPage() {
                               </div>
                               <Badge 
                                 variant="outline" 
-                                className={spots > 0 ? "bg-desert-50 text-green-700" : "bg-red-50 text-red-700"}
+                                className={
+                                  spots > 0 
+                                    ? isSelected 
+                                      ? "bg-desert-200 text-green-700 border-desert-300" 
+                                      : "bg-desert-50 text-green-700"
+                                    : "bg-red-50 text-red-700"
+                                }
                               >
                                 {spots} {currentContent.availableSpots}
                               </Badge>

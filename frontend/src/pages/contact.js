@@ -25,7 +25,7 @@ const translations = {
     emailPlaceholder: "הזן את כתובת האימייל שלך",
     phonePlaceholder: "הזן את מספר הטלפון שלך",
     subjectPlaceholder: "בחר נושא להודעה",
-    messagePlaceholder: "כתב את הודעתך כאן...",
+    messagePlaceholder: "כתוב את ההודעה כאן...",
     send: "שלח הודעה",
     sending: "שולח...",
     required: "שדה חובה",

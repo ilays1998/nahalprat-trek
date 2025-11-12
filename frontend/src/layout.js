@@ -492,7 +492,7 @@ export default function Layout({ children, currentPageName }) {
                 </div>
               </div>
               <p className="text-sm text-gray-500">
-                © 2024 {t.title}. {t.allRights}
+                © 2025 {t.title}. {t.allRights}
               </p>
             </div>
           </div>

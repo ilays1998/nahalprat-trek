@@ -340,7 +340,7 @@ export default function Contact() {
                   <MapPin className="w-5 h-5 text-desert-600" />
                   <div>
                     <p className="font-medium">{t.addressLabel}</p>
-                    <p className="text-gray-600">Jerusalem, Israel</p>
+                    <p className="text-gray-600">{language === 'he' ? 'נופי פרת 45' : 'Nofei Prat 45'}</p>
                   </div>
                 </div>
               </CardContent>

@@ -110,7 +110,9 @@ export default function BookingPage() {
   };
 
   const getAvailableDates = () => {
-    return availableDates.filter(date => isDateAvailable(date));
+    return availableDates
+      .filter(date => isDateAvailable(date))
+      .sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
   };
 
   const content = {
@@ -146,6 +148,7 @@ export default function BookingPage() {
       errorMessage: "אירעה שגיאה. אנא נסה שוב.",
       step1: "שלב 1: בחירת תאריך",
       step2: "שלב 2: פרטים אישיים",
+      step1Subtitle: "בחר את תאריך ההתחלה לטרק של 3 ימים",
       trekDuration: "טיול של 3 ימים, 2 לילות",
       selectDateFirst: "אנא בחר תאריך כדי להמשיך",
       required: "שדה חובה",
@@ -191,6 +194,7 @@ export default function BookingPage() {
       errorMessage: "An error occurred. Please try again.",
       step1: "Step 1: Select Date",
       step2: "Step 2: Personal Details",
+      step1Subtitle: "Choose your starting date for the 3-day trek",
       trekDuration: "3-day trek, 2 nights",
       selectDateFirst: "Please select a date to continue",
       required: "Required field",
@@ -437,7 +441,24 @@ export default function BookingPage() {
         {(
           <Card className="border-none shadow-lg mb-8 bg-gradient-to-r from-desert-50 to-orange-50">
             <CardHeader>
-              <CardTitle className="text-xl font-bold">{currentContent.step2}</CardTitle>
+              <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
+                <CardTitle className="text-xl font-bold">
+                  {currentContent.step1}
+                  <div className="text-sm font-normal text-gray-600 mt-2">
+                    {currentContent.step1Subtitle}
+                  </div>
+                </CardTitle>
+                {selectedDate && (
+                  <div className="lg:text-right bg-desert-100 p-3 rounded-lg border border-desert-300 shadow-sm -mt-3">
+                    <div className="text-xs text-desert-600 font-medium mb-1 uppercase tracking-wide">
+                      {language === 'he' ? 'תאריך נבחר' : 'Selected Date'}
+                    </div>
+                    <div className="text-lg font-bold text-desert-800">
+                      {format(selectedDate, 'MMM d')} - {format(addDays(selectedDate, 2), 'MMM d, yyyy')}
+                    </div>
+                  </div>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
               {getAvailableDates().length > 0 ? (
@@ -522,7 +543,12 @@ export default function BookingPage() {
           <form onSubmit={handleSubmit} className="space-y-10">
             <Card className="border-none shadow-lg bg-gradient-to-r from-desert-50 to-orange-50">
               <CardHeader>
-                <CardTitle className="text-xl font-bold">{currentContent.step3}</CardTitle>
+                <CardTitle className="text-xl font-bold">
+                  {currentContent.step2}
+                  <div className="text-sm font-normal text-gray-600 mt-2">
+                    {format(selectedDate, 'MMM d')} - {format(addDays(selectedDate, 2), 'MMM d, yyyy')}
+                  </div>
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-8">
                 <div className="grid lg:grid-cols-2 gap-8">

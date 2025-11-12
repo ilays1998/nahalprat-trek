@@ -521,16 +521,6 @@ export default function BookingPage() {
                             onClick={() => {
                               setSelectedDate(startDate);
                               setCalendarMonth(startDate);
-                              // Auto-scroll to selected date
-                              setTimeout(() => {
-                                const element = document.getElementById(`date-${date.id}`);
-                                if (element) {
-                                  element.scrollIntoView({ 
-                                    behavior: 'smooth', 
-                                    block: 'center' 
-                                  });
-                                }
-                              }, 100);
                             }}
 
                           >

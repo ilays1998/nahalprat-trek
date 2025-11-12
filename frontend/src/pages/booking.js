@@ -292,6 +292,36 @@ export default function BookingPage() {
     return packagePrice  * formData.participants_count;  // packagePrice  NIS per person
   };
 
+  const handleCalendarDateSelect = (date) => {
+    setSelectedDate(date);
+    setCalendarMonth(date);
+    
+    // Auto-scroll to the selected date in the available dates container
+    if (date) {
+      setTimeout(() => {
+        const dateStr = format(date, 'yyyy-MM-dd');
+        const matchingDate = getAvailableDates().find(d => d.start_date === dateStr);
+        if (matchingDate) {
+          const element = document.getElementById(`date-${matchingDate.id}`);
+          const container = document.getElementById('available-dates-container');
+          if (element && container) {
+            // Scroll within the container to show the selected date
+            const containerRect = container.getBoundingClientRect();
+            const elementRect = element.getBoundingClientRect();
+            const relativeTop = elementRect.top - containerRect.top + container.scrollTop;
+            const containerMiddle = container.clientHeight / 2;
+            const elementMiddle = element.clientHeight / 2;
+            
+            container.scrollTo({
+              top: relativeTop - containerMiddle + elementMiddle,
+              behavior: 'smooth'
+            });
+          }
+        }
+      }, 100);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -456,7 +486,7 @@ export default function BookingPage() {
                     <Calendar
                       mode="single"
                       selected={selectedDate}
-                      onSelect={setSelectedDate}
+                      onSelect={handleCalendarDateSelect}
                       month={calendarMonth}
                       onMonthChange={setCalendarMonth}
                       disabled={(date) => {

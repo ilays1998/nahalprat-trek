@@ -435,11 +435,10 @@ export default function Home() {
             {Object.entries(currentContent.stats).map(([key, stat], index) => {
             // cycle through your 4 background images
             const bgImages = [
-              // TODO: replace third image
-              "/images/pencil/nofei_prat_2.png",
-              "/images/pencil/tamar_pool.png",
-              "/images/pencil/hanakik.png",
-              "/images/pencil/nahal_prat_2.png",
+              cfImage("/images/pencil/nofei_prat_2.png"),
+              cfImage("/images/pencil/tamar_pool.png"),
+              cfImage("/images/pencil/hanakik.png"),
+              cfImage("/images/pencil/nahal_prat_2.png"),
 
             ];
             const bgImage = bgImages[index % bgImages.length];

@@ -42,4 +42,8 @@ export const filenameTitleMap = {
   "37_עין מבוע.JPG": { en: "Ein Mabua Spring", he: "עין מבוע" },
   "39_עין מבוע.jpg": { en: "Ein Mabua Spring", he: "עין מבוע" },
   "42_עין מבוע.jpg": { en: "Ein Mabua Spring", he: "עין מבוע" },
+  "zimmer_garden.jpg": { en: "Cabin Garden", he: "גינת הצימר" },
+  "zimmer_standard_1.jpg": { en: "Standard Cabin", he: "צימר סטנדרט" },
+  "zimmer_standard_2.jpg": { en: "Standard Cabin", he: "צימר סטנדרט" },
+  "zimmer_standard_3.jpg": { en: "Standard Cabin", he: "צימר סטנדרט" },
 };

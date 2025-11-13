@@ -44,13 +44,41 @@
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    
+    <!-- Optimized Google Fonts loading with font-display: swap -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap"></noscript>
     
     <title>טרק נחל פרת - Nahal Prat Trek | מסע מבקתה לבקתה בלב המדבר</title>
     
-    <!-- Animate on Scroll CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Animate on Scroll CSS - Non-blocking load -->
+    <link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"></noscript>
     
     <style>
+      /* Critical CSS for above-the-fold content */
+      html { scroll-behavior: smooth; }
+      
+      body {
+        margin: 0;
+        font-family: 'Rubik', system-ui, -apple-system, sans-serif;
+        background-color: #faf8f3;
+        visibility: visible;
+        opacity: 1;
+      }
+      
+      body.loading {
+        visibility: hidden;
+        opacity: 0;
+      }
+      
+      body.loaded {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.3s ease-in;
+      }
+      
       /* Initial loading screen */
       #loading-screen {
         position: fixed;
@@ -80,16 +108,9 @@
         100% { transform: rotate(360deg); }
       }
       
-      /* Prevent FOUC */
-      body {
-        visibility: hidden;
-        opacity: 0;
-      }
-      
-      body.loaded {
-        visibility: visible;
-        opacity: 1;
-        transition: opacity 0.3s ease-in;
+      /* Critical header styles */
+      #root {
+        min-height: 100vh;
       }
     </style>
     
@@ -148,32 +169,56 @@
     
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <!-- Preload critical scripts -->
+    <link rel="modulepreload" href="/src/index.js">
     <script type="module" src="/src/index.js"></script>
     
-    <!-- Animate on Scroll JS -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-      // Initialize AOS
-      AOS.init({
-        duration: 800,
-        once: true,
-        offset: 50
-      });
+      // Ensure page is always scrollable and functional
+      document.body.classList.add('loaded');
       
-      // Remove loading screen when page loads
-      window.addEventListener('load', function() {
+      // Initialize page loading logic
+      function initializePage() {
         const loadingScreen = document.getElementById('loading-screen');
-        const body = document.body;
         
-        setTimeout(() => {
-          loadingScreen.style.opacity = '0';
-          body.classList.add('loaded');
-          
+        // Remove loading screen quickly
+        if (loadingScreen) {
           setTimeout(() => {
-            loadingScreen.style.display = 'none';
-          }, 500);
-        }, 500);
-      });
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+              loadingScreen.remove();
+            }, 300);
+          }, 100);
+        }
+        
+        // Load AOS asynchronously
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
+        script.async = true;
+        script.onload = function() {
+          if (typeof AOS !== 'undefined') {
+            AOS.init({
+              duration: 800,
+              once: true,
+              offset: 50
+            });
+          }
+        };
+        script.onerror = function() {
+          console.warn('Failed to load AOS library');
+        };
+        document.head.appendChild(script);
+        
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/sw.js')
+            .then(() => console.log('ServiceWorker registered'))
+            .catch(() => console.log('ServiceWorker registration failed'));
+        }
+      }
+      
+      // Initialize immediately
+      initializePage();
     </script>
   </body>
 </html>

@@ -112,7 +112,7 @@ export default function Home() {
         text: `אנחנו משפחת סופר, גרים בנופי פרת כבר 27 שנים. מאז ומתמיד הייתה לנו אהבה גדולה לטבע ולהליכה בו. הכנו בשבילכם טרק בהשראת הטרקים באיטליה ואוסטריה עם אוכל טוב ולינה נוחה.
         
         המטרה שלנו היא לאפשר לכם לצאת למסע שבו תוכלו להתנתק מהרעש וההמולה ששוררת במדינה שלנו בדרך קבע, ולתת לעצמכם את השקט שרק המרחבים הבראשיתיים של מדבר יהודה יכולים לתת.`,
-        image: "/images/aboutus/DSC_0325.JPG"
+        image: cfImage("/images/aboutus/DSC_0325.JPG")
       },
       cta: {
         title: "מוכנים להרפתקה?",
@@ -172,7 +172,7 @@ export default function Home() {
         title: "About Us",
         subtitle: "Meet the Sofer Family - Your Desert Adventure Hosts",
         text: "We are the Sofer family, living in the landscapes of Prat for 27 years. We have always had a great love for nature and hiking in it. We have prepared a route for you inspired by the treks in Italy and Austria with good food and comfortable accommodation.\n\nOur goal is to allow you to go on a journey where you can disconnect from the noise and hustle and bustle that constantly prevails in our country, and give yourself the quiet that only the pristine expanses of the Judean Desert can provide.",
-        image: "/images/aboutus/DSC_0325.JPG"
+        image: cfImage("/images/aboutus/DSC_0325.JPG")
       },
       cta: {
         title: "Ready for Adventure?",

@@ -335,9 +335,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen overflow-hidden">
-      {/* Preload the first hero image for LCP optimization */}
-      <link rel="preload" as="image" href={heroImages[0]} fetchPriority="high" />
-      
       {/* Hero Section with Parallax */}
       <section
         className="relative flex items-center justify-center overflow-hidden z-0"
@@ -346,28 +343,15 @@ export default function Home() {
           minHeight: heroHeight
         }}
       >
-        {/* LCP Optimized First Image */}
-        <img
-          src={heroImages[0]}
-          alt="Nahal Prat Trek Hero"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-          style={{
-            opacity: currentImageIndex === 0 ? 1 : 0,
-            transition: "opacity 1000ms ease-in-out",
-          }}
-          fetchPriority="high"
-          loading="eager"
-        />
-        
-        {/* Animated Background Images for subsequent slides */}
+        {/* Animated Background Images */}
         <div className="absolute inset-0">
-          {heroImages.slice(1).map((image, index) => (
+          {heroImages.map((image, index) => (
             <motion.div
-              key={index + 1}
+              key={index}
               className="hero-slide absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
               style={{
                 backgroundImage: `url(${image})`,
-                opacity: currentImageIndex === index + 1 ? 1 : 0,
+                opacity: currentImageIndex === index ? 1 : 0,
                 position: "absolute",
               }}
             />

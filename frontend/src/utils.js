@@ -46,4 +46,8 @@ export const filenameTitleMap = {
   "zimmer_standard_1.jpg": { en: "Standard Cabin", he: "צימר סטנדרט" },
   "zimmer_standard_2.jpg": { en: "Standard Cabin", he: "צימר סטנדרט" },
   "zimmer_standard_3.jpg": { en: "Standard Cabin", he: "צימר סטנדרט" },
+  "סלטים.jpg": { en: "Fresh Salads", he: "סלטים טריים" },
+  "עיקרית_בשרית.jpg": { en: "Meat Main Course", he: "מנה עיקרית בשרית" },
+  "עיקרית_צמחונית.jpg": { en: "Vegetarian Main Course", he: "מנה עיקרית צמחונית" },
+  "קינוח_טפיוקה.jpg": { en: "Tapioca Dessert", he: "קינוח טפיוקה" },
 };

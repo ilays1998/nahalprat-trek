@@ -133,13 +133,20 @@ def create_booking():
 @jwt_required()
 def update_booking(booking_id: int):
     user_id = get_jwt_identity()
+    logging.info(f"Update booking {booking_id}: JWT identity = {user_id}")
+    
     user = AppUser.query.get(int(user_id))
+    logging.info(f"Update booking {booking_id}: Found user = {user.email if user else None}, auth_method = {user.auth_method if user else None}")
+    
     data = request.json or {}
+    logging.info(f"Update booking {booking_id}: Request data = {data}")
 
     booking = Booking.query.get_or_404(booking_id)
+    logging.info(f"Update booking {booking_id}: Booking owner user_id = {booking.user_id}, requesting user_id = {user.id if user else None}")
 
     # Only owner or admin can update
     if not user or (user.role != 'admin' and booking.user_id != user.id):
+        logging.warning(f"Update booking {booking_id}: Access denied - user={user.email if user else None}, role={user.role if user else None}, booking_owner={booking.user_id}, requesting_user={user.id if user else None}")
         return jsonify({"error": "Forbidden"}), 403
 
     # Track original status for email notifications
@@ -157,6 +164,20 @@ def update_booking(booking_id: int):
     # Allow updating limited fields (status for now)
     if 'status' in data:
         booking.status = data['status']
+        
+        # If cancelling, restore the spots to the trek date
+        if data['status'] == 'cancelled':
+            from models import TrekDate
+            trek_date = TrekDate.query.filter_by(start_date=booking.trek_date).first()
+            logging.info(f"Looking for trek date with start_date={booking.trek_date}")
+            if trek_date:
+                current_spots = trek_date.available_spots or 0
+                new_spots = current_spots + booking.participants_count
+                logging.info(f"Found trek date {trek_date.id}: current_spots={current_spots}, adding {booking.participants_count}, new_spots={new_spots}")
+                trek_date.available_spots = new_spots
+                db.session.add(trek_date)
+            else:
+                logging.warning(f"No trek date found with start_date={booking.trek_date}")
 
     db.session.add(booking)
     db.session.commit()

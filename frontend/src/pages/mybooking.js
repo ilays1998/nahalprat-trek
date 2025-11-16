@@ -120,31 +120,18 @@ export default function MyBookingsPage() {
   const handleCancelBooking = async (bookingToCancel, cancellationReason = '') => {
     setIsCancelling(true);
     try {
-      // 1. Update booking status to 'cancelled' with optional reason
+      // Update booking status to 'cancelled' with optional reason
+      // Backend automatically handles restoring spots to trek date
       const updateData = { 
         status: 'cancelled',
         ...(cancellationReason && { cancellation_reason: cancellationReason })
       };
       await Booking.update(bookingToCancel.id, updateData);
 
-      // 2. Find the corresponding trek date
-      const trekDateToUpdate = trekDates.find(td => 
-        td.start_date === bookingToCancel.trek_date
-      );
-
-      if (trekDateToUpdate) {
-        // 3. Add the spots back to the available count (single package system)
-        const currentSpots = trekDateToUpdate.available_spots || 0;
-        const spotsToAdd = bookingToCancel.participants_count;
-        await TrekDate.update(trekDateToUpdate.id, {
-          available_spots: currentSpots + spotsToAdd
-        });
-      }
-
-      // 4. Refresh data
+      // Refresh data to get updated booking and trek date info
       await loadData();
       
-      // 5. Close dialog and reset state after successful cancellation
+      // Close dialog and reset state after successful cancellation
       setSelectedBookingToCancel(null);
       setCancellationReason('');
       // Clear textarea ref

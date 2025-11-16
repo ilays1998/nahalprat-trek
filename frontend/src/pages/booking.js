@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { TrekDate, Booking } from "../entities/all";
 import { createPageUrl } from "../utils";
 import { scrollToError } from "../components/navigation/ScrollToError";
+import { trackFormSubmission, trackButtonClick, trackBookingEvent, trackUserInteraction } from "../utils/analytics";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -296,6 +297,11 @@ export default function BookingPage() {
     setSelectedDate(date);
     setCalendarMonth(date);
     
+    // Track date selection
+    if (date) {
+      trackUserInteraction('date_selected', format(date, 'yyyy-MM-dd'));
+    }
+    
     // Auto-scroll to the selected date in the available dates container
     if (date) {
       setTimeout(() => {
@@ -348,6 +354,10 @@ export default function BookingPage() {
 
       await Booking.create(bookingData);
       
+      // Track successful booking
+      trackBookingEvent('booking_completed', calculateTotalPrice());
+      trackFormSubmission('booking_form', true);
+      
       // Reload available dates to reflect updated spots
       await loadAvailableDates();
 
@@ -384,6 +394,10 @@ export default function BookingPage() {
       // await loadAvailableDates(); 
 
     } catch (err) {
+      // Track booking error
+      trackFormSubmission('booking_form', false);
+      trackBookingEvent('booking_error');
+      
       setError(currentContent.errorMessage);
       scrollToError();
     }
@@ -408,14 +422,20 @@ export default function BookingPage() {
               </p>
               <div className="space-y-3">
                 <Button 
-                  onClick={() => setSuccess(false)}
+                  onClick={() => {
+                    trackButtonClick('book_another', 'success_page');
+                    setSuccess(false);
+                  }}
                   className="w-full bg-desert-600 text-white hover:opacity-90"
                 >
                   {language === 'he' ? 'הזמנה נוספת' : 'Book Another'}
                 </Button>
                 <Button 
                   variant="outline"
-                  onClick={() => window.location.href = createPageUrl("MyBookings")}
+                  onClick={() => {
+                    trackButtonClick('view_my_bookings', 'success_page');
+                    window.location.href = createPageUrl("MyBookings");
+                  }}
                   className="w-full border-desert-200 text-desert-600 hover:bg-desert-50"
                 >
                   {language === 'he' ? 'צפה בהזמנות שלי' : 'View My Bookings'}
@@ -812,6 +832,7 @@ export default function BookingPage() {
                     type="submit"
                     size="lg"
                     disabled={loading}
+                    onClick={() => trackButtonClick('book_now', 'booking_form')}
                     className="bg-desert-bold text-white hover:opacity-90 text-lg px-12 py-4 rounded-xl shadow-warm hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 whitespace-nowrap"
                   >
                     {loading ? (

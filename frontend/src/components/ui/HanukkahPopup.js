@@ -73,6 +73,7 @@ const HanukkahPopup = () => {
                        text-white rounded-3xl shadow-2xl z-[10001] 
                        max-w-md w-[90vw] overflow-hidden"
             style={{ transform: 'translate(-50%, -50%)' }}
+            dir={language === 'he' ? 'rtl' : 'ltr'}
           >
             {/* Header with Hanukkah decorations */}
             <div className="relative p-8 text-center">

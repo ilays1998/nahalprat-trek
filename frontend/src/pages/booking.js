@@ -27,7 +27,8 @@ export default function BookingPage() {
 
   const { getPackage, loading: configLoading } = useConfig();
   const standardPackage = getPackage("standard");
-  const packagePrice = standardPackage?.price_per_person || 0;
+  const originalPackagePrice = standardPackage?.price_per_person || 1000;
+  const packagePrice = 900; // Hanukkah special price
 
   const currency = standardPackage?.currency || "ILS";
 
@@ -476,8 +477,16 @@ export default function BookingPage() {
           <CardContent className="p-8">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">{currentContent.packageName}</h2>
-              <div className="text-4xl font-bold text-desert-600 mb-2">
-                {currencySymbols[currency]}{packagePrice.toLocaleString()}
+              <div className="mb-2">
+                <div className="text-lg text-gray-400 line-through">
+                  {currencySymbols[currency]}{originalPackagePrice.toLocaleString()}
+                </div>
+                <div className="text-4xl font-bold text-desert-600">
+                  {currencySymbols[currency]}{packagePrice.toLocaleString()}
+                </div>
+                <div className="inline-block bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-semibold mt-1">
+                  {language === 'he' ? 'מבצע חנוכה!' : 'Hanukkah Special!'}
+                </div>
               </div>
               <p className="text-gray-600">{currentContent.perPerson}</p>
               <div className="mt-4 text-sm text-gray-500">

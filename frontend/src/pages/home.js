@@ -62,7 +62,7 @@ export default function Home() {
       hero: {
         title: "טרק נחל פרת",
         subtitle: "חוויית טיול בת 3 ימים במדבר יהודה",
-        description: "גלה את יופיו של מדבר יהודה בטרק בהשראת הליכה אירופאית בין בקתות בהרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה בבקתות במדבר.",
+        description: "גלה את יופיו של מדבר יהודה בטרק בהשראת הליכה אירופאית בין בקתות בהרים. שלושה ימים של הליכה, נופים עוצרי נשימה ולינה בבקתות במדבר. 🕯️ מבצע חנוכה! 100 ₪ הנחה לאדם!",
         cta: "התחל את ההרפתקה",
         viewPricing: "צפה במחיר"
       },
@@ -124,7 +124,7 @@ export default function Home() {
       hero: {
         title: "Nahal Prat Trek",
         subtitle: "3-Day Desert Adventure",
-        description: "Discover the beauty of the Judean Desert through a trek inspired by European hut-to-hut hiking. Three days of hiking, breathtaking landscapes, and staying in desert cabins.",
+        description: "Discover the beauty of the Judean Desert through a trek inspired by European hut-to-hut hiking. Three days of hiking, breathtaking landscapes, and staying in desert cabins. 🕯️ Hanukkah Special! ₪100 discount per person!",
         cta: "Start Your Adventure",
         viewPricing: "View Pricing"
       },

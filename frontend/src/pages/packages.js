@@ -14,19 +14,21 @@ export default function Packages() {
 
   const { getPackage, loading: configLoading } = useConfig();
   const standardPackage = getPackage("standard");
-  const packagePrice = standardPackage?.price_per_person || 0;
+  const originalPackagePrice = standardPackage?.price_per_person || 1000;
+  const packagePrice = 900; // Hanukkah special price
   const currency = standardPackage?.currency || "ILS";
   const symbols = { ILS: "₪", USD: "$", EUR: "€" };
   const symbol = symbols[currency] || "₪";
   const formattedPrice = `${symbol}${packagePrice.toLocaleString()}`;
+  const originalFormattedPrice = `${symbol}${originalPackagePrice.toLocaleString()}`;
 
 
   const content = {
     he: {
       title: "תמחור שקוף",
       subtitle: "אצלנו אין אותיות קטנות",
-      priceStatement: "החל מ־{price} לאדם",
-      transparency: "המחיר תלוי ברמת הלינה — חבילת הסטנדרט היא {price} לאדם וכוללת את כל מה שרשום למטה",
+      priceStatement: "מבצע חנוכה! החל מ־{price} לאדם",
+      transparency: "מבצע מיוחד לחנוכה! חבילת הסטנדרט היא כעת {price} לאדם (במקום {originalPrice}) וכוללת את כל מה שרשום למטה",
       bookNow: "הזמן את המקום שלך",
       perPerson: "לאדם",
       included: "מה כלול בחבילה",
@@ -72,8 +74,8 @@ export default function Packages() {
     en: {
       title: "Transparent Pricing",
       subtitle: "No fine print here",
-      priceStatement: "Starting from {price} per person",
-      transparency: "Price depends on the accommodation level — the standard package is {price} per person and includes everything listed below.",
+      priceStatement: "Hanukkah Special! Starting from {price} per person",
+      transparency: "Special Hanukkah offer! The standard package is now {price} per person (instead of {originalPrice}) and includes everything listed below.",
       bookNow: "Book Your Spot",
       perPerson: "per person",
       included: "What's Included",
@@ -167,18 +169,20 @@ export default function Packages() {
             
             {!configLoading && (
               <>
-                <motion.div
-                  variants={itemVariants}
-                  className="text-4xl font-bold text-desert-600 mb-4"
-                >
-                  {currentContent.priceStatement.replace("{price}", formattedPrice)}
+                <motion.div variants={itemVariants} className="mb-4">
+                  <div className="text-2xl text-gray-500 line-through mb-2">
+                    {language === 'he' ? 'מחיר רגיל:' : 'Regular price:'} {originalFormattedPrice}
+                  </div>
+                  <div className="text-4xl font-bold text-desert-600">
+                    {currentContent.priceStatement.replace("{price}", formattedPrice)}
+                  </div>
                 </motion.div>
 
                 <motion.p
                   variants={itemVariants}
                   className="text-lg text-gray-600 max-w-2xl mx-auto"
                 >
-                  {currentContent.transparency.replace("{price}", formattedPrice)}
+                  {currentContent.transparency.replace("{price}", formattedPrice).replace("{originalPrice}", originalFormattedPrice)}
                 </motion.p>
               </>
             )}
@@ -206,8 +210,16 @@ export default function Packages() {
 
 
             <CardHeader className="text-center pb-8 pt-20">
-              <div className="text-7xl font-bold text-desert-600 mb-4">
-                {symbol}{packagePrice.toLocaleString()}
+              <div className="mb-4">
+                <div className="text-3xl text-gray-400 line-through mb-2">
+                  {symbol}{originalPackagePrice.toLocaleString()}
+                </div>
+                <div className="text-7xl font-bold text-desert-600">
+                  {symbol}{packagePrice.toLocaleString()}
+                </div>
+                <div className="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold mt-2">
+                  {language === 'he' ? 'מבצע חנוכה!' : 'Hanukkah Special!'}
+                </div>
               </div>
               <p className="text-xl text-gray-500 mb-6">{currentContent.perPerson}</p>
               <p className="text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto">

@@ -9,6 +9,7 @@ import { useAuth } from "./contexts/AuthContext";
 import config from "./config";
 import { LanguageToggle } from "./components/ui/LanguageToggle";
 import { cfImage } from "./utils/image";
+import HanukkahPopup from "./components/ui/HanukkahPopup";
 
 const LanguageContext = createContext();
 
@@ -152,6 +153,7 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <LanguageContext.Provider value={{ language, t, isRTL, toggleLanguage }}>
+      <HanukkahPopup />
       <div className={`min-h-screen bg-gradient-to-b from-desert-50 via-white to-desert-50 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
         {/* Navigation - Only show when authenticated */}
         {shouldShowNavigation && (

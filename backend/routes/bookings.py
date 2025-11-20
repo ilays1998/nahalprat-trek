@@ -95,6 +95,10 @@ def create_booking():
     if not package:
         return jsonify({"error": "Package not found"}), 400
 
+    # Apply Hanukkah discount
+    hanukkah_price = 900  # Special Hanukkah price
+    price_per_person = hanukkah_price  # Use promotional price instead of package.price_per_person
+
     booking = Booking(
         user_id=user.id,
         first_name=data['first_name'],
@@ -104,7 +108,7 @@ def create_booking():
         package_type=package.name,
         trek_date=trek_date_value,
         participants_count=data['participants_count'],
-        total_price=package.price_per_person * data['participants_count'],
+        total_price=price_per_person * data['participants_count'],
         special_requests=data.get('special_requests'),
         emergency_contact_name=data.get('emergency_contact_name'),
         emergency_contact_phone=data.get('emergency_contact_phone'),
